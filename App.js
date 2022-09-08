@@ -11,73 +11,85 @@ import {
 
 import { Home } from "./src/screens";
 
-const _customFonts = {
+const _defaultFonts = {
   regular: { fontFamily: "WorkSans_400Regular" },
   medium: { fontFamily: "WorkSans_500Medium" },
   light: { fontFamily: "WorkSans_300Light" },
   thin: { fontFamily: "WorkSans_100Thin" },
+  bold: { fontFamily: "WorkSans_700Bold" }
 }
 
 const fontConfig = {
-  web: _customFonts,
-  ios: _customFonts,
-  android: _customFonts,
-  default: _customFonts,
-};
+  web: _defaultFonts,
+  ios: _defaultFonts,
+  android: _defaultFonts,
+}
 
 const theme = {
   "light": {
     ...DefaultTheme,
-    roundness: 2,
-    font: configureFonts(fontConfig),
-    typescale: {
-      bodyLarge: { ...DefaultTheme.typescale.bodyLarge, ..._customFonts.regular },
-      bodyMedium: { ...DefaultTheme.typescale.bodyMedium, ..._customFonts.regular },
-      bodySmall: { ...DefaultTheme.typescale.bodySmall, ..._customFonts.regular },
-      displayLarge: { ...DefaultTheme.typescale.displayLarge, ..._customFonts.regular },
-      displayMedium: { ...DefaultTheme.typescale.displayMedium, ..._customFonts.regular },
-      displaySmall: { ...DefaultTheme.typescale.displaySmall, ..._customFonts.regular },
-      headlineLarge: { ...DefaultTheme.typescale.headlineLarge, ..._customFonts.regular },
-      headlineMedium: { ...DefaultTheme.typescale.headlineMedium, ..._customFonts.regular },
-      headlineSmall: { ...DefaultTheme.typescale.headlineSmall, ..._customFonts.regular },
-      labelLarge: { ...DefaultTheme.typescale.labelLarge, ..._customFonts.medium },
-      labelMedium: { ...DefaultTheme.typescale.labelMedium, ..._customFonts.medium },
-      labelSmall: { ...DefaultTheme.typescale.labelSmall, ..._customFonts.medium },
-      titleLarge: { ...DefaultTheme.typescale.titleLarge, ..._customFonts.regular },
-      titleMedium: { ...DefaultTheme.typescale.titleMedium, ..._customFonts.medium },
-      titleSmall: { ...DefaultTheme.typescale.titleSmall, ..._customFonts.medium },
-    },
+    roundness: 8,
+    isV3: false,
+    dark: false,
     colors: {
       ...DefaultTheme.colors,
       background: "#DCDCE0",
       surface: "#C0CDDF",
-      primary: "#FF7E33",
+      primary: "#ef6910",
       secondary: "#9633FF",
       success: "#00A65A",
       error: "#DD4B39",
       warning: "#DA8C10",
+
       text: "#191A1F",
-    }
+      onSurface: "#191A1F",
+      outline: "#191A1F50",
+      semiWhite: "#191A1F50",
+      onSurfaceVariant: "#191A1F80",
+    },
+    fonts: configureFonts(fontConfig),
   },
   "dark": {
     ...DefaultTheme,
-    roundness: 1,
-    fonts: configureFonts(fontConfig),
-    
+    dark: true,
+    roundness: 8,
     colors: {
       ...DefaultTheme.colors,
-      background: "#191A1F",
-      surface: "#262A35",
-      primary: "#FF7E33",
-      secondary: "#9633FF",
-      success: "#00A65A",
-      error: "#DD4B39",
-      warning: "#DA8C10",
       text: "#DCDCE0",
+      error: "#DD4B39",
+      primary: "#ef6910",
+      success: "#00A65A",
+      surface: "#262A35",
+      warning: "#DA8C10",
+      secondary: "#9633FF",
+      onSurface: "#DCDCE0",
+      background: "#191A1F",
+      outline: "#DCDCE050",
+      semiWhite: "#DCDCE050",
+      onSurfaceVariant: "#DCDCE080",
 
-      placeholder: "red",
-      underlineColor: "red"
+      // tertiary: "rgba(125, 82, 96, 1)",
+      // onError: "rgba(255, 255, 255, 1)",
+      // onBackground: "rgba(28, 27, 31, 1)",
+      // onPrimary: "rgba(255, 255, 255, 1)",
+      // onTertiary: "rgba(255, 255, 255, 1)",
+      // inverseSurface: "rgba(49, 48, 51, 1)",
+      // onSecondary: "rgba(255, 255, 255, 1)",
+      // onErrorContainer: "rgba(65, 14, 11, 1)",
+      // errorContainer: "rgba(249, 222, 220, 1)",
+      // inversePrimary: "rgba(208, 188, 255, 1)",
+      // onPrimaryContainer: "rgba(33, 0, 93, 1)",
+      // surfaceVariant: "rgba(231, 224, 236, 1)",
+      // surfaceDisabled: "rgba(28, 27, 31, 0.12)",
+      // onTertiaryContainer: "rgba(49, 17, 29, 1)",
+      // inverseOnSurface: "rgba(244, 239, 244, 1)",
+      // primaryContainer: "rgba(234, 221, 255, 1)",
+      // onSecondaryContainer: "rgba(29, 25, 43, 1)",
+      // onSurfaceDisabled: "rgba(28, 27, 31, 0.38)",
+      // tertiaryContainer: "rgba(255, 216, 228, 1)",
+      // secondaryContainer: "rgba(232, 222, 248, 1)",
     },
+    fonts: configureFonts(fontConfig),
   },
 };
 
