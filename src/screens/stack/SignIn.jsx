@@ -1,6 +1,6 @@
 import React from "react";
 import { View, StyleSheet, Image } from "react-native";
-import { Button, Text, TextInput, useTheme } from "react-native-paper";
+import { Button, Headline, IconButton, Paragraph, Surface, Text, TextInput, useTheme } from "react-native-paper";
 
 import Logo from "../../../assets/Logo.png";
 
@@ -11,29 +11,47 @@ export const SignIn = () => {
   return (
     <View style={{ ...styles.container, backgroundColor: colors.background }}>
 
-      <View style={{ alignItems: "center", flex: 1 }}>
-        <Image resizeMode="contain" source={Logo} style={{ width: 200, height: 200 }} />
+      <View style={{ padding: 20, flex: 1, justifyContent: "flex-end" }}>
+        <IconButton
+          size={40}
+          color={colors.primary}
+          icon="arrow-left-circle-outline"
+          onPress={() => console.log('Pressed')}
+          style={{ position: "absolute", top: 10 }}
+        />
+        <Headline style={{ ...fonts.medium, color: colors.primary }}>Seja muito bem vindo!</Headline>
+        <Paragraph style={{ ...fonts.light }}>Faça o login para continuar</Paragraph>
       </View>
 
-
-      <View style={{ ...styles.main, backgroundColor: colors.surface }}>
-
+      <Surface style={styles.main}>
         <TextInput
-          mode="outlined"
           label="E-mail"
+          mode="outlined"
           style={{ marginBottom: 15 }}
-          theme={{ colors: { background: colors.background } }}
+          theme={{ colors: { background: colors.surface } }}
         />
 
         <TextInput
-          mode="outlined"
           label="Senha"
+          mode="outlined"
+          style={{ marginBottom: 25 }}
           theme={{ colors: { background: colors.surface } }}
-          style={{ marginBottom: 40 }}
         />
 
-        <Button contentStyle={{ height: 55 }} labelStyle={{ fontWeight: "bold" }} icon="login" mode="contained">Teste ll</Button>
-      </View>
+        <Button contentStyle={{ height: 45 }} labelStyle={{ fontWeight: "bold" }} icon="login" mode="contained">Entrar</Button>
+
+        <View style={styles.orView}>
+          <View style={{ ...styles.line, backgroundColor: colors.semiWhite }} />
+          <Text style={{ marginHorizontal: 20 }}>OU</Text>
+          <View style={{ ...styles.line, backgroundColor: colors.semiWhite }} />
+        </View>
+
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <Button uppercase={false} color="#E73B31" icon="google" mode="contained" style={{ flex: 1 }}>Google</Button>
+          <View style={{ width: "3%" }} />
+          <Button uppercase={false} color="#4A72B7" style={{ flex: 1 }} icon="facebook" mode="contained">Facebook</Button>
+        </View>
+      </Surface>
     </View>
   );
 };
@@ -41,13 +59,21 @@ export const SignIn = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "flex-end"
+    justifyContent: "flex-end",
   },
   main: {
-    height: "70%",
-    borderTopLeftRadius: 25,
-    borderTopRightRadius: 25,
+    flex: 2,
+    paddingVertical: 40,
     paddingHorizontal: 20,
-    paddingTop: 40,
+  },
+  line: {
+    flex: 1,
+    height: 2,
+    borderRadius: 2,
+  },
+  orView: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 40,
   }
 });
