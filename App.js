@@ -10,6 +10,7 @@ import {
 } from '@expo-google-fonts/work-sans';
 
 import { Home } from "./src/screens";
+import { SignIn } from "./src/screens/stack";
 
 const _defaultFonts = {
   regular: { fontFamily: "WorkSans_400Regular" },
@@ -33,17 +34,17 @@ const theme = {
     dark: false,
     colors: {
       ...DefaultTheme.colors,
-      background: "#DCDCE0",
-      surface: "#C0CDDF",
-      primary: "#ef6910",
-      secondary: "#9633FF",
-      success: "#00A65A",
-      error: "#DD4B39",
-      warning: "#DA8C10",
-
       text: "#191A1F",
-      onSurface: "#191A1F",
+      error: "#DD4B39",
+      surface: "#c3c8d0",
+      primary: "#9633FF",
+      success: "#00A65A",
+      warning: "#DA8C10",
+      secondary: "#f48225",
       outline: "#191A1F50",
+      onSurface: "#191A1F",
+      background: "#DCDCE0",
+      placeholder: "#191A1F80",
       semiWhite: "#191A1F50",
       onSurfaceVariant: "#191A1F80",
     },
@@ -57,15 +58,16 @@ const theme = {
       ...DefaultTheme.colors,
       text: "#DCDCE0",
       error: "#DD4B39",
-      primary: "#ef6910",
+      primary: "#9633FF",
       success: "#00A65A",
       surface: "#262A35",
       warning: "#DA8C10",
-      secondary: "#9633FF",
+      secondary: "#f48225",
       onSurface: "#DCDCE0",
       background: "#191A1F",
       outline: "#DCDCE050",
       semiWhite: "#DCDCE050",
+      placeholder: "#DCDCE080",
       onSurfaceVariant: "#DCDCE080",
 
       // tertiary: "rgba(125, 82, 96, 1)",
@@ -106,7 +108,8 @@ export default function App() {
     <PaperProvider theme={theme[colorSchema]}>
       <SafeAreaView style={{ width: "100%", flex: 1, backgroundColor: theme[colorSchema].colors.background }} >
         <StatusBar backgroundColor={theme[colorSchema].colors.background} barStyle={colorSchema === "dark" ? "light-content" : "dark-content"} />
-        <Home />
+        {/* <Home /> */}
+        <SignIn />
       </SafeAreaView>
     </PaperProvider>
   );
