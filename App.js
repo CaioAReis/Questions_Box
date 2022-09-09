@@ -9,6 +9,10 @@ import {
   WorkSans_400Regular,
 } from '@expo-google-fonts/work-sans';
 
+import { NavigationContainer, DefaultTheme as NavigateDefaultTheme } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+const Stack = createNativeStackNavigator();
+
 import { SignIn, SignUp } from "./src/screens/stack";
 
 const _defaultFonts = {
@@ -28,11 +32,13 @@ const fontConfig = {
 const theme = {
   "light": {
     ...DefaultTheme,
+    ...NavigateDefaultTheme,
     roundness: 8,
     isV3: false,
     dark: false,
     colors: {
       ...DefaultTheme.colors,
+      ...NavigateDefaultTheme.colors,
       text: "#191A1F",
       error: "#DD4B39",
       surface: "#DCDCE0",
@@ -51,10 +57,12 @@ const theme = {
   },
   "dark": {
     ...DefaultTheme,
+    ...NavigateDefaultTheme,
     dark: true,
     roundness: 8,
     colors: {
       ...DefaultTheme.colors,
+      ...NavigateDefaultTheme.colors,
       text: "#DCDCE0",
       error: "#DD4B39",
       primary: "#DCDCE0",
@@ -68,27 +76,6 @@ const theme = {
       semiWhite: "#DCDCE050",
       placeholder: "#DCDCE080",
       onSurfaceVariant: "#DCDCE080",
-
-      // tertiary: "rgba(125, 82, 96, 1)",
-      // onError: "rgba(255, 255, 255, 1)",
-      // onBackground: "rgba(28, 27, 31, 1)",
-      // onPrimary: "rgba(255, 255, 255, 1)",
-      // onTertiary: "rgba(255, 255, 255, 1)",
-      // inverseSurface: "rgba(49, 48, 51, 1)",
-      // onSecondary: "rgba(255, 255, 255, 1)",
-      // onErrorContainer: "rgba(65, 14, 11, 1)",
-      // errorContainer: "rgba(249, 222, 220, 1)",
-      // inversePrimary: "rgba(208, 188, 255, 1)",
-      // onPrimaryContainer: "rgba(33, 0, 93, 1)",
-      // surfaceVariant: "rgba(231, 224, 236, 1)",
-      // surfaceDisabled: "rgba(28, 27, 31, 0.12)",
-      // onTertiaryContainer: "rgba(49, 17, 29, 1)",
-      // inverseOnSurface: "rgba(244, 239, 244, 1)",
-      // primaryContainer: "rgba(234, 221, 255, 1)",
-      // onSecondaryContainer: "rgba(29, 25, 43, 1)",
-      // onSurfaceDisabled: "rgba(28, 27, 31, 0.38)",
-      // tertiaryContainer: "rgba(255, 216, 228, 1)",
-      // secondaryContainer: "rgba(232, 222, 248, 1)",
     },
     fonts: configureFonts(fontConfig),
   },
@@ -105,11 +92,15 @@ export default function App() {
 
   return (
     <PaperProvider theme={theme[colorSchema]}>
-      <SafeAreaView style={{ width: "100%", flex: 1, backgroundColor: theme[colorSchema].colors.background }} >
-        <StatusBar backgroundColor={theme[colorSchema].colors.background} barStyle={colorSchema === "dark" ? "light-content" : "dark-content"} />
-        {/* <SignIn /> */}
-        <SignUp />
-      </SafeAreaView>
+      <NavigationContainer theme={theme[colorSchema]}>
+        <SafeAreaView style={{ width: "100%", flex: 1, backgroundColor: theme[colorSchema].colors.background }} >
+          <StatusBar backgroundColor={theme[colorSchema].colors.background} barStyle={colorSchema === "dark" ? "light-content" : "dark-content"} />
+          <Stack.Navigator initialRouteName="Cadastro" screenOptions={{ headerShown: false }} >
+            <Stack.Screen name="Login" component={SignIn} />
+            <Stack.Screen name="Cadastro" component={SignUp} />
+          </Stack.Navigator>
+        </SafeAreaView>
+      </NavigationContainer>
     </PaperProvider>
   );
 }
