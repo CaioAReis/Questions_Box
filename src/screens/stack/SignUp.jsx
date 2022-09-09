@@ -16,7 +16,7 @@ export const SignUp = () => {
 
   return (
     <ScrollView style={{ backgroundColor: colors.background }}>
-      <View style={{ padding: 20, flex: 1, justifyContent: "flex-end" }}>
+      <View style={{ marginBottom: 20, padding: 20, flex: 1, justifyContent: "flex-end" }}>
         <IconButton
           size={40}
           color={colors.primary}

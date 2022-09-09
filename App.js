@@ -107,8 +107,8 @@ export default function App() {
     <PaperProvider theme={theme[colorSchema]}>
       <SafeAreaView style={{ width: "100%", flex: 1, backgroundColor: theme[colorSchema].colors.background }} >
         <StatusBar backgroundColor={theme[colorSchema].colors.background} barStyle={colorSchema === "dark" ? "light-content" : "dark-content"} />
-        <SignIn />
-        {/* <SignUp /> */}
+        {/* <SignIn /> */}
+        <SignUp />
       </SafeAreaView>
     </PaperProvider>
   );
