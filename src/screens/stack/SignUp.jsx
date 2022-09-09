@@ -11,7 +11,7 @@ import {
   IconButton,
 } from "react-native-paper";
 
-export const SignIn = () => {
+export const SignUp = () => {
   const { colors, fonts } = useTheme();
 
   return (
@@ -24,14 +24,28 @@ export const SignIn = () => {
           icon="arrow-left-circle-outline"
           onPress={() => console.log('Pressed')}
         />
-        <Headline style={{ ...fonts.medium, color: colors.primary }}>Seja muito bem vindo!</Headline>
-        <Paragraph style={{ ...fonts.light }}>Faça o login para continuar</Paragraph>
+        <Headline style={{ ...fonts.medium, color: colors.primary }}>Cadastre-se já!</Headline>
+        <Paragraph style={{ ...fonts.light }}>Preencha os campos abaixo!</Paragraph>
       </View>
 
       <Surface style={styles.main}>
         <TextInput
+          mode="outlined"
+          label="Nome completo"
+          style={{ marginBottom: 10 }}
+          theme={{ colors: { background: colors.surface } }}
+        />
+
+        <TextInput
           label="E-mail"
           mode="outlined"
+          style={{ marginBottom: 10 }}
+          theme={{ colors: { background: colors.surface } }}
+        />
+
+        <TextInput
+          mode="outlined"
+          label="Telefone"
           style={{ marginBottom: 10 }}
           theme={{ colors: { background: colors.surface } }}
         />
@@ -60,10 +74,10 @@ export const SignIn = () => {
 
 const styles = StyleSheet.create({
   main: {
-    flex: 2,
-    borderRadius: 20,
+    flex: 3,
     paddingVertical: 40,
     paddingHorizontal: 20,
+    borderTopRightRadius: 20, borderTopLeftRadius: 20,
   },
   line: {
     flex: 1,

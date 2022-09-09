@@ -9,8 +9,7 @@ import {
   WorkSans_400Regular,
 } from '@expo-google-fonts/work-sans';
 
-import { Home } from "./src/screens";
-import { SignIn } from "./src/screens/stack";
+import { SignIn, SignUp } from "./src/screens/stack";
 
 const _defaultFonts = {
   regular: { fontFamily: "WorkSans_400Regular" },
@@ -108,8 +107,8 @@ export default function App() {
     <PaperProvider theme={theme[colorSchema]}>
       <SafeAreaView style={{ width: "100%", flex: 1, backgroundColor: theme[colorSchema].colors.background }} >
         <StatusBar backgroundColor={theme[colorSchema].colors.background} barStyle={colorSchema === "dark" ? "light-content" : "dark-content"} />
-        {/* <Home /> */}
         <SignIn />
+        {/* <SignUp /> */}
       </SafeAreaView>
     </PaperProvider>
   );
