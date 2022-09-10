@@ -6,7 +6,7 @@ import { SignIn, SignUp } from "../screens/stack";
 const Stack = createNativeStackNavigator();
 
 export const AuthRoutes = () => (
-  <Stack.Navigator screenOptions={{ headerShown: false }}>
+  <Stack.Navigator initialRouteName="SignUp" screenOptions={{ headerShown: false }}>
     <Stack.Screen name="SignIn" component={SignIn} />
     <Stack.Screen name="SignUp" component={SignUp} />
   </Stack.Navigator>

@@ -44,20 +44,20 @@ export const SignUp = () => {
         />
 
         <TextInput
+          label="Senha"
           mode="outlined"
-          label="Telefone"
           style={{ marginBottom: 10 }}
           theme={{ colors: { background: colors.surface } }}
         />
 
         <TextInput
-          label="Senha"
           mode="outlined"
+          label="Repetir senha"
           style={{ marginBottom: 35 }}
           theme={{ colors: { background: colors.surface } }}
         />
 
-        <Button contentStyle={{ height: 45 }} labelStyle={{ fontWeight: "bold" }} icon="login" mode="contained">Entrar</Button>
+        <Button contentStyle={{ height: 45 }} labelStyle={{ fontWeight: "bold" }} icon="account-arrow-right" mode="contained">Criar conta</Button>
 
         <View style={styles.orView}>
           <View style={{ ...styles.line, backgroundColor: colors.semiWhite }} />
@@ -65,8 +65,11 @@ export const SignUp = () => {
           <View style={{ ...styles.line, backgroundColor: colors.semiWhite }} />
         </View>
 
-        <Button contentStyle={{ height: 45 }} uppercase={false} color="#E73B31" icon="google" mode="contained">Google</Button>
-        <Button contentStyle={{ height: 45 }} uppercase={false} color="#4A72B7" style={{ marginTop: 20 }} icon="facebook" mode="contained">Facebook</Button>
+        <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
+          <IconButton size={40} icon="google" color="#E73B31" onPress={() => console.log("Google")}/>
+          <IconButton size={40} icon="facebook" color="#4A72B7" onPress={() => console.log("Facebook")}/>
+          <IconButton size={40} icon="github" color={colors.text} onPress={() => console.log("GitHub")}/>
+        </View>
       </Surface>
     </ScrollView>
   );

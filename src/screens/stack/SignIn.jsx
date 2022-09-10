@@ -51,8 +51,11 @@ export const SignIn = () => {
           <View style={{ ...styles.line, backgroundColor: colors.semiWhite }} />
         </View>
 
-        <Button contentStyle={{ height: 45 }} uppercase={false} color="#E73B31" icon="google" mode="contained">Google</Button>
-        <Button contentStyle={{ height: 45 }} uppercase={false} color="#4A72B7" style={{ marginTop: 20 }} icon="facebook" mode="contained">Facebook</Button>
+        <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
+          <IconButton size={40} icon="google" color="#E73B31" onPress={() => console.log("Google")} />
+          <IconButton size={40} icon="facebook" color="#4A72B7" onPress={() => console.log("Facebook")} />
+          <IconButton size={40} icon="github" color={colors.text} onPress={() => console.log("GitHub")} />
+        </View>
       </Surface>
     </ScrollView>
   );
