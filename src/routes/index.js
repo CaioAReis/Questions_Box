@@ -59,7 +59,7 @@ const theme = {
       error: "#DD4B39",
       primary: "#5ea0e6",
       success: "#00A65A",
-      surface: "#27314A",
+      surface: "#141A28",
       warning: "#DA8C10",
       secondary: "#9633FF",
       onSurface: "#DCDCE0",
@@ -67,7 +67,7 @@ const theme = {
       // background: "#141A28",
       outline: "#DCDCE050",
       semiWhite: "#DCDCE050",
-      placeholder: "#DCDCE050",
+      placeholder: "#DCDCE080",
       onSurfaceVariant: "#DCDCE080",
     },
     fonts: configureFonts({

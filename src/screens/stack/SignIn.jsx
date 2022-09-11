@@ -27,7 +27,7 @@ export const SignIn = ({ navigation }) => {
         <Headline style={{ ...fonts.regular, fontSize: 16 }}>{"Faça o login para continuar!"}</Headline>
       </View>
 
-      <Surface style={styles.main}>
+      <View style={styles.main}>
         <TextInput
           label="E-mail"
           mode="outlined"
@@ -38,11 +38,12 @@ export const SignIn = ({ navigation }) => {
         <TextInput
           label="Senha"
           mode="outlined"
+          secureTextEntry={true}
           style={{ marginBottom: 35 }}
           theme={{ colors: { background: colors.surface } }}
         />
 
-        <Button contentStyle={{ height: 45 }} labelStyle={{ fontWeight: "bold" }} icon="login" mode="contained">Entrar</Button>
+        <Button contentStyle={{ height: 55 }} icon="login" mode="contained">Entrar</Button>
 
         <View style={styles.orView}>
           <View style={{ ...styles.line, backgroundColor: colors.semiWhite }} />
@@ -56,8 +57,8 @@ export const SignIn = ({ navigation }) => {
           <IconButton size={40} icon="github" color={colors.text} onPress={() => console.log("GitHub")} />
         </View>
 
-        <Paragraph style={{ textAlign: "center", marginTop: 30 }}>Já possui conta? Então, <Paragraph onPress={() => navigation.navigate("SignUp")} style={{...fonts.medium, ...styles.title, color: colors.warning, textDecorationLine: "underline" }}>cadastre-se</Paragraph>!</Paragraph>
-      </Surface>
+        <Paragraph style={{ textAlign: "center", marginTop: 30 }}>Não possui conta? <Paragraph onPress={() => navigation.navigate("SignUp")} style={{ ...fonts.medium, ...styles.title, color: colors.warning, textDecorationLine: "underline" }}>CADASTRE-SE</Paragraph>!</Paragraph>
+      </View>
     </ScrollView>
   );
 };
