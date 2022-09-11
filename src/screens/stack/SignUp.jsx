@@ -15,7 +15,7 @@ export const SignUp = () => {
   const { colors, fonts } = useTheme();
 
   return (
-    <ScrollView style={{ backgroundColor: colors.background }}>
+    <ScrollView style={{ backgroundColor: colors.surface }}>
       <View style={{ marginBottom: 20, padding: 20, flex: 1, justifyContent: "flex-end" }}>
         <IconButton
           size={40}
@@ -28,33 +28,33 @@ export const SignUp = () => {
         <Paragraph style={{ ...fonts.light }}>Preencha os campos abaixo!</Paragraph>
       </View>
 
-      <Surface style={styles.main}>
+      <Surface style={{...styles.main, backgroundColor: colors.background}}>
         <TextInput
           mode="outlined"
           label="Nome completo"
           style={{ marginBottom: 10 }}
-          theme={{ colors: { background: colors.surface } }}
+          // theme={{ colors: { background: colors.surface } }}
         />
 
         <TextInput
           label="E-mail"
           mode="outlined"
           style={{ marginBottom: 10 }}
-          theme={{ colors: { background: colors.surface } }}
+          // theme={{ colors: { background: colors.surface } }}
         />
 
         <TextInput
           label="Senha"
           mode="outlined"
           style={{ marginBottom: 10 }}
-          theme={{ colors: { background: colors.surface } }}
+          // theme={{ colors: { background: colors.surface } }}
         />
 
         <TextInput
           mode="outlined"
           label="Repetir senha"
           style={{ marginBottom: 35 }}
-          theme={{ colors: { background: colors.surface } }}
+          // theme={{ colors: { background: colors.surface } }}
         />
 
         <Button contentStyle={{ height: 45 }} labelStyle={{ fontWeight: "bold" }} icon="account-arrow-right" mode="contained">Criar conta</Button>

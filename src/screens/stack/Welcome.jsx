@@ -1,8 +1,6 @@
-import React from "react";
+import { useRef, useState } from "react";
 import { Dimensions, Image, ScrollView, StyleSheet, View } from "react-native";
-import { Headline, IconButton, Text, useTheme } from "react-native-paper";
-
-import Logo from "../../../assets/Logo.png";
+import { Button, Headline, IconButton, useTheme } from "react-native-paper";
 
 import I1 from "../../../assets/Happy.png";
 import I2 from "../../../assets/Projections.png";
@@ -10,19 +8,29 @@ import I3 from "../../../assets/Questions.png";
 import I4 from "../../../assets/Quiz.png";
 import I5 from "../../../assets/Welcome.png";
 
-export const Welcome = () => {
+export const Welcome = ({ navigation }) => {
   const { colors, fonts } = useTheme();
+
+  // const step = useRef(1);
+  const scrollRef = useRef();
+  const [step, setStep] = useState(1);
 
   const title = { ...fonts.medium, ...styles.title };
   const span = { ...fonts.medium, ...styles.title, color: colors.warning };
 
+  const handleNextStep = () => {
+    scrollRef.current.scrollTo({ x: Dimensions.get("screen").width * step, y: 0, animated: true });
+    // step.current = step.current + 1;
+    setStep(prev => prev + 1);
+  };
+
+  // console.warn("render!");
+
   return (
-    <View style={{ ...styles.container, backgroundColor: colors.surface }}>
-      {/* <Image resizeMode="contain" source={Logo} style={{ width: 70, height: 70, marginVertical: 10 }} /> */}
+    <View style={styles.container}>
+      <Headline style={{ ...title, marginVertical: 20 }}>LOGO</Headline>
 
-      <Headline style={{...title, marginVertical: 20 }}>LOGO</Headline>
-
-      <ScrollView showsHorizontalScrollIndicator={false} pagingEnabled horizontal style={{ flex: 1, backgroundColor: colors.surface }}>
+      <ScrollView scrollEnabled={false} ref={scrollRef} showsHorizontalScrollIndicator={false} pagingEnabled horizontal style={{ flex: 1 }}>
         <View style={styles.step}>
           <Image resizeMode="contain" source={I2} style={styles.img} />
           <View>
@@ -60,9 +68,23 @@ export const Welcome = () => {
         </View>
       </ScrollView>
 
-      <View style={{ alignItems: "center", paddingBottom: 40 }}>
-        <IconButton size={70} icon="chevron-right-circle" color={colors.primary} onPress={() => console.log("hi")} />
-        <Headline style={{ fontSize: 18 }} >Próximo</Headline>
+      <View style={{ paddingBottom: 40, width: "100%" }}>
+        {step < 5 ? (
+          <View style={{ alignItems: "center" }}>
+            <IconButton size={70} icon="chevron-right-circle" color={colors.primary} onPress={handleNextStep} />
+            <Headline style={{ fontSize: 18 }} onPress={handleNextStep}>Próximo</Headline>
+          </View>
+        ) : (
+          <View style={{ paddingHorizontal: 40, paddingTop: 20 }}>
+            <Button contentStyle={{ height: 55 }} style={{ marginBottom: 20 }} icon="login" mode="contained" onPress={() => navigation.navigate("SignIn")}>
+              Fazer login
+            </Button>
+
+            <Button contentStyle={{ height: 55 }} icon="account-arrow-right" mode="outlined" onPress={() => navigation.navigate("SignUp")}>
+              Fazer cadastro
+            </Button>
+          </View>
+        )}
       </View>
     </View>
   );
@@ -75,13 +97,11 @@ const styles = StyleSheet.create({
   },
   step: {
     flex: 1,
-    justifyContent: "space-evenly",
     alignItems: "center",
+    justifyContent: "space-evenly",
     width: Dimensions.get("screen").width,
-    // backgroundColor: "blue"
   },
   img: {
-    // borderRadius: 20,
     width: Dimensions.get("screen").width / 1.5,
     height: Dimensions.get("screen").width / 1.5,
   },
