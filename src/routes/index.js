@@ -57,7 +57,7 @@ const theme = {
       ...NavigateDefaultTheme.colors,
       text: "#DCDCE0",
       error: "#DD4B39",
-      primary: "#DCDCE0",
+      primary: "#5ea0e6",
       success: "#00A65A",
       surface: "#27314A",
       warning: "#DA8C10",
@@ -67,7 +67,7 @@ const theme = {
       // background: "#141A28",
       outline: "#DCDCE050",
       semiWhite: "#DCDCE050",
-      placeholder: "#DCDCE080",
+      placeholder: "#DCDCE050",
       onSurfaceVariant: "#DCDCE080",
     },
     fonts: configureFonts({

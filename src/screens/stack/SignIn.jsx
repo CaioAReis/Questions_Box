@@ -11,21 +11,20 @@ import {
   IconButton,
 } from "react-native-paper";
 
-export const SignIn = () => {
+export const SignIn = ({ navigation }) => {
   const { colors, fonts } = useTheme();
 
   return (
-    <ScrollView style={{ backgroundColor: colors.background }}>
-      <View style={{ marginBottom: 20, padding: 20, flex: 1, justifyContent: "flex-end" }}>
+    <ScrollView>
+      <View style={{ padding: 20, flex: 1, justifyContent: "flex-end" }}>
         <IconButton
           size={40}
-          color={colors.primary}
-          style={{ marginBottom: 40 }}
+          color={colors.text}
           icon="arrow-left-circle-outline"
-          onPress={() => console.log('Pressed')}
+          onPress={() => navigation.goBack()}
         />
-        <Headline style={{ ...fonts.medium, color: colors.primary }}>Seja muito bem vindo!</Headline>
-        <Paragraph style={{ ...fonts.light }}>Faça o login para continuar</Paragraph>
+        <Headline style={{ textAlign: "center", marginTop: 20, marginBottom: 40 }}>LOGO</Headline>
+        <Headline style={{ ...fonts.regular, fontSize: 16 }}>{"Faça o login para continuar!"}</Headline>
       </View>
 
       <Surface style={styles.main}>
@@ -47,7 +46,7 @@ export const SignIn = () => {
 
         <View style={styles.orView}>
           <View style={{ ...styles.line, backgroundColor: colors.semiWhite }} />
-          <Text style={{ marginHorizontal: 20 }}>OU</Text>
+          <Text style={{ marginHorizontal: 20 }}>Ou entre com</Text>
           <View style={{ ...styles.line, backgroundColor: colors.semiWhite }} />
         </View>
 
@@ -56,6 +55,8 @@ export const SignIn = () => {
           <IconButton size={40} icon="facebook" color="#4A72B7" onPress={() => console.log("Facebook")} />
           <IconButton size={40} icon="github" color={colors.text} onPress={() => console.log("GitHub")} />
         </View>
+
+        <Paragraph style={{ textAlign: "center", marginTop: 30 }}>Já possui conta? Então, <Paragraph onPress={() => navigation.navigate("SignUp")} style={{...fonts.medium, ...styles.title, color: colors.warning, textDecorationLine: "underline" }}>cadastre-se</Paragraph>!</Paragraph>
       </Surface>
     </ScrollView>
   );
@@ -64,9 +65,7 @@ export const SignIn = () => {
 const styles = StyleSheet.create({
   main: {
     flex: 2,
-    borderRadius: 20,
-    paddingVertical: 40,
-    paddingHorizontal: 20,
+    padding: 20,
   },
   line: {
     flex: 1,
@@ -74,7 +73,8 @@ const styles = StyleSheet.create({
     borderRadius: 2,
   },
   orView: {
-    marginVertical: 40,
+    marginTop: 30,
+    marginBottom: 10,
     alignItems: "center",
     flexDirection: "row",
   }

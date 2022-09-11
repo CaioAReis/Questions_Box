@@ -16,7 +16,7 @@ export const Welcome = ({ navigation }) => {
   const [step, setStep] = useState(1);
 
   const title = { ...fonts.medium, ...styles.title };
-  const span = { ...fonts.medium, ...styles.title, color: colors.warning };
+  const span = { ...fonts.medium, ...styles.title, color: colors.primary };
 
   const handleNextStep = () => {
     scrollRef.current.scrollTo({ x: Dimensions.get("screen").width * step, y: 0, animated: true });
