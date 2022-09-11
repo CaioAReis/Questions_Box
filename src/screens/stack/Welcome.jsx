@@ -16,7 +16,7 @@ export const Welcome = ({ navigation }) => {
   const [step, setStep] = useState(1);
 
   const title = { ...fonts.medium, ...styles.title };
-  const span = { ...fonts.medium, ...styles.title, color: colors.primary };
+  const span = { ...fonts.medium, ...styles.title, color: colors.warning };
 
   const handleNextStep = () => {
     scrollRef.current.scrollTo({ x: Dimensions.get("screen").width * step, y: 0, animated: true });
@@ -72,15 +72,14 @@ export const Welcome = ({ navigation }) => {
         {step < 5 ? (
           <View style={{ alignItems: "center" }}>
             <IconButton size={70} icon="chevron-right-circle" color={colors.primary} onPress={handleNextStep} />
-            <Headline style={{ fontSize: 18 }} onPress={handleNextStep}>Próximo</Headline>
           </View>
         ) : (
           <View style={{ paddingHorizontal: 40, paddingTop: 20 }}>
-            <Button contentStyle={{ height: 55 }} style={{ marginBottom: 20 }} icon="login" mode="contained" onPress={() => navigation.navigate("SignIn")}>
+            <Button contentStyle={{ height: 45 }} style={{ marginBottom: 20 }} icon="login" mode="contained" onPress={() => navigation.navigate("SignIn")}>
               Fazer login
             </Button>
 
-            <Button contentStyle={{ height: 55 }} icon="account-arrow-right" mode="outlined" onPress={() => navigation.navigate("SignUp")}>
+            <Button contentStyle={{ height: 45 }} icon="account-arrow-right" mode="outlined" onPress={() => navigation.navigate("SignUp")}>
               Fazer cadastro
             </Button>
           </View>

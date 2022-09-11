@@ -45,14 +45,6 @@ export const SignUp = ({ navigation }) => {
           label="Senha"
           mode="outlined"
           secureTextEntry={true}
-          style={{ marginBottom: 10 }}
-          theme={{ colors: { background: colors.surface } }}
-        />
-
-        <TextInput
-          mode="outlined"
-          label="Repetir senha"
-          secureTextEntry={true}
           style={{ marginBottom: 35 }}
           theme={{ colors: { background: colors.surface } }}
         />
