@@ -6,7 +6,7 @@ import {
   useFonts,WorkSans_100Thin, WorkSans_700Bold, WorkSans_300Light, WorkSans_500Medium, WorkSans_400Regular,
 } from '@expo-google-fonts/work-sans';
 
-import { AuthRoutes } from "./stack.routes";
+import { AuthRoutes, SessionRoutes } from "./stack.routes";
 
 const Stack = createNativeStackNavigator();
 
@@ -95,6 +95,7 @@ const RootRoutes = () => {
           <Stack.Navigator initialRouteName="Cadastro" screenOptions={{ headerShown: false }} >
             
             <Stack.Screen name="AuthRoutes" component={AuthRoutes} />
+            <Stack.Screen name="SessionRoutes" component={SessionRoutes} />
 
           </Stack.Navigator>
         </SafeAreaView>

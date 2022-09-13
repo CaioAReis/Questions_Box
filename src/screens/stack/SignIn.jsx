@@ -3,7 +3,6 @@ import { View, StyleSheet, ScrollView } from "react-native";
 import {
   Text,
   Button,
-  Surface,
   Headline,
   useTheme,
   Paragraph,
@@ -43,7 +42,7 @@ export const SignIn = ({ navigation }) => {
           theme={{ colors: { background: colors.surface } }}
         />
 
-        <Button contentStyle={{ height: 55 }} icon="login" mode="contained">Entrar</Button>
+        <Button onPress={() => navigation.navigate("SessionRoutes")} contentStyle={{ height: 45 }} icon="login" mode="contained">Entrar</Button>
 
         <View style={styles.orView}>
           <View style={{ ...styles.line, backgroundColor: colors.semiWhite }} />

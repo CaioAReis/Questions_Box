@@ -49,7 +49,7 @@ export const SignUp = ({ navigation }) => {
           theme={{ colors: { background: colors.surface } }}
         />
 
-        <Button contentStyle={{ height: 55 }} icon="account-arrow-right" mode="contained">Criar conta</Button>
+        <Button contentStyle={{ height: 45 }} icon="account-arrow-right" mode="contained">Criar conta</Button>
 
         <View style={styles.orView}>
           <View style={{ ...styles.line, backgroundColor: colors.semiWhite }} />
