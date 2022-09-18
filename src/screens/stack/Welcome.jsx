@@ -1,7 +1,8 @@
 import { useRef, useState } from "react";
-import { Dimensions, Image, ScrollView, StyleSheet, View } from "react-native";
+import { Dimensions, Image, ImageBackground, ScrollView, StyleSheet, View } from "react-native";
 import { Button, Headline, IconButton, useTheme } from "react-native-paper";
 
+import mancha from "../../../assets/mancha.png";
 import I1 from "../../../assets/Happy.png";
 import I2 from "../../../assets/Projections.png";
 import I3 from "../../../assets/Questions.png";
@@ -32,7 +33,9 @@ export const Welcome = ({ navigation }) => {
 
       <ScrollView scrollEnabled={false} ref={scrollRef} showsHorizontalScrollIndicator={false} pagingEnabled horizontal style={{ flex: 1 }}>
         <View style={styles.step}>
-          <Image resizeMode="contain" source={I2} style={styles.img} />
+          <ImageBackground imageStyle={{ opacity: 0.4 }} resizeMode="stretch" source={mancha}>
+            <Image resizeMode="contain" source={I2} style={styles.img} />
+          </ImageBackground>
           <View>
             <Headline style={span}>Olá mundo!</Headline>
             <Headline style={title}>Seja muito bem-vindo(a) ao nosso APP</Headline>
@@ -40,28 +43,36 @@ export const Welcome = ({ navigation }) => {
         </View>
 
         <View style={styles.step}>
-          <Image resizeMode="contain" source={I4} style={styles.img} />
+          <ImageBackground imageStyle={{ opacity: 0.4 }} resizeMode="stretch" source={mancha}>
+            <Image resizeMode="contain" source={I4} style={styles.img} />
+          </ImageBackground>
           <Headline style={title}>
             A todo momento possuímos <Headline style={span}>dúvidas</Headline> sobre algo, não é mesmo?
           </Headline>
         </View>
 
         <View style={styles.step}>
-          <Image resizeMode="contain" source={I3} style={styles.img} />
+          <ImageBackground imageStyle={{ opacity: 0.4 }} resizeMode="stretch" source={mancha}>
+            <Image resizeMode="contain" source={I3} style={styles.img} />
+          </ImageBackground>
           <Headline style={title}>
             Esperamos que voçê consiga tirar <Headline style={span}>todas</Headline> elas aqui!
           </Headline>
         </View>
 
         <View style={styles.step}>
-          <Image resizeMode="contain" source={I1} style={styles.img} />
+          <ImageBackground imageStyle={{ opacity: 0.4 }} resizeMode="stretch" source={mancha}>
+            <Image resizeMode="contain" source={I1} style={styles.img} />
+          </ImageBackground>
           <Headline style={title}>
             Faça <Headline style={span}>perguntas</Headline> ou espalhe seu conhecimento na nossa plataforma!
           </Headline>
         </View>
 
         <View style={styles.step}>
-          <Image resizeMode="contain" source={I5} style={styles.img} />
+          <ImageBackground imageStyle={{ opacity: 0.4 }} resizeMode="stretch" source={mancha}>
+            <Image resizeMode="contain" source={I5} style={styles.img} />
+          </ImageBackground>
           <Headline style={title}>
             Faça o <Headline style={span}>login</Headline> ou <Headline style={span}>cadastre-se</Headline> para começar!
           </Headline>
@@ -71,7 +82,7 @@ export const Welcome = ({ navigation }) => {
       <View style={{ paddingBottom: 40, width: "100%" }}>
         {step < 5 ? (
           <View style={{ alignItems: "center" }}>
-            <IconButton size={70} icon="chevron-right-circle" color={colors.primary} onPress={handleNextStep} />
+            <IconButton size={70} icon="arrow-right-circle" color={colors.primary} onPress={handleNextStep} />
           </View>
         ) : (
           <View style={{ paddingHorizontal: 40, paddingTop: 20 }}>
