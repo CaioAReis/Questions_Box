@@ -8,6 +8,17 @@ import {
 
 import { AuthRoutes, SessionRoutes } from "./stack.routes";
 
+// Logos
+import LogoMain from "../../assets/LogoMain.png";
+import LogoMainWhite from "../../assets/LogoMainWhite.png";
+import Logo2 from "../../assets/Logo2.png";
+import Logo2White from "../../assets/Logo2White.png";
+import LogoH from "../../assets/LogoH.png";
+import LogoHWhite from "../../assets/LogoHWhite.png";
+
+
+
+
 const Stack = createNativeStackNavigator();
 
 const _defaultFonts = {
@@ -24,6 +35,11 @@ const theme = {
     ...NavigateDefaultTheme,
     roundness: 8,
     dark: false,
+    logos: {
+      1: LogoMain,
+      2: Logo2,
+      3: LogoH,
+    },
     colors: {
       ...DefaultTheme.colors,
       ...NavigateDefaultTheme.colors,
@@ -52,6 +68,11 @@ const theme = {
     ...NavigateDefaultTheme,
     dark: true,
     roundness: 8,
+    logos: {
+      1: LogoMainWhite,
+      2: Logo2White,
+      3: LogoHWhite,
+    },
     colors: {
       ...DefaultTheme.colors,
       ...NavigateDefaultTheme.colors,

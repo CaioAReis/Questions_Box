@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, ScrollView } from "react-native";
+import { View, StyleSheet, ScrollView, Image } from "react-native";
 import {
   Text,
   Button,
@@ -11,7 +11,7 @@ import {
 } from "react-native-paper";
 
 export const SignIn = ({ navigation }) => {
-  const { colors, fonts } = useTheme();
+  const { colors, fonts, logos } = useTheme();
 
   return (
     <ScrollView>
@@ -22,7 +22,10 @@ export const SignIn = ({ navigation }) => {
           icon="arrow-left-circle-outline"
           onPress={() => navigation.goBack()}
         />
-        <Headline style={{ textAlign: "center", marginTop: 20, marginBottom: 40 }}>LOGO</Headline>
+        <View style={{ alignItems: "center" }}>
+          <Image source={logos[1]} resizeMode="contain" style={{ marginVertical: 20, width: 120, height: 120 }} />
+        </View>
+
         <Headline style={{ ...fonts.regular, fontSize: 16 }}>{"Faça o login para continuar!"}</Headline>
       </View>
 

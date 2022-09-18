@@ -1,13 +1,16 @@
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Image } from "react-native";
 import { Avatar, Chip, Divider, Headline, IconButton, Surface, Text, Title, useTheme } from "react-native-paper";
 
 export const Home = () => {
-  const { colors } = useTheme();
+  const { colors, logos } = useTheme();
 
   return (
     <Surface style={styles.container}>
       <View style={{ ...styles.header, backgroundColor: colors.background }}>
-        <Headline>LOGO</Headline>
+
+        <View style={{ alignItems: "center" }}>
+          <Image source={logos[3]} resizeMode="contain" style={{ width: 140, height: 50 }} />
+        </View>
         <Avatar.Image size={40} source={{ uri: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.cgmagonline.com%2Fwp-content%2Fuploads%2F2017%2F03%2Fsuper-bomberman-r-review-not-a-total-bomb.jpg&f=1&nofb=1" }} />
       </View>
 

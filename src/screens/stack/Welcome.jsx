@@ -10,7 +10,7 @@ import I4 from "../../../assets/Quiz.png";
 import I5 from "../../../assets/Welcome.png";
 
 export const Welcome = ({ navigation }) => {
-  const { colors, fonts } = useTheme();
+  const { colors, fonts, logos } = useTheme();
 
   // const step = useRef(1);
   const scrollRef = useRef();
@@ -29,7 +29,7 @@ export const Welcome = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Headline style={{ ...title, marginVertical: 20 }}>LOGO</Headline>
+      <Image source={logos[1]} resizeMode="contain" style={{ marginTop: 20, width: 120, height: 120 }} />
 
       <ScrollView scrollEnabled={false} ref={scrollRef} showsHorizontalScrollIndicator={false} pagingEnabled horizontal style={{ flex: 1 }}>
         <View style={styles.step}>
