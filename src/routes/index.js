@@ -87,7 +87,7 @@ const theme = {
       background: "#27314A",
       // background: "#141A28",
       outline: "#DCDCE050",
-      semiWhite: "#DCDCE050",
+      semiTransparent: "#DCDCE030",
       placeholder: "#DCDCE080",
       onSurfaceVariant: "#DCDCE080",
     },
