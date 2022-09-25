@@ -1,5 +1,5 @@
 import { View, StyleSheet, Image, FlatList } from "react-native";
-import { Avatar, Chip, Divider, IconButton, Surface, Text, Title, useTheme } from "react-native-paper";
+import { Avatar, Chip, Colors, Divider, FAB, IconButton, Surface, Text, Title, useTheme } from "react-native-paper";
 
 export const Home = () => {
   const { colors, logos } = useTheme();
@@ -89,7 +89,7 @@ export const Home = () => {
                 <Title numberOfLines={2} style={{ fontSize: 14, lineHeight: 22 }}>{item?.title}</Title>
                 <View style={styles.tagsView}>
                   {item?.tags.map(tag =>
-                    <Chip mode="outlined" textStyle={{ fontSize: 12 }} style={{ backgroundColor: colors.background, marginRight: 4, marginBottom: 4 }} onPress={() => console.log('Pressed')}>{tag}</Chip>
+                    <Chip key={tag} mode="outlined" textStyle={{ fontSize: 12 }} style={{ backgroundColor: colors.background, marginRight: 4, marginBottom: 4 }} onPress={() => console.log('Pressed')}>{tag}</Chip>
                   )}
                 </View>
               </View>
@@ -121,6 +121,13 @@ export const Home = () => {
           </View>
         )}
       />
+      <FAB
+        icon="plus"
+        style={{...styles.fab, backgroundColor: colors.primary}}
+        animated={true}
+        label="Postar dúvida"
+        onPress={() => console.log('Pressed')}
+      />
     </Surface>
   );
 };
@@ -150,5 +157,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 15,
     justifyContent: "space-between",
-  }
+  },
+  fab: {
+    right: 10,
+    margin: 16,
+    bottom: 20,
+    position: "absolute",
+  },
 });

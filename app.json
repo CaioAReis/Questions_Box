@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "frontend_MBL",
-    "slug": "frontend_MBL",
+    "name": "Questions Box",
+    "slug": "Questions_Box",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

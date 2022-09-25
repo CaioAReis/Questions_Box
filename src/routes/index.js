@@ -16,9 +16,6 @@ import Logo2White from "../../assets/Logo2White.png";
 import LogoH from "../../assets/LogoH.png";
 import LogoHWhite from "../../assets/LogoHWhite.png";
 
-
-
-
 const Stack = createNativeStackNavigator();
 
 const _defaultFonts = {

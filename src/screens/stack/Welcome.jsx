@@ -12,7 +12,6 @@ import I5 from "../../../assets/Welcome.png";
 export const Welcome = ({ navigation }) => {
   const { colors, fonts, logos } = useTheme();
 
-  // const step = useRef(1);
   const scrollRef = useRef();
   const [step, setStep] = useState(1);
 
@@ -21,11 +20,8 @@ export const Welcome = ({ navigation }) => {
 
   const handleNextStep = () => {
     scrollRef.current.scrollTo({ x: Dimensions.get("screen").width * step, y: 0, animated: true });
-    // step.current = step.current + 1;
     setStep(prev => prev + 1);
   };
-
-  // console.warn("render!");
 
   return (
     <View style={styles.container}>
@@ -33,7 +29,7 @@ export const Welcome = ({ navigation }) => {
 
       <ScrollView scrollEnabled={false} ref={scrollRef} showsHorizontalScrollIndicator={false} pagingEnabled horizontal style={{ flex: 1 }}>
         <View style={styles.step}>
-          <ImageBackground imageStyle={{ opacity: 0.4 }} resizeMode="stretch" source={mancha}>
+          <ImageBackground imageStyle={{ opacity: 0.7 }} resizeMode="stretch" source={mancha}>
             <Image resizeMode="contain" source={I2} style={styles.img} />
           </ImageBackground>
           <View>
@@ -43,7 +39,7 @@ export const Welcome = ({ navigation }) => {
         </View>
 
         <View style={styles.step}>
-          <ImageBackground imageStyle={{ opacity: 0.4 }} resizeMode="stretch" source={mancha}>
+          <ImageBackground imageStyle={{ opacity: 0.7 }} resizeMode="stretch" source={mancha}>
             <Image resizeMode="contain" source={I4} style={styles.img} />
           </ImageBackground>
           <Headline style={title}>
@@ -52,7 +48,7 @@ export const Welcome = ({ navigation }) => {
         </View>
 
         <View style={styles.step}>
-          <ImageBackground imageStyle={{ opacity: 0.4 }} resizeMode="stretch" source={mancha}>
+          <ImageBackground imageStyle={{ opacity: 0.7 }} resizeMode="stretch" source={mancha}>
             <Image resizeMode="contain" source={I3} style={styles.img} />
           </ImageBackground>
           <Headline style={title}>
@@ -61,7 +57,7 @@ export const Welcome = ({ navigation }) => {
         </View>
 
         <View style={styles.step}>
-          <ImageBackground imageStyle={{ opacity: 0.4 }} resizeMode="stretch" source={mancha}>
+          <ImageBackground imageStyle={{ opacity: 0.7 }} resizeMode="stretch" source={mancha}>
             <Image resizeMode="contain" source={I1} style={styles.img} />
           </ImageBackground>
           <Headline style={title}>
@@ -70,7 +66,7 @@ export const Welcome = ({ navigation }) => {
         </View>
 
         <View style={styles.step}>
-          <ImageBackground imageStyle={{ opacity: 0.4 }} resizeMode="stretch" source={mancha}>
+          <ImageBackground imageStyle={{ opacity: 0.7 }} resizeMode="stretch" source={mancha}>
             <Image resizeMode="contain" source={I5} style={styles.img} />
           </ImageBackground>
           <Headline style={title}>
