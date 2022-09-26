@@ -73,7 +73,7 @@ export const Home = () => {
                 <Chip style={{ margin: 4, backgroundColor: colors.background }} onPress={() => console.log('Pressed')}>Pokémon</Chip>
                 <Chip style={{ margin: 4, backgroundColor: colors.background }} onPress={() => console.log('Pressed')}>One Piece</Chip><Divider />
 
-                <Chip icon="plus" mode="outlined" theme={{ colors: { text: colors.warning } }} style={{ margin: 4, borderColor: colors.warning }} onPress={() => console.log('Pressed')}>Mais tags</Chip><Divider />
+                <Chip icon="plus" mode="outlined" theme={{ colors: { text: colors.primary } }} style={{ margin: 4, borderColor: colors.primary }} onPress={() => console.log('Pressed')}>Mais tags</Chip><Divider />
               </View>
               <Divider style={{ marginVertical: 20 }} />
               <Title>Dúvidas recentes:</Title>
@@ -123,10 +123,10 @@ export const Home = () => {
       />
       <FAB
         icon="plus"
-        style={{...styles.fab, backgroundColor: colors.primary}}
         animated={true}
         label="Postar dúvida"
         onPress={() => console.log('Pressed')}
+        style={{...styles.fab, backgroundColor: colors.primary}}
       />
     </Surface>
   );
