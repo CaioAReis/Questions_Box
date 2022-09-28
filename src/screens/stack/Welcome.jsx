@@ -63,7 +63,7 @@ export const Welcome = ({ navigation }) => {
             <Image resizeMode="contain" source={I1} style={styles.img} />
           </ImageBackground>
           <Title style={title}>
-            Faça <Title style={span}>perguntas</Title> ou espalhe seu conhecimento na nossa plataforma!
+            Faça <Title style={span}>perguntas</Title> ou tire as dúvidas da galera!
           </Title>
         </View>
 
@@ -72,7 +72,7 @@ export const Welcome = ({ navigation }) => {
             <Image resizeMode="contain" source={I5} style={styles.img} />
           </ImageBackground>
           <Title style={title}>
-            Faça o <Title style={span}>login</Title> ou <Title style={span}>cadastre-se</Title> para começar!
+            <Title style={span}>Entre</Title> ou <Title style={span}>cadastre-se</Title> para começar!
           </Title>
         </View>
       </ScrollView>
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: "center",
-    fontSize: 24 / ratio,
-    marginHorizontal: 20,
+    fontSize: 20 / ratio,
+    paddingHorizontal: 40,
   }
 });

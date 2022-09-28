@@ -17,7 +17,8 @@ import LogoH from "../../assets/LogoH.png";
 import LogoHWhite from "../../assets/LogoHWhite.png";
 
 /*
-  text: 14
+  Text: 14
+  Title: 20
   heading: 24
 */
 
@@ -45,19 +46,17 @@ const theme = {
     colors: {
       ...DefaultTheme.colors,
       ...NavigateDefaultTheme.colors,
-      text: "#191A1F",
-      error: "#DD4B39",
-      surface: "#FFFFFF",
-      primary: "#191A1F",
-      success: "#00A65A",
-      warning: "#DA8C10",
-      secondary: "#9633FF",
-      outline: "#191A1F50",
-      onSurface: "#191A1F",
-      background: "#ededed",
-      placeholder: "#191A1F",
-      semiWhite: "#191A1F50",
-      onSurfaceVariant: "#191A1F80",
+      text: "#141A28",
+      error: "#F0424C",
+      primary: "#F0424C",
+      success: "#10B278",
+      surface: "#DCDCE0",
+      warning: "#F8A700",
+      secondary: "#286EF5",
+      onSurface: "#DCDCE0",
+      background: "#EDEDED",
+      placeholder: "#141A2850",
+      semiTransparent: "#141A2850",
     },
     fonts: configureFonts({
       web: _defaultFonts,
@@ -90,14 +89,14 @@ const theme = {
       placeholder: "#EDEDED50",
       semiTransparent: "#EDEDED50",
 
-      accent: "#F0424C",
-      border: "#F0424C",
-      outline: "#F0424C",
-      backdrop: "#F0424C",
-      disabled: "#F0424C",
-      onSurface: "#F0424C",
-      notification: "#F0424C",
-      onSurfaceVariant: "#F0424C",
+      // accent: "#F0424C",
+      // border: "#F0424C",
+      // outline: "#F0424C",
+      // backdrop: "#F0424C",
+      // disabled: "#F0424C",
+      // onSurface: "#F0424C",
+      // notification: "#F0424C",
+      // onSurfaceVariant: "#F0424C",
     },
     fonts: configureFonts({
       web: _defaultFonts,

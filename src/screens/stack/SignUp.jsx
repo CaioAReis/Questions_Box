@@ -15,7 +15,7 @@ export const SignUp = ({ navigation }) => {
   const { colors, fonts, logos } = useTheme();
 
   return (
-    <ScrollView>
+    <ScrollView showsVerticalScrollIndicator={false}>
       <View style={{ padding: 20, flex: 1, justifyContent: "flex-end" }}>
         <IconButton
           size={40}
@@ -35,14 +35,14 @@ export const SignUp = ({ navigation }) => {
           mode="outlined"
           label="Nome completo"
           style={{ marginBottom: 10 }}
-          theme={{ colors: { background: colors.surface, primary: colors.secondary } }}
+          theme={{ colors: { background: colors.surface, primary: colors.text } }}
         />
 
         <TextInput
           label="E-mail"
           mode="outlined"
           style={{ marginBottom: 10 }}
-          theme={{ colors: { background: colors.surface, primary: colors.secondary } }}
+          theme={{ colors: { background: colors.surface, primary: colors.text } }}
         />
 
         <TextInput
@@ -50,15 +50,15 @@ export const SignUp = ({ navigation }) => {
           mode="outlined"
           secureTextEntry={true}
           style={{ marginBottom: 35 }}
-          theme={{ colors: { background: colors.surface, primary: colors.secondary } }}
+          theme={{ colors: { background: colors.surface, primary: colors.text } }}
         />
 
         <Button contentStyle={{ height: 45 }} icon="account-arrow-right" mode="contained">Criar conta</Button>
 
         <View style={styles.orView}>
-          <View style={{ ...styles.line, backgroundColor: colors.semiWhite }} />
+          <View style={{ ...styles.line, backgroundColor: colors.semiTransparent }} />
           <Text style={{ marginHorizontal: 20, fontSize: 14 / ratio }}>Ou entre com</Text>
-          <View style={{ ...styles.line, backgroundColor: colors.semiWhite }} />
+          <View style={{ ...styles.line, backgroundColor: colors.semiTransparent }} />
         </View>
 
         <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
@@ -67,7 +67,7 @@ export const SignUp = ({ navigation }) => {
           <IconButton size={40} icon="github" color={colors.text} onPress={() => console.log("GitHub")} />
         </View>
 
-        <Text style={{ textAlign: "center", marginTop: 30, fontSize: 14 / ratio }}>Já possui conta? Faça o <Text onPress={() => navigation.navigate("SignIn")} style={{ ...fonts.medium, ...styles.title, color: colors.primary, textDecorationLine: "underline", fontSize: 14 / ratio }}>LOGIN</Text>!</Text>
+        <Text style={{ textAlign: "center", marginTop: 30, fontSize: 14 / ratio }}>Já possui conta? Faça o <Text onPress={() => navigation.navigate("SignIn")} style={{ ...fonts.medium, ...styles.title, color: colors.primary, fontSize: 14 / ratio }}>LOGIN</Text>!</Text>
       </View>
     </ScrollView>
   );

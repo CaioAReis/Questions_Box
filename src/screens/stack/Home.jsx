@@ -1,5 +1,7 @@
-import { View, StyleSheet, Image, FlatList } from "react-native";
-import { Avatar, Chip, Colors, Divider, FAB, IconButton, Surface, Text, Title, useTheme } from "react-native-paper";
+import { View, StyleSheet, Image, FlatList, PixelRatio } from "react-native";
+import { Avatar, Chip, Divider, FAB, IconButton, Surface, Text, Title, useTheme } from "react-native-paper";
+
+const ratio = PixelRatio.getFontScale();
 
 export const Home = () => {
   const { colors, logos } = useTheme();
@@ -47,10 +49,22 @@ export const Home = () => {
 
   ];
 
+  const tags = [
+    { title: "Java" },
+    { title: "SQL" },
+    { title: "JavaScript" },
+    { title: "HTML" },
+    { title: "CSS" },
+    { title: "React" },
+    { title: "Flutter" },
+    { title: "NodeJS" },
+  ];
+
   return (
     <Surface style={styles.container}>
       <FlatList
         data={list}
+        showsVerticalScrollIndicator={false}
         keyExtractor={question => question._id}
         contentContainerStyle={{ paddingBottom: 20 }}
         ListHeaderComponent={
@@ -63,33 +77,29 @@ export const Home = () => {
             </View>
 
             <View style={{ padding: 20 }}>
-              <Title>Tags populares:</Title>
+              <Title style={{ fontSize: 20 / ratio }}>Tags populares:</Title>
               <View style={styles.tagsView}>
-                <Chip style={{ margin: 4, backgroundColor: colors.background }} onPress={() => console.log('Pressed')}>Java</Chip>
-                <Chip style={{ margin: 4, backgroundColor: colors.background }} onPress={() => console.log('Pressed')}>PHP</Chip>
-                <Chip style={{ margin: 4, backgroundColor: colors.background }} onPress={() => console.log('Pressed')}>JavaScript</Chip>
-                <Chip style={{ margin: 4, backgroundColor: colors.background }} onPress={() => console.log('Pressed')}>HTML</Chip>
-                <Chip style={{ margin: 4, backgroundColor: colors.background }} onPress={() => console.log('Pressed')}>CSS</Chip>
-                <Chip style={{ margin: 4, backgroundColor: colors.background }} onPress={() => console.log('Pressed')}>Pokémon</Chip>
-                <Chip style={{ margin: 4, backgroundColor: colors.background }} onPress={() => console.log('Pressed')}>One Piece</Chip><Divider />
-
+                {tags.map(tag => (
+                  <Chip key={tag.title} textStyle={{ fontSize: 14 / ratio }} style={{ margin: 4, backgroundColor: colors.background }} onPress={() => console.log('Pressed')}>{tag.title}</Chip>
+                ))}
+               
                 <Chip icon="plus" mode="outlined" theme={{ colors: { text: colors.primary } }} style={{ margin: 4, borderColor: colors.primary }} onPress={() => console.log('Pressed')}>Mais tags</Chip><Divider />
               </View>
               <Divider style={{ marginVertical: 20 }} />
-              <Title>Dúvidas recentes:</Title>
+              <Title style={{ fontSize: 20 / ratio }}>Dúvidas recentes:</Title>
             </View>
           </View>
         }
 
         renderItem={({ item }) => (
           <View style={{ position: "relative", marginHorizontal: 20, marginBottom: 20 }}>
-            <Text style={{ fontSize: 10 }}>{item?.date}</Text>
+            <Text style={{ fontSize: 10 / ratio }}>{item?.date}</Text>
             <View style={{ backgroundColor: colors.background, ...styles.post }}>
               <View style={{ flex: 1, marginRight: 10, paddingTop: 10 }}>
-                <Title numberOfLines={2} style={{ fontSize: 14, lineHeight: 22 }}>{item?.title}</Title>
+                <Title numberOfLines={2} style={{ fontSize: 14 / ratio, lineHeight: 22 }}>{item?.title}</Title>
                 <View style={styles.tagsView}>
                   {item?.tags.map(tag =>
-                    <Chip key={tag} mode="outlined" textStyle={{ fontSize: 12 }} style={{ backgroundColor: colors.background, marginRight: 4, marginBottom: 4 }} onPress={() => console.log('Pressed')}>{tag}</Chip>
+                    <Chip key={tag} mode="outlined" textStyle={{ fontSize: 12 / ratio }} style={{ backgroundColor: colors.background, marginRight: 4, marginBottom: 4 }} onPress={() => console.log('Pressed')}>{tag}</Chip>
                   )}
                 </View>
               </View>
@@ -97,8 +107,8 @@ export const Home = () => {
               <View style={{ width: 2, height: "100%", backgroundColor: colors.surface }} />
 
               <View style={{ alignItems: "center", marginLeft: 10 }}>
-                <Title style={{ fontSize: 16, color: colors.success }}>{item.qtdAnsers > 1000 ? "+999" : item?.qtdAnsers}</Title>
-                <Title style={{ fontSize: 12, lineHeight: 12, color: colors.success }}>{item.qtdAnsers === 1 ? "Resposta" : "Respostas"}</Title>
+                <Title style={{ fontSize: 16 / ratio, color: colors.success }}>{item.qtdAnsers > 1000 ? "+999" : item?.qtdAnsers}</Title>
+                <Title style={{ fontSize: 12 / ratio, lineHeight: 12, color: colors.success }}>{item.qtdAnsers === 1 ? "Resposta" : "Respostas"}</Title>
 
                 <View style={{ flexDirection: "row", }}>
                   <IconButton
@@ -126,7 +136,7 @@ export const Home = () => {
         animated={true}
         label="Postar dúvida"
         onPress={() => console.log('Pressed')}
-        style={{...styles.fab, backgroundColor: colors.primary}}
+        style={{ ...styles.fab, backgroundColor: colors.primary }}
       />
     </Surface>
   );

@@ -15,7 +15,7 @@ export const SignIn = ({ navigation }) => {
   const { colors, fonts, logos } = useTheme();
 
   return (
-    <ScrollView>
+    <ScrollView showsVerticalScrollIndicator={false}>
       <View style={{ padding: 20, flex: 1, justifyContent: "flex-end" }}>
         <IconButton
           size={40}
@@ -48,9 +48,7 @@ export const SignIn = ({ navigation }) => {
         <Button onPress={() => navigation.navigate("SessionRoutes")} contentStyle={{ height: 45 }} icon="login" mode="contained">Entrar</Button>
 
         <View style={styles.orView}>
-          <View style={{ ...styles.line, backgroundColor: colors.semiWhite }} />
           <Text style={{ marginHorizontal: 20, fontSize: 14 / ratio }}>Ou entre com</Text>
-          <View style={{ ...styles.line, backgroundColor: colors.semiWhite }} />
         </View>
 
         <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
@@ -59,7 +57,7 @@ export const SignIn = ({ navigation }) => {
           <IconButton size={40} icon="github" color={colors.text} onPress={() => console.log("GitHub")} />
         </View>
 
-        <Text style={{ textAlign: "center", marginTop: 30, fontSize: 14 / ratio }}>Não possui conta? <Text onPress={() => navigation.navigate("SignUp")} style={{ ...fonts.medium, ...styles.title, color: colors.primary, textDecorationLine: "underline", fontSize: 14 / ratio }}>CADASTRE-SE</Text>!</Text>
+        <Text style={{ textAlign: "center", marginTop: 30, fontSize: 14 / ratio }}>Não possui conta? <Text onPress={() => navigation.navigate("SignUp")} style={{ ...fonts.medium, ...styles.title, color: colors.primary, fontSize: 14 / ratio }}>CADASTRE-SE</Text>!</Text>
       </View>
     </ScrollView>
   );
@@ -79,6 +77,6 @@ const styles = StyleSheet.create({
     marginTop: 30,
     marginBottom: 10,
     alignItems: "center",
-    flexDirection: "row",
+    justifyContent: "center",
   }
 });
