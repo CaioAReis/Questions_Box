@@ -1,14 +1,15 @@
 import React from "react";
-import { View, StyleSheet, ScrollView, Image } from "react-native";
+import { View, StyleSheet, ScrollView, Image, PixelRatio } from "react-native";
 import {
   Text,
+  Title,
   Button,
-  Headline,
   useTheme,
   TextInput,
-  Paragraph,
   IconButton,
 } from "react-native-paper";
+
+const ratio = PixelRatio.getFontScale();
 
 export const SignUp = ({ navigation }) => {
   const { colors, fonts, logos } = useTheme();
@@ -26,7 +27,7 @@ export const SignUp = ({ navigation }) => {
         <View style={{ alignItems: "center" }}>
           <Image source={logos[1]} resizeMode="contain" style={{ marginVertical: 20, width: 120, height: 120 }} />
         </View>
-        <Headline style={{ ...fonts.regular, fontSize: 16 }}>Faça já seu cadastro!</Headline>
+        <Title style={{ ...fonts.regular, fontSize: 18 / ratio }}>Faça já seu cadastro!</Title>
       </View>
 
       <View style={{ ...styles.main }}>
@@ -34,14 +35,14 @@ export const SignUp = ({ navigation }) => {
           mode="outlined"
           label="Nome completo"
           style={{ marginBottom: 10 }}
-          theme={{ colors: { background: colors.surface } }}
+          theme={{ colors: { background: colors.surface, primary: colors.secondary } }}
         />
 
         <TextInput
           label="E-mail"
           mode="outlined"
           style={{ marginBottom: 10 }}
-          theme={{ colors: { background: colors.surface } }}
+          theme={{ colors: { background: colors.surface, primary: colors.secondary } }}
         />
 
         <TextInput
@@ -49,14 +50,14 @@ export const SignUp = ({ navigation }) => {
           mode="outlined"
           secureTextEntry={true}
           style={{ marginBottom: 35 }}
-          theme={{ colors: { background: colors.surface } }}
+          theme={{ colors: { background: colors.surface, primary: colors.secondary } }}
         />
 
         <Button contentStyle={{ height: 45 }} icon="account-arrow-right" mode="contained">Criar conta</Button>
 
         <View style={styles.orView}>
           <View style={{ ...styles.line, backgroundColor: colors.semiWhite }} />
-          <Text style={{ marginHorizontal: 20 }}>Ou entre com</Text>
+          <Text style={{ marginHorizontal: 20, fontSize: 14 / ratio }}>Ou entre com</Text>
           <View style={{ ...styles.line, backgroundColor: colors.semiWhite }} />
         </View>
 
@@ -66,7 +67,7 @@ export const SignUp = ({ navigation }) => {
           <IconButton size={40} icon="github" color={colors.text} onPress={() => console.log("GitHub")} />
         </View>
 
-        <Paragraph style={{ textAlign: "center", marginTop: 30 }}>Já possui conta? Faça o <Paragraph onPress={() => navigation.navigate("SignIn")} style={{ ...fonts.medium, ...styles.title, color: colors.warning, textDecorationLine: "underline" }}>LOGIN</Paragraph>!</Paragraph>
+        <Text style={{ textAlign: "center", marginTop: 30, fontSize: 14 / ratio }}>Já possui conta? Faça o <Text onPress={() => navigation.navigate("SignIn")} style={{ ...fonts.medium, ...styles.title, color: colors.primary, textDecorationLine: "underline", fontSize: 14 / ratio }}>LOGIN</Text>!</Text>
       </View>
     </ScrollView>
   );

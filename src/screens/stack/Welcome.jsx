@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
-import { Dimensions, Image, ImageBackground, ScrollView, StyleSheet, View } from "react-native";
-import { Button, Headline, IconButton, useTheme } from "react-native-paper";
+import { Dimensions, Image, ImageBackground, ScrollView, StyleSheet, View, PixelRatio } from "react-native";
+import { Button, IconButton, Title, useTheme } from "react-native-paper";
 
 import mancha from "../../../assets/mancha.png";
 import I1 from "../../../assets/Happy.png";
@@ -8,6 +8,8 @@ import I2 from "../../../assets/Projections.png";
 import I3 from "../../../assets/Questions.png";
 import I4 from "../../../assets/Quiz.png";
 import I5 from "../../../assets/Welcome.png";
+
+const ratio = PixelRatio.getFontScale();
 
 export const Welcome = ({ navigation }) => {
   const { colors, fonts, logos } = useTheme();
@@ -33,8 +35,8 @@ export const Welcome = ({ navigation }) => {
             <Image resizeMode="contain" source={I2} style={styles.img} />
           </ImageBackground>
           <View>
-            <Headline style={span}>Olá mundo!</Headline>
-            <Headline style={title}>Seja muito bem-vindo(a) ao nosso APP</Headline>
+            <Title style={span}>Olá mundo!</Title>
+            <Title style={title}>Seja muito bem-vindo(a) ao nosso APP</Title>
           </View>
         </View>
 
@@ -42,36 +44,36 @@ export const Welcome = ({ navigation }) => {
           <ImageBackground imageStyle={{ opacity: 0.7 }} resizeMode="stretch" source={mancha}>
             <Image resizeMode="contain" source={I4} style={styles.img} />
           </ImageBackground>
-          <Headline style={title}>
-            A todo momento possuímos <Headline style={span}>dúvidas</Headline> sobre algo, não é mesmo?
-          </Headline>
+          <Title style={title}>
+            A todo momento possuímos <Title style={span}>dúvidas</Title> sobre algo, não é mesmo?
+          </Title>
         </View>
 
         <View style={styles.step}>
           <ImageBackground imageStyle={{ opacity: 0.7 }} resizeMode="stretch" source={mancha}>
             <Image resizeMode="contain" source={I3} style={styles.img} />
           </ImageBackground>
-          <Headline style={title}>
-            Esperamos que voçê consiga tirar <Headline style={span}>todas</Headline> elas aqui!
-          </Headline>
+          <Title style={title}>
+            Esperamos que voçê consiga tirar <Title style={span}>todas</Title> elas aqui!
+          </Title>
         </View>
 
         <View style={styles.step}>
           <ImageBackground imageStyle={{ opacity: 0.7 }} resizeMode="stretch" source={mancha}>
             <Image resizeMode="contain" source={I1} style={styles.img} />
           </ImageBackground>
-          <Headline style={title}>
-            Faça <Headline style={span}>perguntas</Headline> ou espalhe seu conhecimento na nossa plataforma!
-          </Headline>
+          <Title style={title}>
+            Faça <Title style={span}>perguntas</Title> ou espalhe seu conhecimento na nossa plataforma!
+          </Title>
         </View>
 
         <View style={styles.step}>
           <ImageBackground imageStyle={{ opacity: 0.7 }} resizeMode="stretch" source={mancha}>
             <Image resizeMode="contain" source={I5} style={styles.img} />
           </ImageBackground>
-          <Headline style={title}>
-            Faça o <Headline style={span}>login</Headline> ou <Headline style={span}>cadastre-se</Headline> para começar!
-          </Headline>
+          <Title style={title}>
+            Faça o <Title style={span}>login</Title> ou <Title style={span}>cadastre-se</Title> para começar!
+          </Title>
         </View>
       </ScrollView>
 
@@ -86,7 +88,7 @@ export const Welcome = ({ navigation }) => {
               Fazer login
             </Button>
 
-            <Button contentStyle={{ height: 45 }} icon="account-arrow-right" mode="outlined" onPress={() => navigation.navigate("SignUp")}>
+            <Button  contentStyle={{ height: 45 }}  icon="account-arrow-right" mode="text" onPress={() => navigation.navigate("SignUp")}>
               Fazer cadastro
             </Button>
           </View>
@@ -108,11 +110,12 @@ const styles = StyleSheet.create({
     width: Dimensions.get("screen").width,
   },
   img: {
-    width: Dimensions.get("screen").width / 1.5,
-    height: Dimensions.get("screen").width / 1.5,
+    width: Dimensions.get("screen").width / 1.7,
+    height: Dimensions.get("screen").width / 1.7,
   },
   title: {
     textAlign: "center",
+    fontSize: 24 / ratio,
     marginHorizontal: 20,
   }
 });

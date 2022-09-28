@@ -16,6 +16,11 @@ import Logo2White from "../../assets/Logo2White.png";
 import LogoH from "../../assets/LogoH.png";
 import LogoHWhite from "../../assets/LogoHWhite.png";
 
+/*
+  text: 14
+  heading: 24
+*/
+
 const Stack = createNativeStackNavigator();
 
 const _defaultFonts = {
@@ -73,20 +78,26 @@ const theme = {
     colors: {
       ...DefaultTheme.colors,
       ...NavigateDefaultTheme.colors,
-      text: "#DCDCE0",
-      error: "#DD4B39",
-      primary: "#F8A700",
-      success: "#00A65A",
+      text: "#EDEDED",
+      error: "#F0424C",
+      primary: "#F0424C",
+      success: "#10B278",
       surface: "#141A28",
-      warning: "#DA8C10",
-      secondary: "#BE5DE8",
+      warning: "#F8A700",
+      secondary: "#286EF5",
       onSurface: "#DCDCE0",
       background: "#27314A",
-      // background: "#141A28",
-      outline: "#DCDCE050",
-      semiTransparent: "#DCDCE030",
-      placeholder: "#DCDCE080",
-      onSurfaceVariant: "#DCDCE080",
+      placeholder: "#EDEDED50",
+      semiTransparent: "#EDEDED50",
+
+      accent: "#F0424C",
+      border: "#F0424C",
+      outline: "#F0424C",
+      backdrop: "#F0424C",
+      disabled: "#F0424C",
+      onSurface: "#F0424C",
+      notification: "#F0424C",
+      onSurfaceVariant: "#F0424C",
     },
     fonts: configureFonts({
       web: _defaultFonts,
