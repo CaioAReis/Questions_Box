@@ -2,12 +2,12 @@ import { useRef, useState } from "react";
 import { Dimensions, Image, ImageBackground, ScrollView, StyleSheet, View, PixelRatio } from "react-native";
 import { Button, IconButton, Title, useTheme } from "react-native-paper";
 
-import mancha from "../../../assets/mancha.png";
-import I1 from "../../../assets/Happy.png";
-import I2 from "../../../assets/Projections.png";
-import I3 from "../../../assets/Questions.png";
-import I4 from "../../../assets/Quiz.png";
-import I5 from "../../../assets/Welcome.png";
+import mancha from "../../assets/mancha.png";
+import I1 from "../../assets/Happy.png";
+import I2 from "../../assets/Projections.png";
+import I3 from "../../assets/Questions.png";
+import I4 from "../../assets/Quiz.png";
+import I5 from "../../assets/Welcome.png";
 
 const ratio = PixelRatio.getFontScale();
 
