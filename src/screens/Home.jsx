@@ -145,6 +145,7 @@ export const Home = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingBottom: 30,
   },
   header: {
     padding: 20,
@@ -169,9 +170,9 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   fab: {
-    right: 10,
+    right: 8,
     margin: 16,
-    bottom: 20,
+    bottom: 10,
     position: "absolute",
   },
 });

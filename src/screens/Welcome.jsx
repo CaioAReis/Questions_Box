@@ -12,6 +12,7 @@ import I5 from "../../assets/Welcome.png";
 const ratio = PixelRatio.getFontScale();
 
 export const Welcome = ({ navigation }) => {
+  const imgDimensions = Dimensions.get("window").width / 3.5;
   const { colors, fonts, logos } = useTheme();
 
   const scrollRef = useRef();
@@ -27,9 +28,9 @@ export const Welcome = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Image source={logos[1]} resizeMode="contain" style={{ marginTop: 20, width: 120, height: 120 }} />
+      <Image source={logos[1]} resizeMode="contain" style={{ marginTop: 40, width: imgDimensions, height: imgDimensions }} />
 
-      <ScrollView scrollEnabled={false} ref={scrollRef} showsHorizontalScrollIndicator={false} pagingEnabled horizontal style={{ flex: 1 }}>
+      <ScrollView scrollEnabled={false} ref={scrollRef} showsHorizontalScrollIndicator={false} pagingEnabled horizontal style={{ paddingVertical: 20, flex: 1 }}>
         <View style={styles.step}>
           <ImageBackground imageStyle={{ opacity: 0.7 }} resizeMode="stretch" source={mancha}>
             <Image resizeMode="contain" source={I2} style={styles.img} />
@@ -77,7 +78,7 @@ export const Welcome = ({ navigation }) => {
         </View>
       </ScrollView>
 
-      <View style={{ paddingBottom: 40, width: "100%" }}>
+      <View style={{ paddingBottom: 20, width: "100%" }}>
         {step < 5 ? (
           <View style={{ alignItems: "center" }}>
             <IconButton size={70} icon="arrow-right-circle" color={colors.primary} onPress={handleNextStep} />
@@ -106,16 +107,17 @@ const styles = StyleSheet.create({
   step: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "space-evenly",
+    justifyContent: "space-around",
     width: Dimensions.get("screen").width,
   },
   img: {
-    width: Dimensions.get("screen").width / 1.7,
-    height: Dimensions.get("screen").width / 1.7,
+    width: Dimensions.get("screen").width / 1.9,
+    height: Dimensions.get("screen").width / 1.9,
   },
   title: {
     textAlign: "center",
     fontSize: 20 / ratio,
     paddingHorizontal: 40,
+    lineHeight: 30 / ratio,
   }
 });
