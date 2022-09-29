@@ -1,5 +1,13 @@
 import React from "react";
-import { View, StyleSheet, ScrollView, Image, PixelRatio, KeyboardAvoidingView, Dimensions } from "react-native";
+import {
+  View,
+  Image,
+  Platform,
+  StyleSheet,
+  PixelRatio,
+  Dimensions,
+  KeyboardAvoidingView,
+} from "react-native";
 import {
   Text,
   Title,
@@ -9,15 +17,14 @@ import {
   IconButton,
 } from "react-native-paper";
 
-const ratio = PixelRatio.getFontScale();
-
 export const SignIn = ({ navigation }) => {
-  const imgDimensions = Dimensions.get("window").width / 3.5;
+  const ratio = PixelRatio.getFontScale();
   const { colors, fonts, logos } = useTheme();
+  const imgDimensions = Dimensions.get("window").width / 3.5;
 
   return (
     <KeyboardAvoidingView behavior={Platform.OS === "ios" && "padding"}>
-      <View showsVerticalScrollIndicator={false} style={styles.content} >
+      <View style={styles.content}>
         <View style={styles.main}>
           <IconButton
             size={40}

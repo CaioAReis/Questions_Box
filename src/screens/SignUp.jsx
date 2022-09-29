@@ -1,5 +1,13 @@
 import React from "react";
-import { View, StyleSheet, ScrollView, Image, PixelRatio, KeyboardAvoidingView, Platform, Dimensions } from "react-native";
+import {
+  View,
+  Image,
+  Platform,
+  StyleSheet,
+  Dimensions,
+  PixelRatio,
+  KeyboardAvoidingView,
+} from "react-native";
 import {
   Text,
   Title,
@@ -9,30 +17,27 @@ import {
   IconButton,
 } from "react-native-paper";
 
-const ratio = PixelRatio.getFontScale();
-
 export const SignUp = ({ navigation }) => {
-  const imgDimensions = Dimensions.get("window").width / 3.5;
+  const ratio = PixelRatio.getFontScale();
   const { colors, fonts, logos } = useTheme();
+  const imgDimensions = Dimensions.get("window").width / 3.5;
 
   return (
-    <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "position" : ""}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={{ padding: 20, flex: 1, justifyContent: "flex-end" }}>
+    <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : ""}>
+      <View style={styles.content}>
+        <View style={{ ...styles.main }}>
           <IconButton
             size={40}
             color={colors.text}
             icon="arrow-left-circle-outline"
             onPress={() => navigation.goBack()}
+            style={{ position: "absolute", top: 0 }}
           />
-
           <View style={{ alignItems: "center" }}>
             <Image source={logos[1]} resizeMode="contain" style={{ marginVertical: 20, width: imgDimensions, height: imgDimensions }} />
           </View>
           <Title style={{ ...fonts.regular, fontSize: 18 / ratio }}>Faça já seu cadastro!</Title>
-        </View>
 
-        <View style={{ ...styles.main }}>
           <TextInput
             mode="outlined"
             label="Nome completo"
@@ -57,7 +62,7 @@ export const SignUp = ({ navigation }) => {
 
           <Button contentStyle={{ height: 45 }} icon="account-arrow-right" mode="contained">Criar conta</Button>
 
-          <View style={styles.orView}>
+          {/* <View style={styles.orView}>
             <Text style={{ marginHorizontal: 20, fontSize: 14 / ratio }}>Ou entre com</Text>
           </View>
 
@@ -65,20 +70,25 @@ export const SignUp = ({ navigation }) => {
             <IconButton size={40} icon="google" color="#E73B31" onPress={() => console.log("Google")} />
             <IconButton size={40} icon="facebook" color="#4A72B7" onPress={() => console.log("Facebook")} />
             <IconButton size={40} icon="github" color={colors.text} onPress={() => console.log("GitHub")} />
-          </View>
+          </View> */}
 
           <Text style={{ textAlign: "center", marginTop: 30, fontSize: 14 / ratio }}>Já possui conta? Faça o <Text onPress={() => navigation.navigate("SignIn")} style={{ ...fonts.medium, ...styles.title, color: colors.primary, fontSize: 14 / ratio }}>LOGIN</Text>!</Text>
         </View>
-      </ScrollView>
+      </View>
     </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
+  content: {
+    height: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   main: {
-    flex: 2,
-    paddingBottom: 30,
-    paddingHorizontal: 20,
+    padding: 20,
+    width: "100%",
+    paddingBottom: 50,
   },
   line: {
     flex: 1,
