@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import { SignIn, SignUp, Welcome, Home } from "../screens";
+import { SignIn, SignUp, Welcome, Home, Tags } from "../screens";
 
 const Stack = createNativeStackNavigator();
 
@@ -17,5 +17,6 @@ export const AuthRoutes = () => (
 export const SessionRoutes = () => (
   <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
     <Stack.Screen name="Home" component={Home} />
+    <Stack.Screen name="Tags" component={Tags} />
   </Stack.Navigator>
 );

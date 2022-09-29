@@ -1,9 +1,9 @@
 import { View, StyleSheet, Image, FlatList, PixelRatio } from "react-native";
-import { Avatar, Chip, Divider, FAB, IconButton, Surface, Text, Title, useTheme } from "react-native-paper";
+import { Avatar, Chip, Divider, FAB, IconButton, Text, Title, useTheme } from "react-native-paper";
 
 const ratio = PixelRatio.getFontScale();
 
-export const Home = () => {
+export const Home = ({ navigation }) => {
   const { colors, logos } = useTheme();
 
   const list = [
@@ -11,7 +11,7 @@ export const Home = () => {
       _id: "1",
       qtdAnsers: 2,
       date: "15/09/2022 - 20:07",
-      tags: ["IFS", "CRE", "Lagarto"],
+      tags: ["IFS", "Lagarto"],
       title: "Onde fica a CRE do campus Lagarto?",
     },
 
@@ -56,24 +56,24 @@ export const Home = () => {
     { title: "HTML" },
     { title: "CSS" },
     { title: "React" },
-    { title: "Flutter" },
+    { title: "IFS" },
     { title: "NodeJS" },
   ];
 
   return (
-    <Surface style={styles.container}>
+    <View style={{ backgroundColor: colors.background }}>
       <FlatList
         data={list}
         showsVerticalScrollIndicator={false}
         keyExtractor={question => question._id}
-        contentContainerStyle={{ paddingBottom: 20 }}
+        contentContainerStyle={{ paddingBottom: 34, backgroundColor: colors.surface }}
         ListHeaderComponent={
           <View>
             <View style={{ ...styles.header, backgroundColor: colors.background }}>
               <View style={{ alignItems: "center" }}>
                 <Image source={logos[3]} resizeMode="contain" style={{ width: 140, height: 50 }} />
               </View>
-              <Avatar.Image size={40} source={{ uri: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.cgmagonline.com%2Fwp-content%2Fuploads%2F2017%2F03%2Fsuper-bomberman-r-review-not-a-total-bomb.jpg&f=1&nofb=1" }} />
+              <Avatar.Text size={40} label="CA" labelStyle={{ fontSize: 16 / ratio }} />
             </View>
 
             <View style={{ padding: 20 }}>
@@ -82,8 +82,18 @@ export const Home = () => {
                 {tags.map(tag => (
                   <Chip key={tag.title} textStyle={{ fontSize: 14 / ratio }} style={{ margin: 4, backgroundColor: colors.background }} onPress={() => console.log('Pressed')}>{tag.title}</Chip>
                 ))}
-               
-                <Chip icon="plus" mode="outlined" theme={{ colors: { text: colors.primary } }} style={{ margin: 4, borderColor: colors.primary }} onPress={() => console.log('Pressed')}>Mais tags</Chip><Divider />
+
+                <Chip 
+                  icon="plus" 
+                  mode="outlined" 
+                  onPress={() => navigation.navigate("Tags")}
+                  theme={{ colors: { text: colors.primary } }} 
+                  style={{ margin: 4, borderColor: colors.primary }} 
+                  >
+                  Tags
+                </Chip>
+
+                <Divider />
               </View>
               <Divider style={{ marginVertical: 20 }} />
               <Title style={{ fontSize: 20 / ratio }}>Dúvidas recentes:</Title>
@@ -103,9 +113,7 @@ export const Home = () => {
                   )}
                 </View>
               </View>
-
               <View style={{ width: 2, height: "100%", backgroundColor: colors.surface }} />
-
               <View style={{ alignItems: "center", marginLeft: 10 }}>
                 <Title style={{ fontSize: 16 / ratio, color: colors.success }}>{item.qtdAnsers > 1000 ? "+999" : item?.qtdAnsers}</Title>
                 <Title style={{ fontSize: 12 / ratio, lineHeight: 12, color: colors.success }}>{item.qtdAnsers === 1 ? "Resposta" : "Respostas"}</Title>
@@ -138,15 +146,11 @@ export const Home = () => {
         onPress={() => console.log('Pressed')}
         style={{ ...styles.fab, backgroundColor: colors.primary }}
       />
-    </Surface>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingBottom: 30,
-  },
   header: {
     padding: 20,
     flexDirection: "row",
