@@ -1,5 +1,6 @@
 import { View, StyleSheet, Image, FlatList, PixelRatio } from "react-native";
-import { Avatar, Chip, Divider, FAB, IconButton, Text, Title, useTheme } from "react-native-paper";
+import { Avatar, Chip, Divider, FAB, Title, useTheme } from "react-native-paper";
+import { QuestionCard } from "../components";
 
 const ratio = PixelRatio.getFontScale();
 
@@ -67,6 +68,7 @@ export const Home = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
         keyExtractor={question => question._id}
         contentContainerStyle={{ paddingBottom: 34, backgroundColor: colors.surface }}
+        renderItem={({ item }) => <QuestionCard nav={navigation} question={item} ratio={ratio} />}
         ListHeaderComponent={
           <View>
             <View style={{ ...styles.header, backgroundColor: colors.background }}>
@@ -80,16 +82,21 @@ export const Home = ({ navigation }) => {
               <Title style={{ fontSize: 20 / ratio }}>Tags populares:</Title>
               <View style={styles.tagsView}>
                 {tags.map(tag => (
-                  <Chip key={tag.title} textStyle={{ fontSize: 14 / ratio }} style={{ margin: 4, backgroundColor: colors.background }} onPress={() => console.log('Pressed')}>{tag.title}</Chip>
+                  <Chip
+                    key={tag.title}
+                    textStyle={{ fontSize: 14 / ratio }}
+                    onPress={() => console.log('Pressed')}
+                    style={{ margin: 4, backgroundColor: colors.background }}>
+                    {tag.title}
+                  </Chip>
                 ))}
 
-                <Chip 
-                  icon="plus" 
-                  mode="outlined" 
+                <Chip
+                  icon="plus"
+                  mode="outlined"
                   onPress={() => navigation.navigate("Tags")}
-                  theme={{ colors: { text: colors.primary } }} 
-                  style={{ margin: 4, borderColor: colors.primary }} 
-                  >
+                  theme={{ colors: { text: colors.primary } }}
+                  style={{ margin: 4, borderColor: colors.primary }}>
                   Tags
                 </Chip>
 
@@ -100,44 +107,6 @@ export const Home = ({ navigation }) => {
             </View>
           </View>
         }
-
-        renderItem={({ item }) => (
-          <View style={{ position: "relative", marginHorizontal: 20, marginBottom: 20 }}>
-            <Text style={{ fontSize: 10 / ratio }}>{item?.date}</Text>
-            <View style={{ backgroundColor: colors.background, ...styles.post }}>
-              <View style={{ flex: 1, marginRight: 10, paddingTop: 10 }}>
-                <Title numberOfLines={2} style={{ fontSize: 14 / ratio, lineHeight: 22 }}>{item?.title}</Title>
-                <View style={styles.tagsView}>
-                  {item?.tags.map(tag =>
-                    <Chip key={tag} mode="outlined" textStyle={{ fontSize: 12 / ratio }} style={{ backgroundColor: colors.background, marginRight: 4, marginBottom: 4 }} onPress={() => console.log('Pressed')}>{tag}</Chip>
-                  )}
-                </View>
-              </View>
-              <View style={{ width: 2, height: "100%", backgroundColor: colors.surface }} />
-              <View style={{ alignItems: "center", marginLeft: 10 }}>
-                <Title style={{ fontSize: 16 / ratio, color: colors.success }}>{item.qtdAnsers > 1000 ? "+999" : item?.qtdAnsers}</Title>
-                <Title style={{ fontSize: 12 / ratio, lineHeight: 12, color: colors.success }}>{item.qtdAnsers === 1 ? "Resposta" : "Respostas"}</Title>
-
-                <View style={{ flexDirection: "row", }}>
-                  <IconButton
-                    size={20}
-                    icon="thumb-up"
-                    color={colors.semiTransparent}
-                    onPress={() => console.log('Pressed')}
-                    style={{ backgroundColor: colors.background }}
-                  />
-                  <IconButton
-                    size={20}
-                    icon="thumb-down"
-                    color={colors.semiTransparent}
-                    onPress={() => console.log('Pressed')}
-                    style={{ backgroundColor: colors.background }}
-                  />
-                </View>
-              </View>
-            </View>
-          </View>
-        )}
       />
       <FAB
         icon="plus"
@@ -164,14 +133,6 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     marginVertical: 15,
     flexDirection: "row",
-  },
-  post: {
-    marginTop: 5,
-    borderRadius: 4,
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 15,
-    justifyContent: "space-between",
   },
   fab: {
     right: 8,
