@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { View, StyleSheet, PixelRatio, ScrollView, Modal, Dimensions, KeyboardAvoidingView, Platform } from "react-native";
 import { Avatar, Text, Button, Divider, IconButton, Title, useTheme, TextInput, List } from 'react-native-paper';
 import { TagCard } from '../components';
@@ -8,6 +8,7 @@ const ratio = PixelRatio.getFontScale();
 export const Tags = ({ navigation }) => {
   const { colors, fonts } = useTheme();
   const span = { ...fonts.medium, color: colors.primary };
+  const [openCreateTag, setOpenCreateTag] = useState(false);
 
   return (
     <>
@@ -36,7 +37,7 @@ export const Tags = ({ navigation }) => {
 
           <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 25 }}>
             <Title style={{ fontSize: 18 / ratio }}>TAGs populares:</Title>
-            <Button icon="plus-circle" labelStyle={{ fontSize: 12 / ratio }} mode="contained">Criar TAG</Button>
+            <Button onPress={() => setOpenCreateTag(true)} icon="plus-circle" labelStyle={{ fontSize: 12 / ratio }} mode="contained">Criar TAG</Button>
           </View>
 
           <TagCard />
@@ -52,8 +53,8 @@ export const Tags = ({ navigation }) => {
         </View>
       </ScrollView>
 
-      <Modal visible={true} transparent>
-        <View style={{ backgroundColor: colors.semiTransparent, flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <Modal animationType="fade" visible={openCreateTag} transparent onRequestClose={() => setOpenCreateTag(false)}>
+        <View style={{ backgroundColor: colors.backModal, flex: 1, alignItems: "center", justifyContent: "center" }}>
           <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : ""}>
             <View style={{ ...styles.modalContent, backgroundColor: colors.background }}>
               <View style={{ position: "relative", marginBottom: 30 }}>
@@ -61,14 +62,14 @@ export const Tags = ({ navigation }) => {
                 <IconButton
                   size={30}
                   icon="close-circle-outline"
-                  color={colors.error} onPress={() => { }}
+                  color={colors.error} onPress={() => setOpenCreateTag(false)}
                   style={{ position: "absolute", margin: 0, top: -10, right: 0 }}
                 />
               </View>
 
               <Text style={{ fontSize: 14 / ratio }}>
-                Você pode <Text style={span}>criar</Text> suas próprias TAGs para categorizar
-                melhor suas dúvidas, seguindo o passo a passo abaixo:
+                Você pode <Text style={span}>criar</Text> TAGs para categorizar
+                melhor suas dúvidas. Atenção às observações abaixo:
               </Text>
 
               <List.Accordion style={{ borderRadius: 8, padding: 0, marginVertical: 10 }} titleStyle={{ fontSize: 14 / ratio }} title="Observações:">

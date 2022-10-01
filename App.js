@@ -47,6 +47,7 @@ const theme = {
       background: "#EDEDED",
       placeholder: "#141A2850",
       semiTransparent: "#141A2850",
+      backModal: "#00000070"
     },
     fonts: configureFonts({
       web: _defaultFonts,
@@ -74,6 +75,7 @@ const theme = {
       background: "#27314A",
       placeholder: "#EDEDED50",
       semiTransparent: "#EDEDED50",
+      backModal: "#00000070"
     },
     fonts: configureFonts({
       web: _defaultFonts,
