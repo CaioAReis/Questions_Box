@@ -85,8 +85,8 @@ export const Home = ({ navigation }) => {
                   <Chip
                     key={tag.title}
                     textStyle={{ fontSize: 14 / ratio }}
-                    onPress={() => console.log('Pressed')}
-                    style={{ margin: 4, backgroundColor: colors.background }}>
+                    style={{ margin: 4, backgroundColor: colors.background }}
+                    onPress={() => navigation.navigate("ListForTag", { TAG: tag })}>
                     {tag.title}
                   </Chip>
                 ))}
