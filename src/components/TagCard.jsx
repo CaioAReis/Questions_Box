@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, PixelRatio } from 'react-native'
-import { Chip, useTheme, Text, Divider, Card } from 'react-native-paper'
+import { Chip, useTheme, Text, Divider, Card, Title } from 'react-native-paper'
 
 export const TagCard = () => {
   const { colors } = useTheme();
@@ -16,7 +16,7 @@ export const TagCard = () => {
         >
           Java
         </Chip>
-        <Text style={{ fontSize: 14 / ratio, textAlign: "center", color: colors.success }} >{`${123}\r\nDúvidas`}</Text>
+        <Title style={{ fontSize: 14 / ratio, textAlign: "center", color: colors.success, lineHeight: 20 }} >{`${123}\r\nDúvidas`}</Title>
       </View>
 
       <Divider style={{ marginVertical: 8 }} />
