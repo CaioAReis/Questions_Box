@@ -1,5 +1,5 @@
-import { View, StyleSheet, Image, FlatList, PixelRatio } from "react-native";
-import { Avatar, Chip, Divider, FAB, Title, useTheme } from "react-native-paper";
+import { View, StyleSheet, Image, FlatList, PixelRatio, Pressable } from "react-native";
+import { Avatar, Button, Chip, Divider, FAB, Title, useTheme } from "react-native-paper";
 import { QuestionCard } from "../components";
 
 const ratio = PixelRatio.getFontScale();
@@ -62,20 +62,29 @@ export const Home = ({ navigation }) => {
   ];
 
   return (
-    <View style={{ backgroundColor: colors.background }}>
+    <View style={{ backgroundColor: colors.surface, height: "100%" }}>
       <FlatList
         data={list}
         showsVerticalScrollIndicator={false}
         keyExtractor={question => question._id}
         contentContainerStyle={{ paddingBottom: 34, backgroundColor: colors.surface }}
         renderItem={({ item }) => <QuestionCard nav={navigation} question={item} ratio={ratio} />}
+        ListEmptyComponent={
+          <View style={{ padding: 20 }}>
+            <Title style={{ color: colors.semiTransparent, textAlign: "center", fontSize: 20 / ratio, marginBottom: 20 }}>
+              Nenhuma dúvida postada!
+            </Title>
+          </View>
+        }
         ListHeaderComponent={
           <View>
             <View style={{ ...styles.header, backgroundColor: colors.background }}>
               <View style={{ alignItems: "center" }}>
                 <Image source={logos[3]} resizeMode="contain" style={{ width: 140, height: 50 }} />
               </View>
-              <Avatar.Text size={40} label="CA" labelStyle={{ fontSize: 16 / ratio }} />
+              <Pressable onPress={() => navigation.navigate("Profile")}>
+                <Avatar.Text size={40} label="CA" labelStyle={{ fontSize: 16 / ratio }} />
+              </Pressable>
             </View>
 
             <View style={{ padding: 20 }}>
