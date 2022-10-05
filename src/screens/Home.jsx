@@ -12,14 +12,14 @@ export const Home = ({ navigation }) => {
       _id: "1",
       qtdAnsers: 2,
       date: "15/09/2022 - 20:07",
-      tags: ["IFS", "Lagarto"],
+      tags: [{ title: "IFS" }, { title: "Lagarto" }],
       title: "Onde fica a CRE do campus Lagarto?",
     },
 
     {
       _id: "2",
       qtdAnsers: 12,
-      tags: ["Cartão", "Clonar"],
+      tags: [{ title: "Cartão" }, { title: "Clonar" }],
       date: "15/09/2022 - 20:07",
       title: "Como clonar um cartão?",
     },
@@ -28,7 +28,7 @@ export const Home = ({ navigation }) => {
       _id: "3",
       qtdAnsers: 0,
       date: "15/09/2022 - 20:07",
-      tags: ["Compra", "Trailer"],
+      tags: [{ title: "Compra" }, { title: "Trailer" }],
       title: "Onde posso comprar um trailer?",
     },
 
@@ -36,7 +36,7 @@ export const Home = ({ navigation }) => {
       _id: "4",
       qtdAnsers: 4,
       date: "15/09/2022 - 20:07",
-      tags: ["Pokemon", "Shiny"],
+      tags: [{ title: "Pokemon" }, { title: "Shiny" }],
       title: "Como encontrar um pokemon shiny?",
     },
 
@@ -44,7 +44,7 @@ export const Home = ({ navigation }) => {
       _id: "5",
       qtdAnsers: 1,
       date: "15/09/2022 - 20:07",
-      tags: ["Gato", "Elétrico"],
+      tags: [{ title: "Gato" }, { title: "Elétrico" }],
       title: "Como fazer um gato elétrico sem tomar choque⚡?",
     }
 

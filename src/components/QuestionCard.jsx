@@ -15,12 +15,12 @@ export const QuestionCard = ({ question, ratio, nav }) => {
 						<View style={styles.tagsView}>
 							{question?.tags.map(tag =>
 								<Chip
-									key={tag}
+									key={tag.title}
 									mode="outlined"
 									textStyle={{ fontSize: 12 / ratio }}
-									onPress={() => console.log('Pressed')}
+                  onPress={() => nav.navigate("ListForTag", { TAG: tag })}
 									style={{ backgroundColor: colors.background, marginRight: 4, marginBottom: 4 }}>
-									{tag}
+									{tag.title}
 								</Chip>
 							)}
 						</View>

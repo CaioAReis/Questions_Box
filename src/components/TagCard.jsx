@@ -11,12 +11,12 @@ export const TagCard = () => {
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <Chip
           textStyle={{ fontSize: 14 / ratio,  }}
-          onPress={() => console.log('Pressed')}
+          // onPress={() => console.log('Pressed')}
           style={{ backgroundColor: colors.surface,  }}
         >
           Java
         </Chip>
-        <Title style={{ fontSize: 14 / ratio, textAlign: "center", color: colors.success, lineHeight: 20 }} >{`${123} Dúvidas`}</Title>
+        <Title style={{ fontSize: 14 / ratio, color: colors.success, lineHeight: 16 / ratio }} >{`${123} Dúvidas`}</Title>
       </View>
 
       <Divider style={{ marginVertical: 8 }} />
