@@ -16,7 +16,7 @@ export const TagCard = () => {
         >
           Java
         </Chip>
-        <Title style={{ fontSize: 14 / ratio, textAlign: "center", color: colors.success, lineHeight: 20 }} >{`${123}\r\nDúvidas`}</Title>
+        <Title style={{ fontSize: 14 / ratio, textAlign: "center", color: colors.success, lineHeight: 20 }} >{`${123} Dúvidas`}</Title>
       </View>
 
       <Divider style={{ marginVertical: 8 }} />

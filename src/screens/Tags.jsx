@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, StyleSheet, PixelRatio, ScrollView, Modal, Dimensions, KeyboardAvoidingView, Platform } from "react-native";
+import { View, StyleSheet, PixelRatio, ScrollView, Modal, Dimensions, KeyboardAvoidingView, Platform, Pressable } from "react-native";
 import { Avatar, Text, Button, Divider, IconButton, Title, useTheme, TextInput, List } from 'react-native-paper';
 import { TagCard } from '../components';
 
@@ -22,7 +22,9 @@ export const Tags = ({ navigation }) => {
             style={{ backgroundColor: colors.background, margin: 0 }}
           />
           <Title style={{ fontSize: 20 / ratio }}>TAGs</Title>
-          <Avatar.Text size={40} label="CA" labelStyle={{ fontSize: 16 / ratio }} />
+          <Pressable onPress={() => navigation.navigate("Profile")}>
+            <Avatar.Text size={40} label="CA" labelStyle={{ fontSize: 16 / ratio }} />
+          </Pressable>
         </View>
 
         <View style={{ paddingHorizontal: 20, paddingBottom: 40 }}>
@@ -35,7 +37,7 @@ export const Tags = ({ navigation }) => {
 
           <Divider style={{ marginBottom: 20 }} />
 
-          <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 25 }}>
+          <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 25 }}>
             <Title style={{ fontSize: 18 / ratio }}>TAGs populares:</Title>
             <Button onPress={() => setOpenCreateTag(true)} icon="plus-circle" labelStyle={{ fontSize: 12 / ratio }} mode="contained">Criar TAG</Button>
           </View>
