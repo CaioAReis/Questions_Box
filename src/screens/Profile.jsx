@@ -81,10 +81,10 @@ export const Profile = ({ navigation }) => {
 
                   <IconButton
                     size={35}
-                    onPress={() => setOpenEdit(true)}
                     color={colors.text}
                     style={{ margin: 0 }}
                     icon="circle-edit-outline"
+                    onPress={() => setOpenEdit(true)}
                   />
                 </View>
 
