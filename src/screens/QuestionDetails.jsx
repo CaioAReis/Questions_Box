@@ -1,6 +1,6 @@
 import React from "react";
-import { FlatList, PixelRatio, View } from "react-native";
-import { Avatar, Chip, Divider, IconButton, Text, Title, useTheme } from "react-native-paper";
+import { FlatList, PixelRatio, Pressable, View } from "react-native";
+import { Avatar, Button, Chip, Divider, IconButton, Text, Title, useTheme } from "react-native-paper";
 import { ResponseCard } from "../components";
 
 const ratio = PixelRatio.getFontScale();
@@ -9,7 +9,7 @@ export const QuestionDetails = ({ navigation }) => {
   const { colors } = useTheme();
 
   const list = [
-    { 
+    {
       _id: "111",
       date: "15/09/22 - 20:07",
       response: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin efficitur ex et finibus tincidunt. Donec sodales sollicitudin purus, lacinia dictum metus fringilla vitae. Ut sagittis ligula non finibus convallis. Donec at tincidunt magna, quis elementum.",
@@ -19,7 +19,7 @@ export const QuestionDetails = ({ navigation }) => {
       bestAnswer: true,
     },
 
-    { 
+    {
       _id: "222",
       date: "15/09/22 - 20:07",
       response: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin efficitur ex et finibus tincidunt. Donec sodales sollicitudin purus, lacinia dictum metus fringilla vitae. Ut sagittis ligula non finibus convallis. Donec at tincidunt magna, quis elementum.",
@@ -29,7 +29,7 @@ export const QuestionDetails = ({ navigation }) => {
       bestAnswer: false,
     },
 
-    { 
+    {
       _id: "333",
       date: "15/09/22 - 20:07",
       response: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin efficitur ex et finibus tincidunt. Donec sodales sollicitudin purus, lacinia dictum metus fringilla vitae. Ut sagittis ligula non finibus convallis. Donec at tincidunt magna, quis elementum.",
@@ -60,10 +60,10 @@ export const QuestionDetails = ({ navigation }) => {
             <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
               <Text style={{ fontSize: 18 / ratio }}>Postado por:</Text>
 
-              <View style={{ borderRadius: 8, backgroundColor: colors.background, flexDirection: "row", alignItems: "center", padding: 5, paddingHorizontal: 15 }}>
+              <Pressable onPress={() => navigation.navigate("Profile")} style={{ borderRadius: 8, backgroundColor: colors.background, flexDirection: "row", alignItems: "center", padding: 5, paddingHorizontal: 15 }}>
                 <Avatar.Text size={30} label="CA" labelStyle={{ fontSize: 12 / ratio, fontWeight: "bold" }} />
                 <Text style={{ marginLeft: 10 }} >Caio AReis</Text>
-              </View>
+              </Pressable>
             </View>
 
             <Divider style={{ marginVertical: 30 }} />
@@ -113,6 +113,18 @@ export const QuestionDetails = ({ navigation }) => {
           </View>
         }
       />
+
+      <View style={{ paddingHorizontal: 20 }}>
+        <Button
+          mode="contained"
+          icon="clipboard-check"
+          style={{ marginBottom: 20 }}
+          contentStyle={{ height: 45 }}
+          onPress={() => navigation.navigate("SessionRoutes")}
+        >
+          Responder
+        </Button>
+      </View>
     </View>
   );
 }

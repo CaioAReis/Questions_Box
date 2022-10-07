@@ -21,7 +21,7 @@ export const TagCard = () => {
 
       <Divider style={{ marginVertical: 8 }} />
 
-      <Text numberOfLines={4} style={{ fontSize: 12 / ratio }}>
+      <Text numberOfLines={4} style={{ fontSize: 14 / ratio }}>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
         Phasellus sollicitudin id nibh vitae eleifend. Fusce placerat 
         justo sed erat lobortis bibendum. Donec at tellus vestibulum, faucibus nisl at!
