@@ -121,7 +121,7 @@ export const Home = ({ navigation }) => {
         icon="plus"
         animated={true}
         label="Postar dúvida"
-        onPress={() => console.log('Pressed')}
+        onPress={() => navigation.navigate("CreateQuestion")}
         style={{ ...styles.fab, backgroundColor: colors.primary }}
       />
     </View>

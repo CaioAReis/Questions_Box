@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import { SignIn, SignUp, Welcome, Home, Tags, ListForTag, Profile, QuestionDetails } from "../screens";
+import { SignIn, SignUp, Welcome, Home, Tags, ListForTag, Profile, QuestionDetails, CreateQuestion } from "../screens";
 
 const Stack = createNativeStackNavigator();
 
@@ -21,5 +21,6 @@ export const SessionRoutes = () => (
     <Stack.Screen name="ListForTag" component={ListForTag} />
     <Stack.Screen name="Profile" component={Profile} />
     <Stack.Screen name="QuestionDetails" component={QuestionDetails} />
+    <Stack.Screen name="CreateQuestion" component={CreateQuestion} />
   </Stack.Navigator>
 );
