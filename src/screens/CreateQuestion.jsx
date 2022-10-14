@@ -40,10 +40,10 @@ export const CreateQuestion = ({ navigation }) => {
 
         <Button
           mode="contained"
-          icon="plus-circle"
+          icon="checkbox-marked-circle"
           onPress={() => { }}
           contentStyle={{ height: 45 }}
-          labelStyle={{ fontSize: 12 / ratio }}>
+          labelStyle={{ fontSize: 14 / ratio }}>
           Postar dúvida
         </Button>
       </View>
