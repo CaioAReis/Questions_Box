@@ -29,6 +29,11 @@ export const UseInfo = () => {
   );
 }
 
+// export const useInfo = () => {
+//   const { ConfErrBody, startConfErr } = confErr();
+//   return { ConfErrBody, startConfErr };
+// }
+
 const styles = StyleSheet.create({
   container: {
     borderRadius: 8,
