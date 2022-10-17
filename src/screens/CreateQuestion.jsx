@@ -1,11 +1,20 @@
 import React from "react";
 import { PixelRatio, StyleSheet, View } from "react-native";
-import { Button, Divider, IconButton, Text, TextInput, Title, useTheme } from "react-native-paper";
+import { Button, Chip, Divider, IconButton, Text, TextInput, Title, useTheme } from "react-native-paper";
 
 const ratio = PixelRatio.getFontScale();
 
 export const CreateQuestion = ({ navigation }) => {
   const { colors } = useTheme();
+
+  const QuestiontagList = [
+    { title: "HTML" },
+    { title: "CSS" },
+    { title: "DOM" },
+    { title: "JavaScript" },
+    { title: "TypeScript" },
+    { title: "PHP" },
+  ];
 
   return (
     <View>
@@ -36,19 +45,40 @@ export const CreateQuestion = ({ navigation }) => {
           theme={{ colors: { background: colors.surface, primary: colors.text } }}
         />
 
+        <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 20 }}>
+          <Title style={{ fontSize: 20 / ratio }}>Tags</Title>
+
+          <Button color={colors.success} icon="plus-circle" onPress={() => { }}>Adicionar tag</Button>
+        </View>
+
+        {Boolean(QuestiontagList.length) && (
+          <View style={{ marginTop: 15, flexDirection: "row", padding: 10, borderRadius: 8, backgroundColor: colors.surface, flexWrap: "wrap" }} >
+            {QuestiontagList.map(tag => (
+              <Chip
+                key={tag.title}
+                onClose={() => alert("close")}
+                closeIcon="close-circle-outline"
+                style={{ margin: 4, backgroundColor: colors.background }}
+              >
+                {tag.title}
+              </Chip>
+            ))}
+          </View>
+        )}
+
         <Divider style={{ marginVertical: 30 }} />
 
         <Button
           mode="contained"
-          icon="checkbox-marked-circle"
           onPress={() => { }}
+          icon="checkbox-marked-circle"
           contentStyle={{ height: 45 }}
           labelStyle={{ fontSize: 14 / ratio }}>
           Postar dúvida
         </Button>
       </View>
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
