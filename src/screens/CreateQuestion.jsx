@@ -1,13 +1,30 @@
-import React from "react";
-import { KeyboardAvoidingView, PixelRatio, StyleSheet, View, Modal, ScrollView } from "react-native";
+import React, { useState } from "react";
+import { KeyboardAvoidingView, PixelRatio, StyleSheet, View, Modal, ScrollView, FlatList } from "react-native";
 import { Button, Chip, Divider, IconButton, Text, TextInput, Title, useTheme, Searchbar } from "react-native-paper";
 
 const ratio = PixelRatio.getFontScale();
 
 export const CreateQuestion = ({ navigation }) => {
   const { colors } = useTheme();
+  const [addTagModal, setAddTagModal] = useState(false);
 
   const tagList = [
+    { title: "Java" },
+    { title: "SQL" },
+    { title: "JavaScript" },
+    { title: "HTML" },
+    { title: "CSS" },
+    { title: "React" },
+    { title: "IFS" },
+    { title: "NodeJS" },
+    { title: "Java" },
+    { title: "SQL" },
+    { title: "JavaScript" },
+    { title: "HTML" },
+    { title: "CSS" },
+    { title: "React" },
+    { title: "IFS" },
+    { title: "NodeJS" },
     { title: "Java" },
     { title: "SQL" },
     { title: "JavaScript" },
@@ -25,10 +42,6 @@ export const CreateQuestion = ({ navigation }) => {
     { title: "JavaScript" },
     { title: "TypeScript" },
     { title: "PHP" },
-  ];
-
-  const selectedTags = [
-    { title: "HTML" },
   ];
 
   return (
@@ -64,7 +77,7 @@ export const CreateQuestion = ({ navigation }) => {
           <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 20 }}>
             <Title style={{ fontSize: 20 / ratio }}>Tags</Title>
 
-            <Button color={colors.success} icon="plus-circle" onPress={() => { }}>Adicionar tag</Button>
+            <Button color={colors.success} icon="plus-circle" onPress={() => setAddTagModal(true)}>Adicionar tag</Button>
           </View>
 
           {Boolean(QuestiontagList.length) && (
@@ -95,8 +108,8 @@ export const CreateQuestion = ({ navigation }) => {
         </View>
       </View>
 
-      <Modal visible={true} transparent>
-        <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : ""} style={{ flex: 1, borderWidth: 1, alignItems: "center", justifyContent: "center", backgroundColor: colors.backModal }}>
+      <Modal visible={addTagModal} transparent>
+        <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : ""} style={{ flex: 1, maxHeight: "90%", borderWidth: 1, alignItems: "center", justifyContent: "center", backgroundColor: colors.backModal }}>
           <View style={{ padding: 20, width: "90%", borderRadius: 10, backgroundColor: colors.background }}>
             <View style={{ position: "relative", marginBottom: 30 }}>
               <Title style={{ textAlign: "center", }}>Adicionar TAGs</Title>
@@ -104,15 +117,15 @@ export const CreateQuestion = ({ navigation }) => {
                 size={30}
                 color={colors.error}
                 icon="close-circle-outline"
-                // onPress={() => setOpenAnswer(false)}
+                onPress={() => setAddTagModal(false)}
                 style={{ position: "absolute", margin: 0, top: -10, right: 0 }}
               />
             </View>
 
             <Title style={{ fontSize: 16 / ratio }}>TAGs selecionadas:</Title>
-            {Boolean(selectedTags.length) && (
+            {Boolean(QuestiontagList.length) && (
               <View style={{ marginTop: 10, flexDirection: "row", flexWrap: "wrap" }}>
-                {selectedTags.map(tag => (
+                {QuestiontagList.map(tag => (
                   <Chip
                     key={tag.title}
                     onClose={() => alert("close")}
@@ -134,20 +147,33 @@ export const CreateQuestion = ({ navigation }) => {
             // onChangeText={onChangeSearch}
             />
 
-            {Boolean(tagList.length) && (
-              <ScrollView style={{ height: 200, marginTop: 15, flexDirection: "row", padding: 10, borderRadius: 8, backgroundColor: colors.surface, flexWrap: "wrap" }} >
-                {tagList.map(tag => (
-                  <Chip
-                    icon="plus"
-                    key={tag.title}
-                    style={{ margin: 4, backgroundColor: colors.background }}
-                  >
-                    {tag.title}
-                  </Chip>
+            <FlatList
+              numColumns={5}
+              data={tagList}
+              scrollEventThrottle={1900}
+              keyExtractor={(item, index) => index}
+              columnWrapperStyle={{ flexWrap: "wrap" }}
+              contentContainerStyle={{ paddingBottom: 30, }}
+              style={{ height: 200, marginTop: 15, padding: 10, borderRadius: 8, backgroundColor: colors.surface }}
+              renderItem={({ item }) => (
+                <Chip icon="plus" onPress={() => { }} style={{ margin: 4, backgroundColor: colors.background }}>
+                  {item.title}
+                </Chip>
+              )}
+            />
+
+            {/* <View style={{ height: 200, marginTop: 15, padding: 10, borderRadius: 8, backgroundColor: colors.surface }}>
+              <ScrollView style={{}}>
+                {tagList.map((item, i) => (
+                  <>
+                    <Chip icon="plus" key={i} style={{ margin: 4, backgroundColor: colors.background }}>
+                      {item.title}
+                    </Chip>
+                  </>
                 ))}
-                <View style={{ marginVertical: 20 }} />
               </ScrollView>
-            )}
+            </View> */}
+
           </View>
         </KeyboardAvoidingView>
       </Modal>
