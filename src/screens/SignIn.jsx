@@ -1,4 +1,5 @@
 import React from "react";
+import { Controller, useForm } from "react-hook-form";
 import {
   View,
   Image,
@@ -15,9 +16,15 @@ import {
   useTheme,
   TextInput,
   IconButton,
+  HelperText,
 } from "react-native-paper";
 
 export const SignIn = ({ navigation }) => {
+  const { control, handleSubmit, formState: { errors } } = useForm({
+    defaultValues: { email: '', password: '' }
+  });
+  const onSubmit = data => console.warn(data);
+
   const ratio = PixelRatio.getFontScale();
   const { colors, fonts, logos } = useTheme();
   const imgDimensions = Dimensions.get("window").width / 3.5;
@@ -34,26 +41,52 @@ export const SignIn = ({ navigation }) => {
             style={{ position: "absolute", top: 0 }}
           />
           <View style={{ alignItems: "center" }}>
-            <Image source={logos[1]} resizeMode="contain" style={{ marginVertical: 20, width: imgDimensions, height: imgDimensions }} />
+            <Image source={logos[1]} resizeMode="contain"
+              style={{ marginVertical: 20, width: imgDimensions, height: imgDimensions }}
+            />
           </View>
-          <Title style={{ ...fonts.regular, fontSize: 18 / ratio }}>Faça o login para continuar!</Title>
+          <Title style={{ ...fonts.regular, fontSize: 18 / ratio, marginBottom: 20 }}>
+            Faça o login para continuar!
+          </Title>
 
-          <TextInput
-            label="E-mail"
-            mode="outlined"
-            style={{ marginBottom: 10 }}
-            theme={{ colors: { background: colors.surface, primary: colors.text } }}
+          <Controller name="email" control={control}
+            rules={{ required: true }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                value={value}
+                label="E-mail"
+                mode="outlined"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                error={Boolean(errors.email)}
+                theme={{ colors: { background: colors.surface, primary: colors.text } }}
+              />
+            )}
           />
+          <HelperText style={{ marginBottom: 5 }} type="error" visible={Boolean(errors.email)} >
+            Campo obrigatório
+          </HelperText>
 
-          <TextInput
-            label="Senha"
-            mode="outlined"
-            secureTextEntry={true}
-            style={{ marginBottom: 35 }}
-            theme={{ colors: { background: colors.surface, primary: colors.text } }}
+          <Controller name="password" control={control}
+            rules={{ required: true }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                value={value}
+                label="Senha"
+                mode="outlined"
+                onBlur={onBlur}
+                secureTextEntry={true}
+                onChangeText={onChange}
+                error={Boolean(errors.password)}
+                theme={{ colors: { background: colors.surface, primary: colors.text } }}
+              />
+            )}
           />
+          <HelperText style={{ marginBottom: 25 }} type="error" visible={Boolean(errors.password)} >
+            Campo obrigatório
+          </HelperText>
 
-          <Button onPress={() => navigation.navigate("SessionRoutes")} contentStyle={{ height: 45 }} icon="login" mode="contained">Entrar</Button>
+          <Button title="Submit" onPress={handleSubmit(onSubmit)} contentStyle={{ height: 45 }} icon="login" mode="contained">Entrar</Button>
 
           {/* <View style={styles.orView}>
             <Text style={{ marginHorizontal: 20, fontSize: 14 / ratio }}>Ou entre com</Text>
