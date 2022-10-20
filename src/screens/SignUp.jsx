@@ -1,4 +1,5 @@
 import React from "react";
+import { useForm, Controller } from "react-hook-form";
 import {
   View,
   Image,
@@ -6,6 +7,7 @@ import {
   StyleSheet,
   Dimensions,
   PixelRatio,
+  ScrollView,
   KeyboardAvoidingView,
 } from "react-native";
 import {
@@ -15,6 +17,7 @@ import {
   useTheme,
   TextInput,
   IconButton,
+  HelperText,
 } from "react-native-paper";
 
 export const SignUp = ({ navigation }) => {
@@ -22,47 +25,109 @@ export const SignUp = ({ navigation }) => {
   const { colors, fonts, logos } = useTheme();
   const imgDimensions = Dimensions.get("window").width / 3.5;
 
+  const { control, handleSubmit, formState: { errors } } = useForm({
+    defaultValues: {
+      name: "",
+      document: "",
+      email: "",
+      password: "",
+    }
+  });
+  const onSubmit = data => console.warn(data);
+
   return (
-    <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : ""}>
-      <View style={styles.content}>
-        <View style={{ ...styles.main }}>
-          <IconButton
-            size={40}
-            color={colors.text}
-            icon="arrow-left-circle-outline"
-            onPress={() => navigation.goBack()}
-            style={{ position: "absolute", top: 0 }}
-          />
-          <View style={{ alignItems: "center" }}>
-            <Image source={logos[1]} resizeMode="contain" style={{ marginVertical: 20, width: imgDimensions, height: imgDimensions }} />
-          </View>
-          <Title style={{ ...fonts.regular, fontSize: 18 / ratio }}>Faça já seu cadastro!</Title>
+    <ScrollView>
+      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : ""}>
+        <View style={styles.content}>
+          <View style={{ ...styles.main }}>
+            <IconButton
+              size={40}
+              color={colors.text}
+              icon="arrow-left-circle-outline"
+              onPress={() => navigation.goBack()}
+              style={{ position: "absolute", top: 0 }}
+            />
+            <View style={{ alignItems: "center" }}>
+              <Image source={logos[1]} resizeMode="contain" style={{ marginVertical: 20, width: imgDimensions, height: imgDimensions }} />
+            </View>
+            <Title style={{ ...fonts.regular, fontSize: 18 / ratio, marginBottom: 20 }}>Faça já seu cadastro!</Title>
 
-          <TextInput
-            mode="outlined"
-            label="Nome completo"
-            style={{ marginBottom: 10 }}
-            theme={{ colors: { background: colors.surface, primary: colors.text } }}
-          />
+            <Controller name="name" control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  value={value}
+                  mode="outlined"
+                  onBlur={onBlur}
+                  label="Nome completo"
+                  onChangeText={onChange}
+                  error={Boolean(errors.name)}
+                  theme={{ colors: { background: colors.surface, primary: colors.text } }}
+                />
+              )}
+            />
+            <HelperText style={{ marginBottom: 5 }} type="error" visible={Boolean(errors.name)} >
+              Campo obrigatório
+            </HelperText>
 
-          <TextInput
-            label="E-mail"
-            mode="outlined"
-            style={{ marginBottom: 10 }}
-            theme={{ colors: { background: colors.surface, primary: colors.text } }}
-          />
+            <Controller name="document" control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  label="CPF"
+                  value={value}
+                  mode="outlined"
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  error={Boolean(errors.document)}
+                  theme={{ colors: { background: colors.surface, primary: colors.text } }}
+                />
+              )}
+            />
+            <HelperText style={{ marginBottom: 5 }} type="error" visible={Boolean(errors.document)} >
+              Campo obrigatório
+            </HelperText>
 
-          <TextInput
-            label="Senha"
-            mode="outlined"
-            secureTextEntry={true}
-            style={{ marginBottom: 35 }}
-            theme={{ colors: { background: colors.surface, primary: colors.text } }}
-          />
+            <Controller name="email" control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  label="Email"
+                  value={value}
+                  mode="outlined"
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  error={Boolean(errors.email)}
+                  theme={{ colors: { background: colors.surface, primary: colors.text } }}
+                />
+              )}
+            />
+            <HelperText style={{ marginBottom: 5 }} type="error" visible={Boolean(errors.email)} >
+              Campo obrigatório
+            </HelperText>
 
-          <Button contentStyle={{ height: 45 }} icon="account-arrow-right" mode="contained">Criar conta</Button>
+            <Controller name="password" control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  value={value}
+                  label="Senha"
+                  mode="outlined"
+                  onBlur={onBlur}
+                  secureTextEntry={true}
+                  onChangeText={onChange}
+                  error={Boolean(errors.password)}
+                  theme={{ colors: { background: colors.surface, primary: colors.text } }}
+                />
+              )}
+            />
+            <HelperText style={{ marginBottom: 25 }} type="error" visible={Boolean(errors.password)} >
+              Campo obrigatório
+            </HelperText>
 
-          {/* <View style={styles.orView}>
+            <Button title="Submit" onPress={handleSubmit(onSubmit)} contentStyle={{ height: 45 }} icon="account-arrow-right" mode="contained">Criar conta</Button>
+
+            {/* <View style={styles.orView}>
             <Text style={{ marginHorizontal: 20, fontSize: 14 / ratio }}>Ou entre com</Text>
           </View>
 
@@ -72,15 +137,17 @@ export const SignUp = ({ navigation }) => {
             <IconButton size={40} icon="github" color={colors.text} onPress={() => console.log("GitHub")} />
           </View> */}
 
-          <Text style={{ textAlign: "center", marginTop: 30, fontSize: 14 / ratio }}>Já possui conta? Faça o <Text onPress={() => navigation.navigate("SignIn")} style={{ ...fonts.medium, ...styles.title, color: colors.primary, fontSize: 14 / ratio }}>LOGIN</Text>!</Text>
+            <Text style={{ textAlign: "center", marginTop: 30, fontSize: 14 / ratio }}>Já possui conta? Faça o <Text onPress={() => navigation.navigate("SignIn")} style={{ ...fonts.medium, ...styles.title, color: colors.primary, fontSize: 14 / ratio }}>LOGIN</Text>!</Text>
+          </View>
         </View>
-      </View>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   content: {
+    marginTop: 20,
     height: "100%",
     alignItems: "center",
     justifyContent: "center",

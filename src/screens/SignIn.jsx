@@ -7,6 +7,7 @@ import {
   StyleSheet,
   PixelRatio,
   Dimensions,
+  ScrollView,
   KeyboardAvoidingView,
 } from "react-native";
 import {
@@ -30,65 +31,66 @@ export const SignIn = ({ navigation }) => {
   const imgDimensions = Dimensions.get("window").width / 3.5;
 
   return (
-    <KeyboardAvoidingView behavior={Platform.OS === "ios" && "padding"}>
-      <View style={styles.content}>
-        <View style={styles.main}>
-          <IconButton
-            size={40}
-            color={colors.text}
-            icon="arrow-left-circle-outline"
-            onPress={() => navigation.goBack()}
-            style={{ position: "absolute", top: 0 }}
-          />
-          <View style={{ alignItems: "center" }}>
-            <Image source={logos[1]} resizeMode="contain"
-              style={{ marginVertical: 20, width: imgDimensions, height: imgDimensions }}
+    <ScrollView>
+      <KeyboardAvoidingView behavior={Platform.OS === "ios" && "padding"}>
+        <View style={styles.content}>
+          <View style={styles.main}>
+            <IconButton
+              size={40}
+              color={colors.text}
+              icon="arrow-left-circle-outline"
+              onPress={() => navigation.goBack()}
+              style={{ position: "absolute", top: 0 }}
             />
-          </View>
-          <Title style={{ ...fonts.regular, fontSize: 18 / ratio, marginBottom: 20 }}>
-            Faça o login para continuar!
-          </Title>
-
-          <Controller name="email" control={control}
-            rules={{ required: true }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                value={value}
-                label="E-mail"
-                mode="outlined"
-                onBlur={onBlur}
-                onChangeText={onChange}
-                error={Boolean(errors.email)}
-                theme={{ colors: { background: colors.surface, primary: colors.text } }}
+            <View style={{ alignItems: "center", marginTop: 40 }}>
+              <Image source={logos[1]} resizeMode="contain"
+                style={{ marginVertical: 20, width: imgDimensions, height: imgDimensions }}
               />
-            )}
-          />
-          <HelperText style={{ marginBottom: 5 }} type="error" visible={Boolean(errors.email)} >
-            Campo obrigatório
-          </HelperText>
+            </View>
+            <Title style={{ ...fonts.regular, fontSize: 18 / ratio, marginBottom: 20 }}>
+              Faça o login para continuar!
+            </Title>
 
-          <Controller name="password" control={control}
-            rules={{ required: true }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                value={value}
-                label="Senha"
-                mode="outlined"
-                onBlur={onBlur}
-                secureTextEntry={true}
-                onChangeText={onChange}
-                error={Boolean(errors.password)}
-                theme={{ colors: { background: colors.surface, primary: colors.text } }}
-              />
-            )}
-          />
-          <HelperText style={{ marginBottom: 25 }} type="error" visible={Boolean(errors.password)} >
-            Campo obrigatório
-          </HelperText>
+            <Controller name="email" control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  value={value}
+                  label="E-mail"
+                  mode="outlined"
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  error={Boolean(errors.email)}
+                  theme={{ colors: { background: colors.surface, primary: colors.text } }}
+                />
+              )}
+            />
+            <HelperText style={{ marginBottom: 5 }} type="error" visible={Boolean(errors.email)} >
+              Campo obrigatório
+            </HelperText>
 
-          <Button title="Submit" onPress={handleSubmit(onSubmit)} contentStyle={{ height: 45 }} icon="login" mode="contained">Entrar</Button>
+            <Controller name="password" control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  value={value}
+                  label="Senha"
+                  mode="outlined"
+                  onBlur={onBlur}
+                  secureTextEntry={true}
+                  onChangeText={onChange}
+                  error={Boolean(errors.password)}
+                  theme={{ colors: { background: colors.surface, primary: colors.text } }}
+                />
+              )}
+            />
+            <HelperText style={{ marginBottom: 25 }} type="error" visible={Boolean(errors.password)} >
+              Campo obrigatório
+            </HelperText>
 
-          {/* <View style={styles.orView}>
+            <Button title="Submit" onPress={handleSubmit(onSubmit)} contentStyle={{ height: 45 }} icon="login" mode="contained">Entrar</Button>
+
+            {/* <View style={styles.orView}>
             <Text style={{ marginHorizontal: 20, fontSize: 14 / ratio }}>Ou entre com</Text>
           </View>
 
@@ -98,17 +100,19 @@ export const SignIn = ({ navigation }) => {
             <IconButton size={40} icon="github" color={colors.text} onPress={() => console.log("GitHub")} />
           </View> */}
 
-          <Text style={{ textAlign: "center", marginTop: 30, fontSize: 14 / ratio }}>
-            Não possui conta? <Text onPress={() => navigation.navigate("SignUp")} style={{ ...fonts.medium, ...styles.title, color: colors.primary, fontSize: 14 / ratio }}>CADASTRE-SE</Text>!
-          </Text>
+            <Text style={{ textAlign: "center", marginTop: 30, fontSize: 14 / ratio }}>
+              Não possui conta? <Text onPress={() => navigation.navigate("SignUp")} style={{ ...fonts.medium, ...styles.title, color: colors.primary, fontSize: 14 / ratio }}>CADASTRE-SE</Text>!
+            </Text>
+          </View>
         </View>
-      </View>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   content: {
+    marginTop: 20,
     height: "100%",
     alignItems: "center",
     justifyContent: "center",
