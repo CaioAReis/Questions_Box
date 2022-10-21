@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { FlatList, KeyboardAvoidingView, Modal, PixelRatio, Pressable, View } from "react-native";
-import { Avatar, Button, Chip, Divider, IconButton, Text, TextInput, Title, useTheme } from "react-native-paper";
+import { Avatar, Button, Chip, Divider, HelperText, IconButton, Text, TextInput, Title, useTheme } from "react-native-paper";
 import { ResponseCard } from "../components";
 
 const ratio = PixelRatio.getFontScale();
@@ -9,6 +10,13 @@ export const QuestionDetails = ({ navigation }) => {
   const { colors } = useTheme();
 
   const [openAnswer, setOpenAnswer] = useState(false);
+
+  const { control, handleSubmit, formState: { errors } } = useForm({
+    defaultValues: { response: "" }
+  });
+  const onSubmit = data => {
+    console.warn(data);
+  };
 
   const list = [
     {
@@ -132,7 +140,7 @@ export const QuestionDetails = ({ navigation }) => {
 
       <Modal animationType="fade" visible={openAnswer} transparent onRequestClose={() => setOpenAnswer(false)}>
         <View style={{ backgroundColor: colors.backModal, flex: 1 }}>
-          <KeyboardAvoidingView style={{ flex: 1, alignItems: "center", justifyContent: "center"  }} behavior={Platform.OS === "ios" ? "padding" : ""}>
+          <KeyboardAvoidingView style={{ flex: 1, alignItems: "center", justifyContent: "center" }} behavior={Platform.OS === "ios" ? "padding" : ""}>
             <View style={{ padding: 20, width: "90%", borderRadius: 20, backgroundColor: colors.background }}>
               <View style={{ position: "relative", marginBottom: 30 }}>
                 <Title style={{ textAlign: "center", }}>Resposta</Title>
@@ -149,15 +157,28 @@ export const QuestionDetails = ({ navigation }) => {
               </Text>
 
               <View style={{ marginBottom: 20 }}>
-                <TextInput
-                  multiline
-                  mode="outlined"
-                  label="Sua resposta"
-                  theme={{ colors: { background: colors.surface, primary: colors.text } }}
-                  style={{ marginBottom: 30, height: 180 }}
-                />
 
-                <Button mode="contained" icon="bookmark-check">Responder</Button>
+                <Controller name="title" control={control}
+                  rules={{ required: true }}
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <TextInput
+                      multiline
+                      value={value}
+                      mode="outlined"
+                      onBlur={onBlur}
+                      label="Sua resposta"
+                      onChangeText={onChange}
+                      error={Boolean(errors.title)}
+                      style={{ height: 150 }}
+                      theme={{ colors: { background: colors.surface, primary: colors.text } }}
+                    />
+                  )}
+                />
+                <HelperText style={{ marginBottom: 25 }} type="error" visible={Boolean(errors.title)} >
+                  Campo obrigatório
+                </HelperText>
+
+                <Button mode="contained" contentStyle={{ height: 45 }} title="Submit" onPress={handleSubmit(onSubmit)} icon="bookmark-check">Responder</Button>
               </View>
             </View>
           </KeyboardAvoidingView>

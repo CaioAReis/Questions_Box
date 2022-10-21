@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
+import { useForm, Controller } from 'react-hook-form';
 import { View, StyleSheet, PixelRatio, ScrollView, Modal, Dimensions, KeyboardAvoidingView, Platform, Pressable } from "react-native";
-import { Avatar, Text, Button, Divider, IconButton, Title, useTheme, TextInput, List } from 'react-native-paper';
+import { Avatar, Text, Button, Divider, IconButton, Title, useTheme, TextInput, List, HelperText } from 'react-native-paper';
 import { TagCard } from '../components';
 
 const ratio = PixelRatio.getFontScale();
@@ -9,6 +10,13 @@ export const Tags = ({ navigation }) => {
   const { colors, fonts } = useTheme();
   const span = { ...fonts.medium, color: colors.primary };
   const [openCreateTag, setOpenCreateTag] = useState(false);
+
+  const { control, handleSubmit, formState: { errors } } = useForm({
+    defaultValues: { title: "", description: "" }
+  });
+  const onSubmit = data => {
+    console.warn(data);
+  };
 
   return (
     <>
@@ -89,22 +97,45 @@ export const Tags = ({ navigation }) => {
               </List.Accordion>
 
               <View style={{ marginBottom: 20 }}>
-                <TextInput
-                  mode="outlined"
-                  label="Título da TAG"
-                  style={{ marginBottom: 10 }}
-                  theme={{ colors: { background: colors.surface, primary: colors.text } }}
-                />
 
-                <TextInput
-                  multiline
-                  mode="outlined"
-                  label="Descrição da TAG"
-                  theme={{ colors: { background: colors.surface, primary: colors.text } }}
-                  style={{ marginBottom: 30, height: Dimensions.get("window").width / 4.5 }}
+                <Controller name="title" control={control}
+                  rules={{ required: true }}
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <TextInput
+                      value={value}
+                      mode="outlined"
+                      onBlur={onBlur}
+                      label="Título da TAG"
+                      onChangeText={onChange}
+                      error={Boolean(errors.title)}
+                      theme={{ colors: { background: colors.surface, primary: colors.text } }}
+                    />
+                  )}
                 />
+                <HelperText style={{ marginBottom: 5 }} type="error" visible={Boolean(errors.title)} >
+                  Campo obrigatório
+                </HelperText>
 
-                <Button mode="contained" icon="plus" >Criar tag</Button>
+                <Controller name="description" control={control}
+                  rules={{ required: true }}
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <TextInput
+                      multiline
+                      value={value}
+                      mode="outlined"
+                      onBlur={onBlur}
+                      label="Descrição da TAG"
+                      onChangeText={onChange}
+                      error={Boolean(errors.description)}
+                      theme={{ colors: { background: colors.surface, primary: colors.text } }}
+                    />
+                  )}
+                />
+                <HelperText style={{ marginBottom: 25 }} type="error" visible={Boolean(errors.description)} >
+                  Campo obrigatório
+                </HelperText>
+
+                <Button mode="contained" contentStyle={{ height: 45 }} title="Submit" onPress={handleSubmit(onSubmit)} icon="plus">Criar tag</Button>
               </View>
             </View>
           </KeyboardAvoidingView>

@@ -1,12 +1,20 @@
 import React, { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { KeyboardAvoidingView, PixelRatio, StyleSheet, View, Modal, ScrollView, FlatList } from "react-native";
-import { Button, Chip, Divider, IconButton, Text, TextInput, Title, useTheme, Searchbar } from "react-native-paper";
+import { Button, Chip, Divider, IconButton, Text, TextInput, Title, useTheme, Searchbar, HelperText } from "react-native-paper";
 
 const ratio = PixelRatio.getFontScale();
 
 export const CreateQuestion = ({ navigation }) => {
   const { colors } = useTheme();
   const [addTagModal, setAddTagModal] = useState(false);
+
+  const { control, handleSubmit, formState: { errors } } = useForm({
+    defaultValues: { title: "", description: "", tags: [] }
+  });
+  const onSubmit = data => {
+    console.warn(data);
+  };
 
   const tagList = [
     { title: "Java" },
@@ -60,48 +68,77 @@ export const CreateQuestion = ({ navigation }) => {
         </View>
 
         <View style={{ paddingHorizontal: 20, paddingVertical: 30 }}>
-          <TextInput
-            mode="outlined"
-            label="Título da dúvida"
-            style={{ marginBottom: 10 }}
-            theme={{ colors: { background: colors.surface, primary: colors.text } }}
-          />
 
-          <TextInput
-            mode="outlined"
-            label="Descrição dúvida"
-            style={{ marginBottom: 10, height: 150 }}
-            theme={{ colors: { background: colors.surface, primary: colors.text } }}
+          <Controller name="title" control={control}
+            rules={{ required: true }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                value={value}
+                mode="outlined"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                label="Título da dúvida"
+                error={Boolean(errors.title)}
+                theme={{ colors: { background: colors.surface, primary: colors.text } }}
+              />
+            )}
           />
+          <HelperText style={{ marginBottom: 5 }} type="error" visible={Boolean(errors.title)} >
+            Campo obrigatório
+          </HelperText>
+
+          <Controller name="description" control={control}
+            rules={{ required: true }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                value={value}
+                mode="outlined"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                style={{ height: 150 }}
+                label="Descrição dúvida"
+                error={Boolean(errors.description)}
+                theme={{ colors: { background: colors.surface, primary: colors.text } }}
+              />
+            )}
+          />
+          <HelperText style={{ marginBottom: 5 }} type="error" visible={Boolean(errors.description)} >
+            Campo obrigatório
+          </HelperText>
 
           <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 20 }}>
             <Title style={{ fontSize: 20 / ratio }}>Tags</Title>
-
-            <Button color={colors.success} icon="plus-circle" onPress={() => setAddTagModal(true)}>Adicionar tag</Button>
+            <Button contentStyle={{ height: 45 }} color={colors.success} icon="plus-circle" onPress={() => setAddTagModal(true)}>Adicionar tag</Button>
           </View>
 
           {Boolean(QuestiontagList.length) && (
-            <View style={{ marginTop: 15, flexDirection: "row", padding: 10, borderRadius: 8, backgroundColor: colors.surface, flexWrap: "wrap" }} >
-              {QuestiontagList.map(tag => (
-                <Chip
-                  key={tag.title}
-                  onClose={() => alert("close")}
-                  closeIcon="close-circle-outline"
-                  style={{ margin: 4, backgroundColor: colors.background }}
-                >
-                  {tag.title}
-                </Chip>
-              ))}
-            </View>
+            <>
+              <View style={{ borderWidth: 1, borderColor: Boolean(errors.tags) ? colors.error : colors.surface, marginTop: 15, flexDirection: "row", padding: 10, borderRadius: 8, backgroundColor: colors.surface, flexWrap: "wrap" }} >
+                {QuestiontagList.map(tag => (
+                  <Chip
+                    key={tag.title}
+                    onClose={() => alert("close")}
+                    closeIcon="close-circle-outline"
+                    style={{ margin: 4, backgroundColor: colors.background }}
+                  >
+                    {tag.title}
+                  </Chip>
+                ))}
+              </View>
+              <HelperText type="error" visible={Boolean(errors.tags)} >
+                Selecione pelo menos uma tag.
+              </HelperText>
+            </>
           )}
 
           <Divider style={{ marginVertical: 30 }} />
 
           <Button
+            title="Submit"
             mode="contained"
-            onPress={() => { }}
             icon="checkbox-marked-circle"
             contentStyle={{ height: 45 }}
+            onPress={handleSubmit(onSubmit)}
             labelStyle={{ fontSize: 14 / ratio }}>
             Postar dúvida
           </Button>

@@ -24,7 +24,10 @@ export const SignIn = ({ navigation }) => {
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: { email: '', password: '' }
   });
-  const onSubmit = data => console.warn(data);
+  const onSubmit = data => {
+    console.warn(data);
+    navigation.navigate("SessionRoutes");
+  };
 
   const ratio = PixelRatio.getFontScale();
   const { colors, fonts, logos } = useTheme();

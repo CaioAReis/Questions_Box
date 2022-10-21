@@ -33,7 +33,10 @@ export const SignUp = ({ navigation }) => {
       password: "",
     }
   });
-  const onSubmit = data => console.warn(data);
+  const onSubmit = data => {
+    console.warn(data);
+    navigation.navigate("SignIn");
+  };
 
   return (
     <ScrollView>
