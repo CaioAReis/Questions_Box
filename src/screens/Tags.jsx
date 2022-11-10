@@ -50,15 +50,9 @@ export const Tags = ({ navigation }) => {
             <Button onPress={() => setOpenCreateTag(true)} icon="plus-circle" labelStyle={{ fontSize: 12 / ratio }} mode="contained">Criar TAG</Button>
           </View>
 
-          <TagCard />
-          <TagCard />
-          <TagCard />
-          <TagCard />
-          <TagCard />
-          <TagCard />
-          <TagCard />
-          <TagCard />
-          <TagCard />
+          <TagCard name="Java" description="Aaushd ia aiushda hsda isudiausd iaus d" qtdQuestions={12} />
+          <TagCard name="HTML" description="Aaushd ia aiushda hsda isudiausd iaus d" qtdQuestions={12} />
+          <TagCard name="CSS" description="Aaushd ia aiushda hsda isudiausd iaus d" qtdQuestions={12} />
 
         </View>
       </ScrollView>
