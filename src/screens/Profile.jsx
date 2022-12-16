@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { FlatList, KeyboardAvoidingView, PixelRatio, Platform, View } from "react-native";
-import { Avatar, Button, IconButton, Modal, TextInput, Title, useTheme } from "react-native-paper";
+import { Avatar, Button, HelperText, IconButton, Modal, TextInput, Title, useTheme } from "react-native-paper";
 import { QuestionCard } from "../components";
+import { API } from "../services/api";
 
 const ratio = PixelRatio.getFontScale();
 
@@ -9,19 +11,38 @@ export const Profile = ({ navigation }) => {
   const { colors } = useTheme();
   const [openEdit, setOpenEdit] = useState(false);
 
+  const { control, handleSubmit, formState: { errors } } = useForm({
+    defaultValues: {
+      name: "cccc",
+      cpf: "1111",
+      email: "xxxxxx",
+    }
+  });
+
+  const onSubmit = data => {
+    API.editUser("639ba17c0150513f93eadd67", data).then(res => {
+      console.warn(res);
+      //  Tratar a resposta!
+      //  Exibir toast de tudo certo!
+    }).catch(err => {
+      //  Exibir toast de erro!
+      console.error(err.response.data);
+    });
+  };
+
   const list = [
     {
       _id: "1",
       qtdAnsers: 2,
       date: "15/09/2022 - 20:07",
-      tags: [{title: "IFS"}, {title: "Lagarto"}],
+      tags: [{ title: "IFS" }, { title: "Lagarto" }],
       title: "Onde fica a CRE do campus Lagarto?",
     },
 
     {
       _id: "2",
       qtdAnsers: 12,
-      tags: [{title: "Cartão"}, {title: "Clonar"}],
+      tags: [{ title: "Cartão" }, { title: "Clonar" }],
       date: "15/09/2022 - 20:07",
       title: "Como clonar um cartão?",
     },
@@ -30,7 +51,7 @@ export const Profile = ({ navigation }) => {
       _id: "3",
       qtdAnsers: 0,
       date: "15/09/2022 - 20:07",
-      tags: [{title: "Compra"}, {title: "Trailer"}],
+      tags: [{ title: "Compra" }, { title: "Trailer" }],
       title: "Onde posso comprar um trailer?",
     },
 
@@ -38,7 +59,7 @@ export const Profile = ({ navigation }) => {
       _id: "4",
       qtdAnsers: 4,
       date: "15/09/2022 - 20:07",
-      tags: [{title: "Pokemon"}, {title: "Shiny"}],
+      tags: [{ title: "Pokemon" }, { title: "Shiny" }],
       title: "Como encontrar um pokemon shiny?",
     },
 
@@ -46,10 +67,25 @@ export const Profile = ({ navigation }) => {
       _id: "5",
       qtdAnsers: 1,
       date: "15/09/2022 - 20:07",
-      tags: [{title: "Gato"}, {title: "Elétrico"}],
+      tags: [{ title: "Gato" }, { title: "Elétrico" }],
       title: "Como fazer um gato elétrico sem tomar choque⚡?",
     }
   ];
+
+  useEffect(() => {
+    const requestProfile = () => {
+      API.getUser("639ba17c0150513f93eadd67").then(res => {
+        console.warn(res);
+        //  Tratar a resposta!
+        //  Exibir toast de tudo certo!
+      }).catch(err => {
+        //  Exibir toast de erro!
+        console.error(err.response.data);
+      });
+    };
+
+    requestProfile();
+  }, []);
 
   return (
     <>
@@ -133,28 +169,70 @@ export const Profile = ({ navigation }) => {
           </View>
 
           <View style={{ marginBottom: 20 }}>
-            <TextInput
-              mode="outlined"
-              label="Nome de usuário"
-              style={{ marginBottom: 10 }}
-              theme={{ colors: { background: colors.surface, primary: colors.text } }}
-            />
 
-            <TextInput
-              mode="outlined"
-              label="Email"
-              style={{ marginBottom: 10 }}
-              theme={{ colors: { background: colors.surface, primary: colors.text } }}
+            <Controller name="name" control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  value={value}
+                  mode="outlined"
+                  onBlur={onBlur}
+                  label="Nome completo"
+                  onChangeText={onChange}
+                  error={Boolean(errors.name)}
+                  theme={{ colors: { background: colors.surface, primary: colors.text } }}
+                />
+              )}
             />
+            {Boolean(errors.name) && (
+              <HelperText type="error" visible={Boolean(errors.name)}>
+                Campo obrigatório
+              </HelperText>
+            )}
 
-            <TextInput
-              mode="outlined"
-              label="Telefone"
-              style={{ marginBottom: 30 }}
-              theme={{ colors: { background: colors.surface, primary: colors.text } }}
+            <Controller name="cpf" control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  label="CPF"
+                  value={value}
+                  mode="outlined"
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  style={{ marginTop: 15 }}
+                  error={Boolean(errors.cpf)}
+                  theme={{ colors: { background: colors.surface, primary: colors.text } }}
+                />
+              )}
             />
+            {Boolean(errors.cpf) && (
+              <HelperText type="error" visible={Boolean(errors.cpf)} >
+                Campo obrigatório
+              </HelperText>
+            )}
 
-            <Button mode="contained" onPress={() => { }} >Salvar alterações</Button>
+            <Controller name="email" control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  label="Email"
+                  value={value}
+                  mode="outlined"
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  style={{ marginTop: 15 }}
+                  error={Boolean(errors.email)}
+                  theme={{ colors: { background: colors.surface, primary: colors.text } }}
+                />
+              )}
+            />
+            {Boolean(errors.email) && (
+              <HelperText type="error" visible={Boolean(errors.email)} >
+                Campo obrigatório
+              </HelperText>
+            )}
+
+            <Button mode="contained" style={{ marginTop: 35 }} onPress={handleSubmit(onSubmit)} >Salvar alterações</Button>
           </View>
         </KeyboardAvoidingView>
       </Modal>

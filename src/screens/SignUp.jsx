@@ -19,6 +19,7 @@ import {
   IconButton,
   HelperText,
 } from "react-native-paper";
+import { API } from "../services/api";
 
 export const SignUp = ({ navigation }) => {
   const ratio = PixelRatio.getFontScale();
@@ -28,14 +29,22 @@ export const SignUp = ({ navigation }) => {
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
       name: "",
-      document: "",
+      cpf: "",
       email: "",
       password: "",
     }
   });
+  
   const onSubmit = data => {
-    console.warn(data);
-    navigation.navigate("SignIn");
+    API.signUP(data).then(res => {
+      console.warn(res);
+      //  Tratar a resposta!
+      //  Exibir toast de tudo certo!
+      navigation.navigate("SignIn");
+    }).catch(err => {
+      //  Exibir toast de erro!
+      console.error(err.response.data);
+    });
   };
 
   return (
@@ -73,7 +82,7 @@ export const SignUp = ({ navigation }) => {
               Campo obrigatório
             </HelperText>
 
-            <Controller name="document" control={control}
+            <Controller name="cpf" control={control}
               rules={{ required: true }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
@@ -82,12 +91,12 @@ export const SignUp = ({ navigation }) => {
                   mode="outlined"
                   onBlur={onBlur}
                   onChangeText={onChange}
-                  error={Boolean(errors.document)}
+                  error={Boolean(errors.cpf)}
                   theme={{ colors: { background: colors.surface, primary: colors.text } }}
                 />
               )}
             />
-            <HelperText style={{ marginBottom: 5 }} type="error" visible={Boolean(errors.document)} >
+            <HelperText style={{ marginBottom: 5 }} type="error" visible={Boolean(errors.cpf)} >
               Campo obrigatório
             </HelperText>
 

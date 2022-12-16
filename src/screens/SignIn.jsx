@@ -19,14 +19,24 @@ import {
   IconButton,
   HelperText,
 } from "react-native-paper";
+import { API } from "../services/api";
 
 export const SignIn = ({ navigation }) => {
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: { email: '', password: '' }
   });
+
   const onSubmit = data => {
-    console.warn(data);
-    navigation.navigate("SessionRoutes");
+    API.signIN(data).then(res => {
+      console.warn(res);
+      //  Tratar a resposta!
+      navigation.navigate("SessionRoutes");
+    }).catch(err => {
+      //  Exibir toast de erro!
+      console.error(err.response.data);
+      navigation.navigate("SessionRoutes");
+
+    });
   };
 
   const ratio = PixelRatio.getFontScale();
