@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { FlatList, KeyboardAvoidingView, PixelRatio, Platform, View } from "react-native";
-import { Avatar, Button, HelperText, IconButton, Modal, TextInput, Title, useTheme } from "react-native-paper";
+import { Avatar, Button, Dialog, HelperText, IconButton, Modal, Portal, Text, TextInput, Title, useTheme } from "react-native-paper";
 import { QuestionCard } from "../components";
 import { API } from "../services/api";
 
@@ -9,14 +9,13 @@ const ratio = PixelRatio.getFontScale();
 
 export const Profile = ({ navigation }) => {
   const { colors } = useTheme();
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
+  const [dialogData, setDialogData] = useState(null);
 
   const { control, handleSubmit, formState: { errors } } = useForm({
-    defaultValues: {
-      name: "cccc",
-      cpf: "1111",
-      email: "xxxxxx",
-    }
+    defaultValues: { name: "cccc", cpf: "1111", email: "xxxxxx", }
   });
 
   const onSubmit = data => {
@@ -30,57 +29,25 @@ export const Profile = ({ navigation }) => {
     });
   };
 
-  const list = [
-    {
-      _id: "1",
-      qtdAnsers: 2,
-      date: "15/09/2022 - 20:07",
-      tags: [{ title: "IFS" }, { title: "Lagarto" }],
-      title: "Onde fica a CRE do campus Lagarto?",
-    },
-
-    {
-      _id: "2",
-      qtdAnsers: 12,
-      tags: [{ title: "Cartão" }, { title: "Clonar" }],
-      date: "15/09/2022 - 20:07",
-      title: "Como clonar um cartão?",
-    },
-
-    {
-      _id: "3",
-      qtdAnsers: 0,
-      date: "15/09/2022 - 20:07",
-      tags: [{ title: "Compra" }, { title: "Trailer" }],
-      title: "Onde posso comprar um trailer?",
-    },
-
-    {
-      _id: "4",
-      qtdAnsers: 4,
-      date: "15/09/2022 - 20:07",
-      tags: [{ title: "Pokemon" }, { title: "Shiny" }],
-      title: "Como encontrar um pokemon shiny?",
-    },
-
-    {
-      _id: "5",
-      qtdAnsers: 1,
-      date: "15/09/2022 - 20:07",
-      tags: [{ title: "Gato" }, { title: "Elétrico" }],
-      title: "Como fazer um gato elétrico sem tomar choque⚡?",
-    }
-  ];
+  // {
+  //   _id: "1",
+  //   qtdAnsers: 2,
+  //   date: "15/09/2022 - 20:07",
+  //   tags: [{ title: "IFS" }, { title: "Lagarto" }],
+  //   title: "Onde fica a CRE do campus Lagarto?",
+  // },
 
   useEffect(() => {
     const requestProfile = () => {
-      API.getUser("639ba17c0150513f93eadd67").then(res => {
+      setLoading(true);
+      API.getUser("63345a8ba7905fcc936708aa").then(res => {
         console.warn(res);
-        //  Tratar a resposta!
-        //  Exibir toast de tudo certo!
+        setUser(res);
       }).catch(err => {
-        //  Exibir toast de erro!
         console.error(err.response.data);
+        setDialogData({ error: true, title: "Oops! Ocorreu um erro!", body: err.response?.data?.message });
+      }).finally(() => {
+        setLoading(false);
       });
     };
 
@@ -91,7 +58,7 @@ export const Profile = ({ navigation }) => {
     <>
       <View style={{ backgroundColor: colors.surface, flex: 1 }}>
         <FlatList
-          data={list}
+          data={user?.questions}
           showsVerticalScrollIndicator={false}
           keyExtractor={question => question._id}
           contentContainerStyle={{ paddingBottom: 34, backgroundColor: colors.surface }}
@@ -125,14 +92,14 @@ export const Profile = ({ navigation }) => {
                 </View>
 
                 <View style={{ flexDirection: "row", }}>
-                  <Avatar.Text size={80} label="CA" labelStyle={{ fontSize: 25 / ratio, fontWeight: "bold" }} />
+                  <Avatar.Text size={80} label={user?.firstName[0] + user?.surname[0] || ""} labelStyle={{ fontSize: 25 / ratio, fontWeight: "bold" }} />
                   <View style={{ flex: 1, marginLeft: 15, justifyContent: "center" }}>
                     <Title style={{ fontSize: 20 / ratio, lineHeight: 20 / ratio }}>
-                      Caio AReis
+                      {(user?.firstName || "") + " " + (user?.surname || "")}
                     </Title>
 
                     <Title style={{ fontSize: 12 / ratio, lineHeight: 20 / ratio, color: colors.primary }}>
-                      Caio.AReis@mail.com
+                      {user?.email}
                     </Title>
                   </View>
                 </View>
@@ -142,7 +109,7 @@ export const Profile = ({ navigation }) => {
                 <Title style={{ fontSize: 20 / ratio, marginBottom: 20 }}>
                   Dúvidas postadas:
                 </Title>
-                <Title style={{ color: colors.primary }}>{"12"}</Title>
+                <Title style={{ color: colors.primary }}>{user?.questions || ""}</Title>
               </View>
             </>
           }
@@ -169,9 +136,8 @@ export const Profile = ({ navigation }) => {
           </View>
 
           <View style={{ marginBottom: 20 }}>
-
             <Controller name="name" control={control}
-              rules={{ required: true }}
+              rules={{ required: "Campo obrigatório" }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
                   value={value}
@@ -184,14 +150,10 @@ export const Profile = ({ navigation }) => {
                 />
               )}
             />
-            {Boolean(errors.name) && (
-              <HelperText type="error" visible={Boolean(errors.name)}>
-                Campo obrigatório
-              </HelperText>
-            )}
+            {Boolean(errors.name) && <HelperText type="error" visible={Boolean(errors.name)}>{errors.name.message}</HelperText>}
 
             <Controller name="cpf" control={control}
-              rules={{ required: true }}
+              rules={{ required: "Campo obrigatório" }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
                   label="CPF"
@@ -205,14 +167,10 @@ export const Profile = ({ navigation }) => {
                 />
               )}
             />
-            {Boolean(errors.cpf) && (
-              <HelperText type="error" visible={Boolean(errors.cpf)} >
-                Campo obrigatório
-              </HelperText>
-            )}
+            {Boolean(errors.cpf) && <HelperText type="error" visible={Boolean(errors.cpf)}>{errors.cpf.message}</HelperText>}
 
             <Controller name="email" control={control}
-              rules={{ required: true }}
+              rules={{ required: "Campo obrigatório" }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
                   label="Email"
@@ -226,16 +184,26 @@ export const Profile = ({ navigation }) => {
                 />
               )}
             />
-            {Boolean(errors.email) && (
-              <HelperText type="error" visible={Boolean(errors.email)} >
-                Campo obrigatório
-              </HelperText>
-            )}
+            {Boolean(errors.email) && <HelperText type="error" visible={Boolean(errors.email)}>{errors.email.message}</HelperText>}
 
-            <Button mode="contained" style={{ marginTop: 35 }} onPress={handleSubmit(onSubmit)} >Salvar alterações</Button>
+            <Button disabled={loading} loading={loading} mode="contained" style={{ marginTop: 35 }} onPress={handleSubmit(onSubmit)}>Salvar alterações</Button>
           </View>
         </KeyboardAvoidingView>
       </Modal>
+
+      <Portal>
+        <Dialog visible={Boolean(dialogData)} onDismiss={() => setDialogData(null)}
+          style={{ borderWidth: 4, borderColor: dialogData?.error ? colors.error : colors.success, paddingVertical: 20 }}
+        >
+          <>
+            <Dialog.Title>{dialogData?.title}</Dialog.Title>
+            <Dialog.Content>
+              <Text>{dialogData?.body}</Text>
+            </Dialog.Content>
+            <Avatar.Icon icon={dialogData?.error ? "close" : "check"} size={120} style={{ position: "absolute", top: -80, alignSelf: "center", backgroundColor: dialogData?.error ? colors.error : colors.success }} />
+          </>
+        </Dialog>
+      </Portal>
     </>
   );
 }
