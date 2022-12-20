@@ -1,11 +1,14 @@
 import { View, StyleSheet, Image, FlatList, PixelRatio, Pressable } from "react-native";
 import { Avatar, Button, Chip, Divider, FAB, Title, useTheme } from "react-native-paper";
 import { QuestionCard } from "../components";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useEffect, useState } from "react";
 
 const ratio = PixelRatio.getFontScale();
 
 export const Home = ({ navigation }) => {
   const { colors, logos } = useTheme();
+  const [session, setSession] = useState(null);
 
   const list = [
     {
@@ -61,6 +64,14 @@ export const Home = ({ navigation }) => {
     { title: "NodeJS" },
   ];
 
+  useEffect(() => {
+    const x = async () => {
+      const value = await AsyncStorage.getItem('QB@user_session_key');
+      setSession(JSON.parse(value));
+    }
+    x();
+  }, []);
+
   return (
     <View style={{ backgroundColor: colors.surface, height: "100%" }}>
       <FlatList
@@ -82,8 +93,8 @@ export const Home = ({ navigation }) => {
               <View style={{ alignItems: "center" }}>
                 <Image source={logos[3]} resizeMode="contain" style={{ width: 140, height: 50 }} />
               </View>
-              <Pressable onPress={() => navigation.navigate("Profile")}>
-                <Avatar.Text size={40} label="CA" labelStyle={{ fontSize: 16 / ratio }} />
+              <Pressable onPress={() => navigation.navigate("Profile", { userID: session?._id })}>
+                <Avatar.Text size={40} label={Boolean(session) ? session?.name[0]?.toUpperCase() : "QB"} labelStyle={{ fontSize: 16 / ratio }} />
               </Pressable>
             </View>
 

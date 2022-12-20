@@ -7,8 +7,9 @@ import { API } from "../services/api";
 
 const ratio = PixelRatio.getFontScale();
 
-export const Profile = ({ navigation }) => {
+export const Profile = ({ route, navigation }) => {
   const { colors } = useTheme();
+  const { userId } = route.params;
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
@@ -40,7 +41,7 @@ export const Profile = ({ navigation }) => {
   useEffect(() => {
     const requestProfile = () => {
       setLoading(true);
-      API.getUser("63345a8ba7905fcc936708aa").then(res => {
+      API.getUser(userId).then(res => {
         console.warn(res);
         setUser(res);
       }).catch(err => {

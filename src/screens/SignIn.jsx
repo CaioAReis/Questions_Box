@@ -4,6 +4,7 @@ import { View, Image, Platform, StyleSheet, PixelRatio, Dimensions, ScrollView, 
 import { Text, Title, Button, useTheme, TextInput, IconButton, HelperText, Portal, Dialog, Avatar, } from "react-native-paper";
 import { API } from "../services/api";
 import { RegEx } from "../utils";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const SignIn = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
@@ -14,13 +15,14 @@ export const SignIn = ({ navigation }) => {
 
   const onSubmit = data => {
     setLoading(true);
-    API.signIN(data).then(res => {
-      console.warn(res);
-      //  Tratar a resposta!
-      // navigation.navigate("SessionRoutes");
+    API.signIN(data).then(async res => {
+      const strRes = JSON.stringify({ ...res?.session });
+      await AsyncStorage.setItem('QB@user_session_key', strRes);
+      // const value = await AsyncStorage.getItem('QB@user_session_key');
+      // console.warn(value);
+      navigation.navigate("SessionRoutes");
     }).catch(err => {
       setDialogData({ error: true, title: "Oops! Ocorreu um erro!", body: err.response?.data?.message });
-      navigation.navigate("SessionRoutes");
     }).finally(() => {
       setLoading(false);
     });

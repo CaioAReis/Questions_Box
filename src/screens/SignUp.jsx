@@ -18,9 +18,7 @@ export const SignUp = ({ navigation }) => {
 
   const onSubmit = data => {
     setLoading(true);
-    API.signUP(data).then(res => {
-      console.warn(res);
-      //  Tratar a resposta!
+    API.signUP(data).then(async res => {
       setDialogData({ error: false, title: "Parabéns! 👏👏", body: "Sua conta foi criada com sucesso!" });
       navigation.navigate("SignIn");
     }).catch(err => {
