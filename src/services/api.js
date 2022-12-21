@@ -73,7 +73,7 @@ export const API = {
   //  Editar usuário
   //  PUT: /:id
   editUser: async (userId, body, token) => {
-    return await api.put(`/users/${userId}`, body, { headers: { "authentication": token }}).then(res => res.data);
+    return await api.put(`/users/${userId}`, { body: body }, { headers: { "authentication": "Bearer " + token }}).then(res => res.data);
   },
 
   //  Revogar usuário

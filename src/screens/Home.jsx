@@ -93,7 +93,7 @@ export const Home = ({ navigation }) => {
               <View style={{ alignItems: "center" }}>
                 <Image source={logos[3]} resizeMode="contain" style={{ width: 140, height: 50 }} />
               </View>
-              <Pressable onPress={() => navigation.navigate("Profile", { userID: session?._id })}>
+              <Pressable onPress={() => navigation.navigate("Profile", { userID: session?._id, user: session })}>
                 <Avatar.Text size={40} label={Boolean(session) ? session?.name[0]?.toUpperCase() : "QB"} labelStyle={{ fontSize: 16 / ratio }} />
               </Pressable>
             </View>

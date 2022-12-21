@@ -9,25 +9,23 @@ const ratio = PixelRatio.getFontScale();
 
 export const Profile = ({ route, navigation }) => {
   const { colors } = useTheme();
-  const { userId } = route.params;
-  const [user, setUser] = useState(null);
+  const { userID, user } = route.params;
   const [loading, setLoading] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [dialogData, setDialogData] = useState(null);
 
   const { control, handleSubmit, formState: { errors } } = useForm({
-    defaultValues: { name: "cccc", cpf: "1111", email: "xxxxxx", }
+    defaultValues: { name: user?.name, cpf: user?.cpf, email: user?.email, }
   });
 
   const onSubmit = data => {
-    API.editUser("639ba17c0150513f93eadd67", data).then(res => {
-      console.warn(res);
-      //  Tratar a resposta!
-      //  Exibir toast de tudo certo!
+    setLoading(true);
+    // console.warn(data);
+    API.editUser(user?._id, data, user?.token).then(res => {
+      setDialogData({ title: "Salvo!", body: "Seus dados foram editados com sucesso!" });
     }).catch(err => {
-      //  Exibir toast de erro!
-      console.error(err.response.data);
-    });
+      setDialogData({ error: true, title: "Oops! Ocorreu um erro!", body: err.response?.data?.message });
+    }).finally(() => setLoading(false));
   };
 
   // {
@@ -41,18 +39,12 @@ export const Profile = ({ route, navigation }) => {
   useEffect(() => {
     const requestProfile = () => {
       setLoading(true);
-      API.getUser(userId).then(res => {
-        console.warn(res);
-        setUser(res);
-      }).catch(err => {
-        console.error(err.response.data);
-        setDialogData({ error: true, title: "Oops! Ocorreu um erro!", body: err.response?.data?.message });
-      }).finally(() => {
-        setLoading(false);
-      });
+      API.getUser(userID)
+        .then(res => setUser(res))
+        .catch(err => setDialogData({ error: true, title: "Oops! Ocorreu um erro!", body: err.response?.data?.message }))
+        .finally(() => setLoading(false));
     };
-
-    requestProfile();
+    !Boolean(user) ? requestProfile() : () => { };
   }, []);
 
   return (
@@ -83,21 +75,21 @@ export const Profile = ({ route, navigation }) => {
                     onPress={() => navigation.goBack()}
                   />
 
-                  <IconButton
-                    size={35}
-                    color={colors.text}
-                    style={{ margin: 0 }}
-                    icon="circle-edit-outline"
-                    onPress={() => setOpenEdit(true)}
-                  />
+                  {userID === user?._id ? (
+                    <IconButton
+                      size={35}
+                      color={colors.text}
+                      style={{ margin: 0 }}
+                      icon="circle-edit-outline"
+                      onPress={() => setOpenEdit(true)}
+                    />
+                  ) : null}
                 </View>
 
                 <View style={{ flexDirection: "row", }}>
-                  <Avatar.Text size={80} label={user?.firstName[0] + user?.surname[0] || ""} labelStyle={{ fontSize: 25 / ratio, fontWeight: "bold" }} />
+                  <Avatar.Text size={80} label={user?.name[0] || ""} labelStyle={{ fontSize: 25 / ratio, fontWeight: "bold" }} />
                   <View style={{ flex: 1, marginLeft: 15, justifyContent: "center" }}>
-                    <Title style={{ fontSize: 20 / ratio, lineHeight: 20 / ratio }}>
-                      {(user?.firstName || "") + " " + (user?.surname || "")}
-                    </Title>
+                    <Title style={{ fontSize: 20 / ratio, lineHeight: 20 / ratio }}>{user?.name || ""}</Title>
 
                     <Title style={{ fontSize: 12 / ratio, lineHeight: 20 / ratio, color: colors.primary }}>
                       {user?.email}
