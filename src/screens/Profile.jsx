@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { FlatList, KeyboardAvoidingView, PixelRatio, Platform, View } from "react-native";
@@ -22,20 +23,15 @@ export const Profile = ({ route, navigation }) => {
 
   const onSubmit = data => {
     setLoading(true);
-    API.editUser(user?._id, data, user?.token).then(res => {
-      setDialogData({ title: "Salvo!", body: "Seus dados foram editados com sucesso!" });
+    API.editUser(user?._id, data, user?.token).then(async res => {
+      setDialogData({ title: "Salvo!", body: "Seus dados foram editados com sucesso!"});
+      await AsyncStorage.setItem('QB@user_session_key', JSON.stringify({ ...session, ...data }));
+      setSession(current => { return { ...current, ...data } });
+      setOpenEdit(false);
     }).catch(err => {
       setDialogData({ error: true, title: "Oops! Ocorreu um erro!", body: err.response?.data?.message });
     }).finally(() => setLoading(false));
   };
-
-  // {
-  //   _id: "1",
-  //   qtdAnsers: 2,
-  //   date: "15/09/2022 - 20:07",
-  //   tags: [{ title: "IFS" }, { title: "Lagarto" }],
-  //   title: "Onde fica a CRE do campus Lagarto?",
-  // },
 
   useEffect(() => {
     const requestProfile = () => {
@@ -196,7 +192,7 @@ export const Profile = ({ route, navigation }) => {
       </Modal>
 
       <Portal>
-        <Dialog visible={Boolean(dialogData)} onDismiss={() => setDialogData(null)}
+        <Dialog visible={Boolean(dialogData)} onDismiss={() => {Boolean(dialogData?.callback) ? dialogData?.callback() : null; setDialogData(null);}}
           style={{ borderWidth: 4, borderColor: dialogData?.error ? colors.error : colors.success, paddingVertical: 20 }}
         >
           <>

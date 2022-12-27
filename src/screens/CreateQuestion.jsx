@@ -19,8 +19,7 @@ export const CreateQuestion = ({ navigation }) => {
   const onSubmit = async data => {
     const session = JSON.parse(await AsyncStorage.getItem('QB@user_session_key'));
     API.createQuestion(data, session?.token).then(res => {
-      setDialogData({ title: "Dúvida publicada!", body: "Sua dúvida publicada com sucesso!" });
-      // navigation.goBack();
+      setDialogData({ title: "Dúvida publicada!", body: "Sua dúvida publicada com sucesso!", callback: () => navigation.goBack()});
     }).catch(err => {
       setDialogData({ error: true, title: "Oops! Ocorreu um erro!", body: err.response?.data?.message });
     }).finally(() => setLoading(false));
@@ -228,7 +227,7 @@ export const CreateQuestion = ({ navigation }) => {
       </Modal>
 
       <Portal>
-        <Dialog visible={Boolean(dialogData)} onDismiss={() => setDialogData(null)}
+        <Dialog visible={Boolean(dialogData)} onDismiss={() => {Boolean(dialogData?.callback) ? dialogData?.callback() : null; setDialogData(null);}}
           style={{ borderWidth: 4, borderColor: dialogData?.error ? colors.error : colors.success, paddingVertical: 20 }}
         >
           <>
