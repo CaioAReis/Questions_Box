@@ -24,9 +24,9 @@ export const API = {
     //   return await api.get(`/questions/${questionId}`).then(res => res.data);
     // },
 
-    // questions: async () => {
-    //   return await api.get(`/questions`).then(res => res.data);
-    // },
+    questions: async (pagination) => {
+      return await api.get(`/questions/${pagination}`).then(res => res.data);
+    },
 
     // Criar uma pergunta
     //  POST: /
