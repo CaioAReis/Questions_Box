@@ -1,14 +1,15 @@
 import React from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
-import { Card, Chip, IconButton, Text, Title, useTheme } from "react-native-paper";
+import { Card, Chip, Text, Title, useTheme } from "react-native-paper";
 
 export const QuestionCard = ({ question, ratio, nav }) => {
   const { colors } = useTheme();
+  const d = new Date(question?.createdAt);
 
   return (
-    <TouchableOpacity activeOpacity={.5} onPress={() => nav.navigate("QuestionDetails")}>
+    <TouchableOpacity activeOpacity={.5} onPress={() => nav.navigate("QuestionDetails", { question: question })}>
       <Card.Content style={{ position: "relative", marginBottom: 20 }}>
-        <Text style={{ fontSize: 10 / ratio }}>{question?.date}</Text>
+        <Text style={{ fontSize: 10 / ratio }}>{`${d.getUTCDate()}/${d.getUTCMonth()+1}/${d.getFullYear()} - ${d.getHours()}:${d.getMinutes()}`}</Text>
         <View style={{ backgroundColor: colors.background, ...styles.post }}>
           <View style={{ flex: 1, marginRight: 10, paddingTop: 10 }}>
             <Title numberOfLines={2} style={{ fontSize: 14 / ratio, lineHeight: 22 }}>{question?.title}</Title>
@@ -18,7 +19,7 @@ export const QuestionCard = ({ question, ratio, nav }) => {
                   key={tag.title}
                   mode="outlined"
                   textStyle={{ fontSize: 12 / ratio }}
-                  onPress={() => nav.navigate("ListForTag", { TAG: tag })}
+                  onPress={() => nav.navigate("ListForTag", { TAG: tag?._id })}
                   style={{ backgroundColor: colors.background, marginRight: 4, marginBottom: 4 }}>
                   {tag.title}
                 </Chip>
@@ -26,11 +27,11 @@ export const QuestionCard = ({ question, ratio, nav }) => {
             </View>
           </View>
           <View style={{ width: 2, height: "100%", backgroundColor: colors.surface }} />
-          <View style={{ alignItems: "center", marginLeft: 10 }}>
-            <Title style={{ fontSize: 16 / ratio, color: colors.success }}>{question.qtdAnsers > 1000 ? "+999" : question?.qtdAnsers}</Title>
+          <View style={{ alignItems: "center", marginLeft: 10, justifyContent: "center" }}>
+            <Title style={{ fontSize: 16 / ratio, color: colors.success }}>{question.qtdAnsers > 1000 ? "+999" : question?.responses?.length}</Title>
             <Title style={{ fontSize: 12 / ratio, lineHeight: 12, color: colors.success }}>{question.qtdAnsers === 1 ? "Resposta" : "Respostas"}</Title>
 
-            <View style={{ flexDirection: "row", }}>
+            {/* <View style={{ flexDirection: "row", }}>
               <IconButton
                 size={20}
                 icon="thumb-up"
@@ -45,7 +46,7 @@ export const QuestionCard = ({ question, ratio, nav }) => {
                 onPress={() => console.log('Pressed')}
                 style={{ backgroundColor: colors.background }}
               />
-            </View>
+            </View> */}
           </View>
         </View>
       </Card.Content>

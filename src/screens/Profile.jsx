@@ -9,10 +9,12 @@ const ratio = PixelRatio.getFontScale();
 
 export const Profile = ({ route, navigation }) => {
   const { colors } = useTheme();
+  const [list, setList] = useState([]);
   const { userID, user } = route.params;
   const [loading, setLoading] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [dialogData, setDialogData] = useState(null);
+  const [session, setSession] = useState({ ...user });
 
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: { name: user?.name, cpf: user?.cpf, email: user?.email, }
@@ -20,7 +22,6 @@ export const Profile = ({ route, navigation }) => {
 
   const onSubmit = data => {
     setLoading(true);
-    // console.warn(data);
     API.editUser(user?._id, data, user?.token).then(res => {
       setDialogData({ title: "Salvo!", body: "Seus dados foram editados com sucesso!" });
     }).catch(err => {
@@ -40,18 +41,28 @@ export const Profile = ({ route, navigation }) => {
     const requestProfile = () => {
       setLoading(true);
       API.getUser(userID)
-        .then(res => setUser(res))
+        .then(res => setSession(res))
         .catch(err => setDialogData({ error: true, title: "Oops! Ocorreu um erro!", body: err.response?.data?.message }))
         .finally(() => setLoading(false));
     };
-    !Boolean(user) ? requestProfile() : () => { };
+
+    const requestQuestions = () => {
+      setLoading(true);
+      API.questionsByUser(userID)
+        .then(res => setList(res))
+        .catch(err => setDialogData({ error: true, title: "Oops! Ocorreu um erro!", body: err.response?.data?.message }))
+        .finally(() => setLoading(false));
+    }
+
+    !Boolean(user) ? requestProfile() : null;
+    requestQuestions();
   }, []);
 
   return (
     <>
       <View style={{ backgroundColor: colors.surface, flex: 1 }}>
         <FlatList
-          data={user?.questions}
+          data={list}
           showsVerticalScrollIndicator={false}
           keyExtractor={question => question._id}
           contentContainerStyle={{ paddingBottom: 34, backgroundColor: colors.surface }}
@@ -75,7 +86,7 @@ export const Profile = ({ route, navigation }) => {
                     onPress={() => navigation.goBack()}
                   />
 
-                  {userID === user?._id ? (
+                  {userID === session?._id ? (
                     <IconButton
                       size={35}
                       color={colors.text}
@@ -87,12 +98,12 @@ export const Profile = ({ route, navigation }) => {
                 </View>
 
                 <View style={{ flexDirection: "row", }}>
-                  <Avatar.Text size={80} label={user?.name[0] || ""} labelStyle={{ fontSize: 25 / ratio, fontWeight: "bold" }} />
+                  <Avatar.Text size={80} label={session?.name[0] || ""} labelStyle={{ fontSize: 25 / ratio, fontWeight: "bold" }} />
                   <View style={{ flex: 1, marginLeft: 15, justifyContent: "center" }}>
-                    <Title style={{ fontSize: 20 / ratio, lineHeight: 20 / ratio }}>{user?.name || ""}</Title>
+                    <Title style={{ fontSize: 20 / ratio, lineHeight: 20 / ratio }}>{session?.name || ""}</Title>
 
                     <Title style={{ fontSize: 12 / ratio, lineHeight: 20 / ratio, color: colors.primary }}>
-                      {user?.email}
+                      {session?.email}
                     </Title>
                   </View>
                 </View>
@@ -102,7 +113,7 @@ export const Profile = ({ route, navigation }) => {
                 <Title style={{ fontSize: 20 / ratio, marginBottom: 20 }}>
                   Dúvidas postadas:
                 </Title>
-                <Title style={{ color: colors.primary }}>{user?.questions || ""}</Title>
+                <Title style={{ color: colors.primary }}>{session?.questions || ""}</Title>
               </View>
             </>
           }

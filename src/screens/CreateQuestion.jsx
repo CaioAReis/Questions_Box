@@ -1,19 +1,29 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { KeyboardAvoidingView, PixelRatio, StyleSheet, View, Modal, ScrollView, FlatList } from "react-native";
-import { Button, Chip, Divider, IconButton, Text, TextInput, Title, useTheme, Searchbar, HelperText } from "react-native-paper";
+import { KeyboardAvoidingView, PixelRatio, StyleSheet, View, Modal, FlatList } from "react-native";
+import { Button, Chip, Divider, IconButton, TextInput, Title, useTheme, Searchbar, HelperText, Portal, Dialog, Avatar, Text } from "react-native-paper";
+import { API } from "../services/api";
 
 const ratio = PixelRatio.getFontScale();
 
 export const CreateQuestion = ({ navigation }) => {
   const { colors } = useTheme();
+  const [loading, setLoading] = useState(false);
+  const [dialogData, setDialogData] = useState(null);
   const [addTagModal, setAddTagModal] = useState(false);
 
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: { title: "", description: "", tags: [] }
   });
-  const onSubmit = data => {
-    console.warn(data);
+  const onSubmit = async data => {
+    const session = JSON.parse(await AsyncStorage.getItem('QB@user_session_key'));
+    API.createQuestion(data, session?.token).then(res => {
+      setDialogData({ title: "Dúvida publicada!", body: "Sua dúvida publicada com sucesso!" });
+      // navigation.goBack();
+    }).catch(err => {
+      setDialogData({ error: true, title: "Oops! Ocorreu um erro!", body: err.response?.data?.message });
+    }).finally(() => setLoading(false));
   };
 
   const tagList = [
@@ -136,6 +146,8 @@ export const CreateQuestion = ({ navigation }) => {
           <Button
             title="Submit"
             mode="contained"
+            loading={loading}
+            disabled={loading}
             icon="checkbox-marked-circle"
             contentStyle={{ height: 45 }}
             onPress={handleSubmit(onSubmit)}
@@ -214,6 +226,20 @@ export const CreateQuestion = ({ navigation }) => {
           </View>
         </KeyboardAvoidingView>
       </Modal>
+
+      <Portal>
+        <Dialog visible={Boolean(dialogData)} onDismiss={() => setDialogData(null)}
+          style={{ borderWidth: 4, borderColor: dialogData?.error ? colors.error : colors.success, paddingVertical: 20 }}
+        >
+          <>
+            <Dialog.Title>{dialogData?.title}</Dialog.Title>
+            <Dialog.Content>
+              <Text>{dialogData?.body}</Text>
+            </Dialog.Content>
+            <Avatar.Icon icon={dialogData?.error ? "close" : "check"} size={120} style={{ position: "absolute", top: -80, alignSelf: "center", backgroundColor: dialogData?.error ? colors.error : colors.success }} />
+          </>
+        </Dialog>
+      </Portal>
     </>
   );
 }
