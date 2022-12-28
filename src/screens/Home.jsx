@@ -1,4 +1,4 @@
-import { View, StyleSheet, Image, FlatList, PixelRatio, Pressable } from "react-native";
+import { View, StyleSheet, Image, FlatList, PixelRatio, Pressable, RefreshControl } from "react-native";
 import { ActivityIndicator, Avatar, Button, Chip, Dialog, Divider, FAB, Portal, Text, Title, useTheme } from "react-native-paper";
 import { QuestionCard } from "../components";
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -31,9 +31,9 @@ export const Home = ({ navigation }) => {
       setLoadList(true);
       API.questions(pagination).then(res => {
         if (Boolean(res.length) && pagination >= 0) {
-          setList(prev => { return [...prev, ...res] });
+          setList(prev => prev.concat(res));
           setPagination(prev => prev + 1);
-        } else setPagination(-1);
+        }
       }).catch(err => {
         setDialogData({ error: true, title: "Oops! Ocorreu um erro!", body: err.response?.data?.message });
       }).finally(() => setLoadList(false));
@@ -47,21 +47,30 @@ export const Home = ({ navigation }) => {
       setSession(JSON.parse(value));
     }
     x();
-    handleGetProducts();
   }, []);
+
+  useEffect(() => {
+    const focusHandler = navigation.addListener('focus', () => {
+      // alert('Refreshed');
+      handleGetProducts();
+    });
+    return focusHandler;
+  }, [navigation]);
 
   return (
     <>
       <View style={{ backgroundColor: colors.surface, height: "100%" }}>
         <FlatList
           data={list}
+          // onEndReachedThreshold={0.1}
           onScrollEndDrag={handleGetProducts}
-          ListFooterComponent={
-            pagination >= 0 && <ActivityIndicator style={{ padding: 10 }} size={"large"} color={colors.primary} />}
           showsVerticalScrollIndicator={false}
-          keyExtractor={question => question._id}
+          keyExtractor={question => question?._id}
           contentContainerStyle={{ paddingBottom: 80, backgroundColor: colors.surface }}
           renderItem={({ item }) => <QuestionCard nav={navigation} question={item} ratio={ratio} />}
+          refreshControl={<RefreshControl refreshing={loadList} onRefresh={() => handleGetProducts()} tintColor={colors.primary} />}
+          ListFooterComponent={
+            pagination >= 0 && <ActivityIndicator style={{ padding: 10 }} size={"large"} color={colors.primary} />}
           ListEmptyComponent={
             <View style={{ padding: 20 }}>
               <Title style={{ color: colors.semiTransparent, textAlign: "center", fontSize: 20 / ratio, marginBottom: 20 }}>

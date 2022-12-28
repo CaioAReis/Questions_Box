@@ -12,6 +12,7 @@ export const QuestionCard = ({ question, ratio, nav }) => {
         <Text style={{ fontSize: 10 / ratio }}>{`${d.getUTCDate()}/${d.getUTCMonth()+1}/${d.getFullYear()} - ${d.getHours()}:${d.getMinutes()}`}</Text>
         <View style={{ backgroundColor: colors.background, ...styles.post }}>
           <View style={{ flex: 1, marginRight: 10, paddingTop: 10 }}>
+            {/* <Title numberOfLines={2} style={{ fontSize: 14 / ratio, lineHeight: 22 }}>{question?._id}</Title> */}
             <Title numberOfLines={2} style={{ fontSize: 14 / ratio, lineHeight: 22 }}>{question?.title}</Title>
             <View style={styles.tagsView}>
               {question?.tags.map(tag =>

@@ -15,7 +15,7 @@ export const Profile = ({ route, navigation }) => {
   const [loading, setLoading] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [dialogData, setDialogData] = useState(null);
-  const [session, setSession] = useState({ ...user });
+  const [userProfile, setUserProfile] = useState(Boolean(user) ? { ...user } : null);
 
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: { name: user?.name, cpf: user?.cpf, email: user?.email, }
@@ -25,8 +25,8 @@ export const Profile = ({ route, navigation }) => {
     setLoading(true);
     API.editUser(user?._id, data, user?.token).then(async res => {
       setDialogData({ title: "Salvo!", body: "Seus dados foram editados com sucesso!"});
-      await AsyncStorage.setItem('QB@user_session_key', JSON.stringify({ ...session, ...data }));
-      setSession(current => { return { ...current, ...data } });
+      await AsyncStorage.setItem('QB@user_session_key', JSON.stringify({ ...userProfile, ...data }));
+      setUserProfile(current => { return { ...current, ...data } });
       setOpenEdit(false);
     }).catch(err => {
       setDialogData({ error: true, title: "Oops! Ocorreu um erro!", body: err.response?.data?.message });
@@ -37,7 +37,7 @@ export const Profile = ({ route, navigation }) => {
     const requestProfile = () => {
       setLoading(true);
       API.getUser(userID)
-        .then(res => setSession(res))
+        .then(res => setUserProfile(res))
         .catch(err => setDialogData({ error: true, title: "Oops! Ocorreu um erro!", body: err.response?.data?.message }))
         .finally(() => setLoading(false));
     };
@@ -82,7 +82,7 @@ export const Profile = ({ route, navigation }) => {
                     onPress={() => navigation.goBack()}
                   />
 
-                  {userID === session?._id ? (
+                  {Boolean(user) ? (
                     <IconButton
                       size={35}
                       color={colors.text}
@@ -94,12 +94,12 @@ export const Profile = ({ route, navigation }) => {
                 </View>
 
                 <View style={{ flexDirection: "row", }}>
-                  <Avatar.Text size={80} label={session?.name[0] || ""} labelStyle={{ fontSize: 25 / ratio, fontWeight: "bold" }} />
+                  <Avatar.Text size={80} label={userProfile?.name[0] || ""} labelStyle={{ fontSize: 25 / ratio, fontWeight: "bold" }} />
                   <View style={{ flex: 1, marginLeft: 15, justifyContent: "center" }}>
-                    <Title style={{ fontSize: 20 / ratio, lineHeight: 20 / ratio }}>{session?.name || ""}</Title>
+                    <Title style={{ fontSize: 20 / ratio, lineHeight: 20 / ratio }}>{userProfile?.name || ""}</Title>
 
                     <Title style={{ fontSize: 12 / ratio, lineHeight: 20 / ratio, color: colors.primary }}>
-                      {session?.email}
+                      {userProfile?.email}
                     </Title>
                   </View>
                 </View>
@@ -109,7 +109,7 @@ export const Profile = ({ route, navigation }) => {
                 <Title style={{ fontSize: 20 / ratio, marginBottom: 20 }}>
                   Dúvidas postadas:
                 </Title>
-                <Title style={{ color: colors.primary }}>{session?.questions || ""}</Title>
+                <Title style={{ color: colors.primary }}>{list?.length}</Title>
               </View>
             </>
           }

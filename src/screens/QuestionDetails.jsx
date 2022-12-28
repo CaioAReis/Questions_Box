@@ -10,7 +10,7 @@ const ratio = PixelRatio.getFontScale();
 export const QuestionDetails = ({ route, navigation }) => {
   const { colors } = useTheme();
   const { question } = route?.params;
-  const [sessionID, setSessionID] = useState("");
+  const [session, setSession] = useState("");
   const [openAnswer, setOpenAnswer] = useState(false);
   
   const { control, handleSubmit, formState: { errors } } = useForm({
@@ -23,8 +23,8 @@ export const QuestionDetails = ({ route, navigation }) => {
 
   useEffect(() => {
     const getSession = async () => {
-      const session = JSON.parse(await AsyncStorage.getItem('QB@user_session_key'));
-      setSessionID(session?._id);
+      const res = JSON.parse(await AsyncStorage.getItem('QB@user_session_key'));
+      setSession(res);
     };
     getSession();
   }, []);
@@ -58,7 +58,7 @@ export const QuestionDetails = ({ route, navigation }) => {
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <Text style={{ fontSize: 18 / ratio, flex: 1 }}>Postado por:</Text>
 
-                <Pressable onPress={() => navigation.navigate("Profile", { userID: question?.user?._id })} style={{ borderRadius: 8, maxWidth: "50%", backgroundColor: colors.background, flexDirection: "row", alignItems: "center", padding: 5, paddingHorizontal: 15 }}>
+                <Pressable onPress={() => navigation.navigate("Profile", { userID: question?.user?._id, user: session?._id === question?.user?._id ? session : null })} style={{ borderRadius: 8, maxWidth: "50%", backgroundColor: colors.background, flexDirection: "row", alignItems: "center", padding: 5, paddingHorizontal: 15 }}>
                   <Avatar.Text size={30} label={question?.user?.name[0]} labelStyle={{ fontSize: 12 / ratio, fontWeight: "bold" }} />
                   <Text numberOfLines={1} style={{ marginLeft: 10, }}>{question?.user?.name}</Text>
                 </Pressable>
@@ -114,7 +114,7 @@ export const QuestionDetails = ({ route, navigation }) => {
           }
         />
 
-        {question?.user?._id !== sessionID ? (
+        {question?.user?._id !== session?._id ? (
           <Button
             mode="contained"
             icon="clipboard-check"
