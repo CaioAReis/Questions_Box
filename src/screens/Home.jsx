@@ -52,6 +52,7 @@ export const Home = ({ navigation }) => {
   useEffect(() => {
     const focusHandler = navigation.addListener('focus', () => {
       // alert('Refreshed');
+      // setPagination(0);
       handleGetProducts();
     });
     return focusHandler;

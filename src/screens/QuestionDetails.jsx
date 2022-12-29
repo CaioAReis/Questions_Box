@@ -54,7 +54,7 @@ export const QuestionDetails = ({ route, navigation }) => {
               </Title>
             </View>
           }
-          renderItem={({ item }) => <ResponseCard answer={item} ratio={ratio} />}
+          renderItem={({ item, index }) => <ResponseCard questionId={question?._id} answerIndex={index} owner={session?._id === question?.user?._id} answer={item} ratio={ratio} />}
           ListHeaderComponent={
             <View style={{ backgroundColor: colors.surface, flex: 1, paddingHorizontal: 20, paddingVertical: 30 }}>
               <IconButton

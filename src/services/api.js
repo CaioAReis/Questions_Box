@@ -45,6 +45,10 @@ export const API = {
       return await api.post(`/questions/answer/${questionId}`, body, {headers: { "authentication": "Bearer " + token }}).then(res => res.data);
     },
 
+    bestAnswer: async (questionId, answerIndex, token) => {
+      return await api.put(`/questions/bestanswer/${questionId}/${answerIndex}`, null, {headers: { "authentication": "Bearer " + token }}).then(res => res.data);
+    },
+
     //  REAÇÃO
     //  PUT: /like/:questionId
     // likeDeslike: async (questionId) => {
