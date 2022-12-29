@@ -9,7 +9,7 @@ export const QuestionCard = ({ question, ratio, nav }) => {
   return (
     <TouchableOpacity activeOpacity={.5} onPress={() => nav.navigate("QuestionDetails", { question: question })}>
       <Card.Content style={{ position: "relative", marginBottom: 20 }}>
-        <Text style={{ fontSize: 10 / ratio }}>{`${d.getUTCDate()}/${d.getUTCMonth()+1}/${d.getFullYear()} - ${d.getHours()}:${d.getMinutes()}`}</Text>
+        <Text style={{ fontSize: 10 / ratio }}>{`${d.getUTCDate() < 10 ? "0"+d.getUTCDate() : d.getUTCDate()}/${d.getUTCMonth()+1 < 10 ? "0"+(d.getUTCMonth()+1) : d.getUTCMonth()+1}/${d.getFullYear()} - ${d.getHours() < 10 ? "0"+d.getHours() : d.getHours()}:${d.getMinutes() < 10 ? "0"+d.getMinutes() : d.getMinutes()}`}</Text>
         <View style={{ backgroundColor: colors.background, ...styles.post }}>
           <View style={{ flex: 1, marginRight: 10, paddingTop: 10 }}>
             {/* <Title numberOfLines={2} style={{ fontSize: 14 / ratio, lineHeight: 22 }}>{question?._id}</Title> */}

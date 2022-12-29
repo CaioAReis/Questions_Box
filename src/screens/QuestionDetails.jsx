@@ -2,8 +2,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { FlatList, KeyboardAvoidingView, Modal, PixelRatio, Pressable, View } from "react-native";
-import { Avatar, Button, Chip, Divider, HelperText, IconButton, Text, TextInput, Title, useTheme } from "react-native-paper";
+import { Avatar, Button, Chip, Dialog, Divider, HelperText, IconButton, Portal, Text, TextInput, Title, useTheme } from "react-native-paper";
 import { ResponseCard } from "../components";
+import { API } from "../services/api";
 
 const ratio = PixelRatio.getFontScale();
 
@@ -11,14 +12,24 @@ export const QuestionDetails = ({ route, navigation }) => {
   const { colors } = useTheme();
   const { question } = route?.params;
   const [session, setSession] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [dialogData, setDialogData] = useState(null);
   const [openAnswer, setOpenAnswer] = useState(false);
-  
+
   const { control, handleSubmit, formState: { errors } } = useForm({
-    defaultValues: { response: "" }
+    defaultValues: { answer: "" }
   });
-  
-  const onSubmit = data => {
-    console.warn(data);
+
+  const onSubmit = async data => {
+    setLoading(true);
+    const session = JSON.parse(await AsyncStorage.getItem('QB@user_session_key'));
+    API.createAnswer(question?._id, data, session?.token).then(res => {
+      setDialogData({ title: "Resposta enviada!", body: "Sua resposta foi enviada com sucesso!" });
+      question?.responses?.push(res.data);
+      setOpenAnswer(false);
+    }).catch(err => {
+      setDialogData({ error: true, title: "Oops! Ocorreu um erro!", body: err.response?.data?.message });
+    }).finally(() => setLoading(false));
   };
 
   useEffect(() => {
@@ -29,13 +40,12 @@ export const QuestionDetails = ({ route, navigation }) => {
     getSession();
   }, []);
 
-  
   return (
     <>
       <View style={{ backgroundColor: colors.surface, flex: 1 }}>
         <FlatList
           data={question?.responses}
-          keyExtractor={answer => answer._id}
+          keyExtractor={(answer, i) => i}
           contentContainerStyle={{ paddingBottom: 34 }}
           ListEmptyComponent={
             <View style={{ padding: 20 }}>
@@ -75,7 +85,7 @@ export const QuestionDetails = ({ route, navigation }) => {
               </Text>
 
               <View style={{ flexWrap: "wrap", marginVertical: 35, flexDirection: "row" }}>
-                {question?.responses?.map(tag => (
+                {question?.tags?.map(tag => (
                   <Chip
                     textStyle={{ fontSize: 16 / ratio }}
                     onPress={() => navigation.navigate("ListForTag", { TAG: { title: "IFS" } })}
@@ -142,12 +152,12 @@ export const QuestionDetails = ({ route, navigation }) => {
               </View>
 
               <Text style={{ fontSize: 14 / ratio, marginBottom: 30 }}>
-                Onde fica a CRE do campus Lagarto?
+                {question?.title}
               </Text>
 
               <View style={{ marginBottom: 20 }}>
 
-                <Controller name="title" control={control}
+                <Controller name="answer" control={control}
                   rules={{ required: true }}
                   render={({ field: { onChange, onBlur, value } }) => (
                     <TextInput
@@ -157,22 +167,36 @@ export const QuestionDetails = ({ route, navigation }) => {
                       onBlur={onBlur}
                       label="Sua resposta"
                       onChangeText={onChange}
-                      error={Boolean(errors.title)}
                       style={{ height: 150 }}
+                      error={Boolean(errors.answer)}
                       theme={{ colors: { background: colors.surface, primary: colors.text } }}
                     />
                   )}
                 />
-                <HelperText style={{ marginBottom: 25 }} type="error" visible={Boolean(errors.title)} >
+                <HelperText style={{ marginBottom: 25 }} type="error" visible={Boolean(errors.answer)} >
                   Campo obrigatório
                 </HelperText>
 
-                <Button mode="contained" contentStyle={{ height: 45 }} title="Submit" onPress={handleSubmit(onSubmit)} icon="bookmark-check">Responder</Button>
+                <Button loading={loading} disabled={loading} mode="contained" contentStyle={{ height: 45 }} title="Submit" onPress={handleSubmit(onSubmit)} icon="bookmark-check">Responder</Button>
               </View>
             </View>
           </KeyboardAvoidingView>
         </View>
       </Modal>
+
+      <Portal>
+        <Dialog visible={Boolean(dialogData)} onDismiss={() => { Boolean(dialogData?.callback) ? dialogData?.callback() : null; setDialogData(null); }}
+          style={{ borderWidth: 4, borderColor: dialogData?.error ? colors.error : colors.success, paddingVertical: 20 }}
+        >
+          <>
+            <Dialog.Title>{dialogData?.title}</Dialog.Title>
+            <Dialog.Content>
+              <Text>{dialogData?.body}</Text>
+            </Dialog.Content>
+            <Avatar.Icon icon={dialogData?.error ? "close" : "check"} size={120} style={{ position: "absolute", top: -80, alignSelf: "center", backgroundColor: dialogData?.error ? colors.error : colors.success }} />
+          </>
+        </Dialog>
+      </Portal>
     </>
   );
 }

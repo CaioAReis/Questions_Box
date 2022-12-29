@@ -41,9 +41,9 @@ export const API = {
 
     //  Responder uma pergunta - Criar resposta
     //  POST: /answer/:questionId
-    // createAnswer: async (questionId, body) => {
-    //   return await api.post(`/questions/answer/${questionId}`, body).then(res => res.data);
-    // },
+    createAnswer: async (questionId, body, token) => {
+      return await api.post(`/questions/answer/${questionId}`, body, {headers: { "authentication": "Bearer " + token }}).then(res => res.data);
+    },
 
     //  REAÇÃO
     //  PUT: /like/:questionId
