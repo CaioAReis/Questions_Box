@@ -57,32 +57,36 @@ export const QuestionDetails = ({ route, navigation }) => {
           renderItem={({ item, index }) => <ResponseCard questionId={question?._id} answerIndex={index} owner={session?._id === question?.user?._id} answer={item} ratio={ratio} />}
           ListHeaderComponent={
             <View style={{ backgroundColor: colors.surface, flex: 1, paddingHorizontal: 20, paddingVertical: 30 }}>
-              <IconButton
-                size={35}
-                color={colors.text}
-                style={{ margin: 0 }}
-                icon="arrow-left-circle-outline"
-                onPress={() => navigation.goBack()}
-              />
+              <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                <IconButton
+                  size={35}
+                  color={colors.text}
+                  style={{ margin: 0 }}
+                  icon="arrow-left-circle-outline"
+                  onPress={() => navigation.goBack()}
+                />
+
+                <IconButton
+                  size={35}
+                  color={colors.text}
+                  style={{ margin: 0 }}
+                  icon="circle-edit-outline"
+                  onPress={() => navigation.goBack()}
+                />
+              </View>
 
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <Text style={{ fontSize: 18 / ratio, flex: 1 }}>Postado por:</Text>
-
                 <Pressable onPress={() => navigation.navigate("Profile", { userID: question?.user?._id, user: session?._id === question?.user?._id ? session : null })} style={{ borderRadius: 8, maxWidth: "50%", backgroundColor: colors.background, flexDirection: "row", alignItems: "center", padding: 5, paddingHorizontal: 15 }}>
                   <Avatar.Text size={30} label={question?.user?.name[0]} labelStyle={{ fontSize: 12 / ratio, fontWeight: "bold" }} />
-                  <Text numberOfLines={1} style={{ marginLeft: 10, }}>{question?.user?.name}</Text>
+                  <Text numberOfLines={1} style={{ marginLeft: 10, flex: 1 }}>{question?.user?.name}</Text>
                 </Pressable>
               </View>
 
               <Divider style={{ marginVertical: 30 }} />
 
-              <Title style={{ fontSize: 25 / ratio, marginBottom: 45 }}>
-                {question?.title}
-              </Title>
-
-              <Text style={{ fontSize: 18 / ratio }}>
-                {question?.description}
-              </Text>
+              <Title style={{ fontSize: 25 / ratio, marginBottom: 45 }}>{question?.title}</Title>
+              <Text style={{ fontSize: 18 / ratio }}>{question?.description}</Text>
 
               <View style={{ flexWrap: "wrap", marginVertical: 35, flexDirection: "row" }}>
                 {question?.tags?.map(tag => (
@@ -95,30 +99,7 @@ export const QuestionDetails = ({ route, navigation }) => {
                   </Chip>
                 ))}
               </View>
-
-              <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
-                <Text style={{ fontSize: 18 / ratio, color: colors.success }}>{question?.responses?.length === 1 ? question?.responses?.length + " Resposta" : question?.responses?.length + " Respostas"}</Text>
-
-                {/* <View style={{ flexDirection: "row", alignItems: "center" }}>
-                  <IconButton
-                    size={25}
-                    style={{ margin: 0 }}
-                    icon="thumb-up-outline"
-                    color={colors.semiTransparent}
-                    onPress={() => { }}
-                  />
-
-                  <Text style={{ fontSize: 16 / ratio, marginHorizontal: 15 }}>0</Text>
-
-                  <IconButton
-                    size={25}
-                    style={{ margin: 0 }}
-                    icon="thumb-down-outline"
-                    color={colors.semiTransparent}
-                    onPress={() => { }}
-                  />
-                </View> */}
-              </View>
+              <Text style={{ fontSize: 18 / ratio, color: colors.success }}>{question?.responses?.length === 1 ? question?.responses?.length + " Resposta" : question?.responses?.length + " Respostas"}</Text>
               <Divider style={{ marginTop: 20 }} />
             </View>
           }
@@ -156,7 +137,6 @@ export const QuestionDetails = ({ route, navigation }) => {
               </Text>
 
               <View style={{ marginBottom: 20 }}>
-
                 <Controller name="answer" control={control}
                   rules={{ required: true }}
                   render={({ field: { onChange, onBlur, value } }) => (
