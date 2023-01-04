@@ -2,10 +2,10 @@ import axios from "axios";
 
 const api = axios.create({
   //  CASA
-  baseURL: "http://192.168.0.113:3333/v1-0/br",
+  // baseURL: "http://192.168.0.113:3333/v1-0/br",
 
   //  CHÁCARA
-  // baseURL: "http://192.168.1.113:3333/v1-0/br",
+  baseURL: "http://192.168.1.113:3333/v1-0/br",
 
   // headers: {}
 });
@@ -54,12 +54,6 @@ export const API = {
       return await api.put(`/questions/${questionId}`, body, {headers: { "authentication": "Bearer " + token }}).then(res => res.data);
     },
 
-    //  REAÇÃO
-    //  PUT: /like/:questionId
-    // likeDeslike: async (questionId) => {
-    //   return await api.put(`/questions/like/${questionId}`).then(res => res.data);
-    // },
-
     //  EDITAR RESPOSTA
     //  PUT: /response/edit/:questionId/:indexAnswer
     // editAnswer: async (questionId, body, token) => {
@@ -100,9 +94,9 @@ export const API = {
   //  TAGS: /tags
     //  Listar Tags
     //  GET: /list
-    // tags: async () => {
-    //   return await api.get("/tags").then(res => res.data);
-    // },
+    tags: async (pagination) => {
+      return await api.get(`/tags/${pagination}`).then(res => res.data);
+    },
 
     //  Listar Tags POPULARES (apenas as 8 primeiras)
     //  GET: /list/popupar
@@ -112,8 +106,8 @@ export const API = {
 
     //  Cadastrar uma TAG
     //  POST: /
-    // createTag: async (body) => {
-    //   return await api.post("/tags", body).then(res => res.data);
-    // },
+    createTag: async (body, token) => {
+      return await api.post("/tags", body, { headers: { "authentication": "Bearer " + token }}).then(res => res.data);
+    },
 
 };

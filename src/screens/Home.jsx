@@ -63,7 +63,7 @@ export const Home = ({ navigation }) => {
       <View style={{ backgroundColor: colors.surface, height: "100%" }}>
         <FlatList
           data={list}
-          // onEndReachedThreshold={0.1}
+          onEndReachedThreshold={0.1}
           onScrollEndDrag={handleGetProducts}
           showsVerticalScrollIndicator={false}
           keyExtractor={question => question?._id}

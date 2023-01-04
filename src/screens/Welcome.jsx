@@ -1,6 +1,6 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Dimensions, Image, ImageBackground, ScrollView, StyleSheet, View, PixelRatio } from "react-native";
-import { Button, IconButton, Title, useTheme } from "react-native-paper";
+import { ActivityIndicator, Button, IconButton, Title, useTheme } from "react-native-paper";
 
 import mancha from "../../assets/mancha.png";
 import I1 from "../../assets/Happy.png";
@@ -8,12 +8,14 @@ import I2 from "../../assets/Projections.png";
 import I3 from "../../assets/Questions.png";
 import I4 from "../../assets/Quiz.png";
 import I5 from "../../assets/Welcome.png";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ratio = PixelRatio.getFontScale();
 
 export const Welcome = ({ navigation }) => {
   const imgDimensions = Dimensions.get("window").width / 3.5;
   const { colors, fonts, logos } = useTheme();
+  const [isLoad, setIsLoad] = useState(true);
 
   const scrollRef = useRef();
   const [step, setStep] = useState(1);
@@ -25,6 +27,21 @@ export const Welcome = ({ navigation }) => {
     scrollRef.current.scrollTo({ x: Dimensions.get("screen").width * step, y: 0, animated: true });
     setStep(prev => prev + 1);
   };
+
+  useEffect(() => {
+    const x = async () => {
+      await AsyncStorage.getItem('QB@user_session_key').then(res => {
+        try {
+          const session = JSON.parse(res);
+          Boolean(session) ? navigation.navigate("SessionRoutes") : setIsLoad(false);
+        } catch (error) {
+          const session = res;
+          Boolean(session) ? navigation.navigate("SessionRoutes") : setIsLoad(false);
+        }
+      });
+    }
+    x();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -81,7 +98,12 @@ export const Welcome = ({ navigation }) => {
       <View style={{ paddingBottom: 20, width: "100%" }}>
         {step < 5 ? (
           <View style={{ alignItems: "center" }}>
-            <IconButton size={70} icon="arrow-right-circle" color={colors.primary} onPress={handleNextStep} />
+
+            {isLoad
+              ? <ActivityIndicator size="large" color={colors.primary} />
+              : <IconButton size={70} icon="arrow-right-circle" color={colors.primary} onPress={handleNextStep} />
+            }
+
           </View>
         ) : (
           <View style={{ paddingHorizontal: 40, paddingTop: 20 }}>

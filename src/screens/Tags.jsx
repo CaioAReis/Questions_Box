@@ -1,61 +1,105 @@
-import React, { useState } from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useEffect, useState } from 'react'
 import { useForm, Controller } from 'react-hook-form';
-import { View, StyleSheet, PixelRatio, ScrollView, Modal, Dimensions, KeyboardAvoidingView, Platform, Pressable } from "react-native";
-import { Avatar, Text, Button, Divider, IconButton, Title, useTheme, TextInput, List, HelperText } from 'react-native-paper';
+import { View, StyleSheet, PixelRatio, Modal, KeyboardAvoidingView, Platform, Pressable, FlatList } from "react-native";
+import { Avatar, Text, Button, Divider, IconButton, Title, useTheme, TextInput, List, HelperText, Portal, Dialog, ActivityIndicator } from 'react-native-paper';
 import { TagCard } from '../components';
+import { API } from '../services/api';
 
 const ratio = PixelRatio.getFontScale();
 
 export const Tags = ({ navigation }) => {
   const { colors, fonts } = useTheme();
+  const [list, setList] = useState([]);
+  const [session, setSession] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [pagination, setPagination] = useState(0);
+  const [dialogData, setDialogData] = useState(null);
   const span = { ...fonts.medium, color: colors.primary };
   const [openCreateTag, setOpenCreateTag] = useState(false);
 
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: { title: "", description: "" }
   });
+
   const onSubmit = data => {
-    console.warn(data);
+    setLoading(true);
+    API.createTag(data, session?.token).then(res => {
+      setOpenCreateTag(false);
+      setDialogData({ title: "Tag criada!", body: "Sua TAG foi criada!" });
+    }).catch(err => {
+      setDialogData({ error: true, title: "Oops! Ocorreu um erro!", body: err.response?.data?.message });
+    }).finally(() => setLoading(false));
   };
+
+  const getList = () => {
+    if (loading || pagination < 0) return;
+    setLoading(true);
+    API.tags(pagination).then(res => {
+      if (Boolean(res.length) && pagination >= 0) {
+        setList([ ...list, ...res ]);
+        setPagination(pagination + 1);
+      } else setPagination(-1);
+    }).catch(err => {
+      setDialogData({ error: true, title: "Oops! Ocorreu um erro!", body: err.response?.data?.message });
+    }).finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    const req = async () => {
+      const s = JSON.parse(await AsyncStorage.getItem('QB@user_session_key'));
+      setSession(s);
+    };
+    req();
+    getList();
+  }, []);
 
   return (
     <>
-      <ScrollView style={{ flex: 1, backgroundColor: colors.surface }}>
-        <View style={{ ...styles.header, backgroundColor: colors.background }}>
-          <IconButton
-            size={35}
-            color={colors.text}
-            icon="arrow-left-circle-outline"
-            onPress={() => navigation.goBack()}
-            style={{ backgroundColor: colors.background, margin: 0 }}
-          />
-          <Title style={{ fontSize: 20 / ratio }}>TAGs</Title>
-          <Pressable onPress={() => navigation.navigate("Profile")}>
-            <Avatar.Text size={40} label="CA" labelStyle={{ fontSize: 16 / ratio }} />
-          </Pressable>
-        </View>
+      <FlatList
+        data={list}
+        onEndReached={getList}
+        scrollEventThrottle={2}
+        keyExtractor={item => item._id}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ backgroundColor: colors.surface }}
+        renderItem={({ item }) => <TagCard name={item.title} description={item.description} style={{ marginHorizontal: 20 }} />}
+        ListFooterComponent={
+          loading && <ActivityIndicator style={{ padding: 10 }} size={"large"} color={colors.primary} />}
+        ListHeaderComponent={
+          <>
+            <View style={{ ...styles.header, backgroundColor: colors.background }}>
+              <IconButton
+                size={35}
+                color={colors.text}
+                icon="arrow-left-circle-outline"
+                onPress={() => navigation.goBack()}
+                style={{ backgroundColor: colors.background, margin: 0 }}
+              />
+              <Title style={{ fontSize: 20 / ratio }}>TAGs</Title>
+              <Pressable onPress={() => navigation.navigate("Profile", { userID: session?._id, user: session })}>
+                <Avatar.Text size={40} label={session?.name[0]} labelStyle={{ fontSize: 16 / ratio }} />
+              </Pressable>
+            </View>
 
-        <View style={{ paddingHorizontal: 20, paddingBottom: 40 }}>
-          <Text style={{ color: colors.text, textAlign: "center", fontSize: 16 / ratio, paddingTop: 40, paddingBottom: 25 }}>
-            As <Text style={span}>TAGs</Text> são ultilizadas
-            para categorizar as dúvidas na plataforma.
-            Utilizando as TAGS <Text style={span}>corretas</Text> as outras
-            pessoas <Text style={span}>encontrarão</Text> e <Text style={span}>responderão</Text> mais facilmente sua dúvida!
-          </Text>
+            <View style={{ paddingHorizontal: 20 }}>
+              <Text style={{ color: colors.text, textAlign: "center", fontSize: 16 / ratio, paddingTop: 40, paddingBottom: 25 }}>
+                As <Text style={span}>TAGs</Text> são ultilizadas
+                para categorizar as dúvidas na plataforma.
+                Utilizando as TAGS <Text style={span}>corretas</Text> as outras
+                pessoas <Text style={span}>encontrarão</Text> e <Text style={span}>responderão</Text> mais facilmente sua dúvida!
+              </Text>
 
-          <Divider style={{ marginBottom: 20 }} />
+              <Divider style={{ marginBottom: 20 }} />
 
-          <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 25 }}>
-            <Title style={{ fontSize: 18 / ratio }}>TAGs populares:</Title>
-            <Button onPress={() => setOpenCreateTag(true)} icon="plus-circle" labelStyle={{ fontSize: 12 / ratio }} mode="contained">Criar TAG</Button>
-          </View>
-
-          <TagCard name="Java" description="Aaushd ia aiushda hsda isudiausd iaus d" qtdQuestions={12} />
-          <TagCard name="HTML" description="Aaushd ia aiushda hsda isudiausd iaus d" qtdQuestions={12} />
-          <TagCard name="CSS" description="Aaushd ia aiushda hsda isudiausd iaus d" qtdQuestions={12} />
-
-        </View>
-      </ScrollView>
+              <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 5 }}>
+                <Title style={{ fontSize: 18 / ratio }}>TAGs populares:</Title>
+                <Button onPress={() => setOpenCreateTag(true)} icon="plus-circle" labelStyle={{ fontSize: 12 / ratio }} mode="contained">Criar TAG</Button>
+              </View>
+            </View>
+          </>
+        }
+      />
 
       <Modal animationType="fade" visible={openCreateTag} transparent onRequestClose={() => setOpenCreateTag(false)}>
         <View style={{ backgroundColor: colors.backModal, flex: 1, alignItems: "center", justifyContent: "center" }}>
@@ -129,12 +173,26 @@ export const Tags = ({ navigation }) => {
                   Campo obrigatório
                 </HelperText>
 
-                <Button mode="contained" contentStyle={{ height: 45 }} title="Submit" onPress={handleSubmit(onSubmit)} icon="plus">Criar tag</Button>
+                <Button loading={loading} disabled={loading} mode="contained" contentStyle={{ height: 45 }} title="Submit" onPress={handleSubmit(onSubmit)} icon="plus">Criar tag</Button>
               </View>
             </View>
           </KeyboardAvoidingView>
         </View>
       </Modal>
+
+      <Portal>
+        <Dialog visible={Boolean(dialogData)} onDismiss={() => { Boolean(dialogData?.callback) ? dialogData?.callback() : null; setDialogData(null); }}
+          style={{ borderWidth: 4, borderColor: dialogData?.error ? colors.error : colors.success, paddingVertical: 20 }}
+        >
+          <>
+            <Dialog.Title>{dialogData?.title}</Dialog.Title>
+            <Dialog.Content>
+              <Text>{dialogData?.body}</Text>
+            </Dialog.Content>
+            <Avatar.Icon icon={dialogData?.error ? "close" : "check"} size={120} style={{ position: "absolute", top: -80, alignSelf: "center", backgroundColor: dialogData?.error ? colors.error : colors.success }} />
+          </>
+        </Dialog>
+      </Portal>
     </>
   )
 }
