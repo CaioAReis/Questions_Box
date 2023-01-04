@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { FlatList, KeyboardAvoidingView, Modal, PixelRatio, Pressable, View } from "react-native";
-import { Avatar, Button, Chip, Dialog, Divider, HelperText, IconButton, Portal, Text, TextInput, Title, useTheme } from "react-native-paper";
+import { Avatar, Button, Chip, Dialog, Divider, HelperText, IconButton, Menu, Portal, Text, TextInput, Title, useTheme } from "react-native-paper";
 import { ResponseCard } from "../components";
 import { API } from "../services/api";
 
@@ -15,6 +15,8 @@ export const QuestionDetails = ({ route, navigation }) => {
   const [loading, setLoading] = useState(false);
   const [dialogData, setDialogData] = useState(null);
   const [openAnswer, setOpenAnswer] = useState(false);
+  const [isOpenMenu, setIsOpenMenu] = useState(false);
+  const [isOpenDelete, setIsOpenDelete] = useState(false);
 
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: { answer: "" }
@@ -30,6 +32,11 @@ export const QuestionDetails = ({ route, navigation }) => {
     }).catch(err => {
       setDialogData({ error: true, title: "Oops! Ocorreu um erro!", body: err.response?.data?.message });
     }).finally(() => setLoading(false));
+  };
+
+  const handleDelete = () => {
+    alert("DELETAR");
+    setIsOpenDelete(false);
   };
 
   useEffect(() => {
@@ -66,13 +73,23 @@ export const QuestionDetails = ({ route, navigation }) => {
                   onPress={() => navigation.goBack()}
                 />
 
-                <IconButton
-                  size={35}
-                  color={colors.text}
-                  style={{ margin: 0 }}
-                  icon="circle-edit-outline"
-                  onPress={() => navigation.goBack()}
-                />
+                <Menu
+                  visible={isOpenMenu}
+                  contentStyle={{ borderWidth: 1, borderColor: colors.placeholder }}
+                  onDismiss={() => setIsOpenMenu(false)}
+                  anchor={
+                    <IconButton
+                      size={35}
+                      color={colors.text}
+                      style={{ margin: 0 }}
+                      icon="circle-edit-outline"
+                      onPress={() => setIsOpenMenu(true)}
+                    />
+                  }>
+                  <Menu.Item icon="circle-edit-outline" onPress={() => { setIsOpenMenu(false); navigation.navigate("CreateQuestion", { question: question }); }} title="Editar dúvida" />
+                  <Divider />
+                  <Menu.Item icon="close" onPress={() => { setIsOpenMenu(false); setIsOpenDelete(true); }} title="Apagar dúvida" />
+                </Menu>
               </View>
 
               <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -163,6 +180,16 @@ export const QuestionDetails = ({ route, navigation }) => {
           </KeyboardAvoidingView>
         </View>
       </Modal>
+
+      <Portal>
+        <Dialog visible={isOpenDelete} onDismiss={() => setIsOpenDelete(false)}>
+          <Dialog.Title>Você realmente deseja apagar esta dúvida?</Dialog.Title>
+          <Dialog.Actions style={{ justifyContent: "space-evenly" }}>
+            <Button labelStyle={{ color: colors.error }} onPress={handleDelete}>SIM</Button>
+            <Button labelStyle={{ color: colors.text }} onPress={() => setIsOpenDelete(false)}>NÃO</Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
 
       <Portal>
         <Dialog visible={Boolean(dialogData)} onDismiss={() => { Boolean(dialogData?.callback) ? dialogData?.callback() : null; setDialogData(null); }}

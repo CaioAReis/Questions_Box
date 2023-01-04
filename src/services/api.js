@@ -49,6 +49,11 @@ export const API = {
       return await api.put(`/questions/bestanswer/${questionId}/${answerIndex}`, body, {headers: { "authentication": "Bearer " + token }}).then(res => res.data);
     },
 
+    // EDITAR QUESTION
+    editQuestion: async (questionId, body, token) => {
+      return await api.put(`/questions/${questionId}`, body, {headers: { "authentication": "Bearer " + token }}).then(res => res.data);
+    },
+
     //  REAÇÃO
     //  PUT: /like/:questionId
     // likeDeslike: async (questionId) => {
@@ -57,8 +62,8 @@ export const API = {
 
     //  EDITAR RESPOSTA
     //  PUT: /response/edit/:questionId/:indexAnswer
-    // editAnswer: async (questionId, body) => {
-    //   return await api.put(`/questions/answer/${questionId}/${indexAnswer}`, body).then(res => res.data);
+    // editAnswer: async (questionId, body, token) => {
+    //   return await api.put(`/questions/answer/${questionId}/${indexAnswer}`, body, {headers: { "authentication": "Bearer " + token }}).then(res => res.data);
     // },
 
   //  USERS: /users

@@ -7,22 +7,30 @@ import { API } from "../services/api";
 
 const ratio = PixelRatio.getFontScale();
 
-export const CreateQuestion = ({ navigation }) => {
+export const CreateQuestion = ({ route, navigation }) => {
   const { colors } = useTheme();
+  const { question } = route.params;
   const [loading, setLoading] = useState(false);
   const [dialogData, setDialogData] = useState(null);
   const [addTagModal, setAddTagModal] = useState(false);
 
   const { control, handleSubmit, formState: { errors } } = useForm({
-    defaultValues: { title: "", description: "", tags: [] }
+    defaultValues: { title: Boolean(question) ? question?.title : "", description: Boolean(question) ? question?.description : "", tags: Boolean(question) ? question?.tags : [] }
   });
   const onSubmit = async data => {
     const session = JSON.parse(await AsyncStorage.getItem('QB@user_session_key'));
-    API.createQuestion(data, session?.token).then(res => {
-      setDialogData({ title: "Dúvida publicada!", body: "Sua dúvida publicada com sucesso!", callback: () => navigation.goBack()});
-    }).catch(err => {
-      setDialogData({ error: true, title: "Oops! Ocorreu um erro!", body: err.response?.data?.message });
-    }).finally(() => setLoading(false));
+    !Boolean(question)
+      ? API.createQuestion(data, session?.token).then(res => {
+        setDialogData({ title: "Dúvida publicada!", body: "Sua dúvida publicada com sucesso!", callback: () => navigation.goBack() });
+      }).catch(err => {
+        setDialogData({ error: true, title: "Oops! Ocorreu um erro!", body: err.response?.data?.message });
+      }).finally(() => setLoading(false))
+
+      : API.editQuestion(question?._id, data, session?.token).then(res => {
+        setDialogData({ title: "Dúvida Editada!", body: "Sua dúvida foi editada com sucesso!", callback: () => navigation.goBack() });
+      }).catch(err => {
+        setDialogData({ error: true, title: "Oops! Ocorreu um erro!", body: err.response?.data?.message });
+      }).finally(() => setLoading(false));
   };
 
   const tagList = [
@@ -72,12 +80,13 @@ export const CreateQuestion = ({ navigation }) => {
             onPress={() => navigation.goBack()}
             style={{ backgroundColor: colors.background, margin: 0 }}
           />
-          <Title style={{ fontSize: 20 / ratio, flex: 1, textAlign: "center" }}>Postar Dúvida</Title>
+          <Title style={{ fontSize: 20 / ratio, flex: 1, textAlign: "center" }}>
+            {Boolean(question) ? "Editar Dúvida" : "Postar Dúvida"}
+          </Title>
           <View style={{ width: 30 }} />
         </View>
 
         <View style={{ paddingHorizontal: 20, paddingVertical: 30 }}>
-
           <Controller name="title" control={control}
             rules={{ required: true }}
             render={({ field: { onChange, onBlur, value } }) => (
@@ -151,7 +160,7 @@ export const CreateQuestion = ({ navigation }) => {
             contentStyle={{ height: 45 }}
             onPress={handleSubmit(onSubmit)}
             labelStyle={{ fontSize: 14 / ratio }}>
-            Postar dúvida
+            {Boolean(question) ? "Salvar Alterações" : "Postar Dúvida"}
           </Button>
         </View>
       </View>
@@ -227,7 +236,7 @@ export const CreateQuestion = ({ navigation }) => {
       </Modal>
 
       <Portal>
-        <Dialog visible={Boolean(dialogData)} onDismiss={() => {Boolean(dialogData?.callback) ? dialogData?.callback() : null; setDialogData(null);}}
+        <Dialog visible={Boolean(dialogData)} onDismiss={() => { Boolean(dialogData?.callback) ? dialogData?.callback() : null; setDialogData(null); }}
           style={{ borderWidth: 4, borderColor: dialogData?.error ? colors.error : colors.success, paddingVertical: 20 }}
         >
           <>
