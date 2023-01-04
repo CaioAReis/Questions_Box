@@ -27,18 +27,16 @@ export const Home = ({ navigation }) => {
   ];
 
   const handleGetProducts = async () => {
-    if (pagination >= 0) {
-      setLoadList(true);
-      API.questions(pagination).then(res => {
-        if (Boolean(res.length) && pagination >= 0) {
-          setList(prev => prev.concat(res));
-          setPagination(prev => prev + 1);
-        }
-      }).catch(err => {
-        setDialogData({ error: true, title: "Oops! Ocorreu um erro!", body: err.response?.data?.message });
-      }).finally(() => setLoadList(false));
-      setLoadList(false);
-    }
+    if (loadList || pagination < 0) return;
+    setLoadList(true);
+    API.questions(pagination).then(res => {
+      if (Boolean(res.length) && pagination >= 0) {
+        setList([ ...list, ...res ]);
+        setPagination(pagination + 1);
+      } else setPagination(-1);
+    }).catch(err => {
+      setDialogData({ error: true, title: "Oops! Ocorreu um erro!", body: err.response?.data?.message });
+    }).finally(() => setLoadList(false));
   }
 
   useEffect(() => {
@@ -51,8 +49,6 @@ export const Home = ({ navigation }) => {
 
   useEffect(() => {
     const focusHandler = navigation.addListener('focus', () => {
-      // alert('Refreshed');
-      // setPagination(0);
       handleGetProducts();
     });
     return focusHandler;
@@ -63,15 +59,15 @@ export const Home = ({ navigation }) => {
       <View style={{ backgroundColor: colors.surface, height: "100%" }}>
         <FlatList
           data={list}
-          onEndReachedThreshold={0.1}
-          onScrollEndDrag={handleGetProducts}
+          scrollEventThrottle={2}
+          onEndReached={handleGetProducts}
           showsVerticalScrollIndicator={false}
           keyExtractor={question => question?._id}
           contentContainerStyle={{ paddingBottom: 80, backgroundColor: colors.surface }}
           renderItem={({ item }) => <QuestionCard nav={navigation} question={item} ratio={ratio} />}
-          refreshControl={<RefreshControl refreshing={loadList} onRefresh={() => handleGetProducts()} tintColor={colors.primary} />}
+          // refreshControl={<RefreshControl refreshing={loadList} onRefresh={() => {setPagination(0); handleGetProducts()}} tintColor={colors.primary} />}
           ListFooterComponent={
-            pagination >= 0 && <ActivityIndicator style={{ padding: 10 }} size={"large"} color={colors.primary} />}
+            loadList && <ActivityIndicator style={{ padding: 10 }} size={"large"} color={colors.primary} />}
           ListEmptyComponent={
             <View style={{ padding: 20 }}>
               <Title style={{ color: colors.semiTransparent, textAlign: "center", fontSize: 20 / ratio, marginBottom: 20 }}>
