@@ -10,21 +10,11 @@ const ratio = PixelRatio.getFontScale();
 export const Home = ({ navigation }) => {
   const { colors, logos } = useTheme();
   const [list, setList] = useState([]);
+  const [tags, setTags] = useState([]);
   const [session, setSession] = useState(null);
   const [loadList, setLoadList] = useState(false);
   const [pagination, setPagination] = useState(0);
   const [dialogData, setDialogData] = useState(null);
-
-  const tags = [
-    { title: "Java" },
-    { title: "SQL" },
-    { title: "JavaScript" },
-    { title: "HTML" },
-    { title: "CSS" },
-    { title: "React" },
-    { title: "IFS" },
-    { title: "NodeJS" },
-  ];
 
   const handleGetProducts = () => {
     if (loadList || pagination < 0) return;
@@ -39,30 +29,40 @@ export const Home = ({ navigation }) => {
     }).finally(() => setLoadList(false));
   };
 
+  const handleGetFirstTags = useCallback(() => {
+    API.firstTags().then(res => { setTags(res); }).catch(err => {
+      setDialogData({ error: true, title: "Oops! Ocorreu um erro!", body: err.response?.data?.message });
+    });
+  }, []);
+
   useEffect(() => {
     const x = async () => {
       const value = await AsyncStorage.getItem('QB@user_session_key');
       setSession(JSON.parse(value));
     }
     x();
+    handleGetFirstTags();
     handleGetProducts();
   }, []);
 
-  // useEffect(() => {
-  //   const focusHandler = navigation.addListener('focus', () => {
-  //     handleGetProducts();
-  //   });
-  //   return focusHandler;
-  // }, [navigation]);
+  useEffect(() => {
+    const focusHandler = navigation.addListener('focus', () => {
+      handleGetProducts();
+    });
+    setList([]);
+    setPagination(0);
+    return focusHandler;
+  }, [navigation]);
+
 
   return (
     <>
       <View style={{ backgroundColor: colors.surface, height: "100%" }}>
         <FlatList
           data={list}
-          scrollEventThrottle={2}
+          // scrollEventThrottle={2}
           onEndReached={handleGetProducts}
-          keyExtractor={(item, i)=> i}
+          keyExtractor={(item, i) => i}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 80, backgroundColor: colors.surface }}
           renderItem={({ item }) => <QuestionCard nav={navigation} question={item} ratio={ratio} />}
@@ -92,7 +92,7 @@ export const Home = ({ navigation }) => {
                 <View style={styles.tagsView}>
                   {tags.map(tag => (
                     <Chip
-                      key={tag.title}
+                      key={tag._id}
                       textStyle={{ fontSize: 14 / ratio }}
                       style={{ margin: 4, backgroundColor: colors.background }}
                       onPress={() => navigation.navigate("ListForTag", { TAG: tag })}>

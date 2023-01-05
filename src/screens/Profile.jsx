@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { FlatList, KeyboardAvoidingView, PixelRatio, Platform, View } from "react-native";
 import { Avatar, Button, Dialog, HelperText, IconButton, Modal, Portal, Text, TextInput, Title, useTheme } from "react-native-paper";
@@ -24,7 +24,7 @@ export const Profile = ({ route, navigation }) => {
   const onSubmit = data => {
     setLoading(true);
     API.editUser(user?._id, data, user?.token).then(async res => {
-      setDialogData({ title: "Salvo!", body: "Seus dados foram editados com sucesso!"});
+      setDialogData({ title: "Salvo!", body: "Seus dados foram editados com sucesso!" });
       await AsyncStorage.setItem('QB@user_session_key', JSON.stringify({ ...userProfile, ...data }));
       setUserProfile(current => { return { ...current, ...data } });
       setOpenEdit(false);
@@ -33,26 +33,34 @@ export const Profile = ({ route, navigation }) => {
     }).finally(() => setLoading(false));
   };
 
-  useEffect(() => {
-    const requestProfile = () => {
-      setLoading(true);
-      API.getUser(userID)
-        .then(res => setUserProfile(res))
-        .catch(err => setDialogData({ error: true, title: "Oops! Ocorreu um erro!", body: err.response?.data?.message }))
-        .finally(() => setLoading(false));
-    };
-
-    const requestQuestions = () => {
-      setLoading(true);
-      API.questionsByUser(userID)
-        .then(res => setList(res))
-        .catch(err => setDialogData({ error: true, title: "Oops! Ocorreu um erro!", body: err.response?.data?.message }))
-        .finally(() => setLoading(false));
-    }
-
-    !Boolean(user) ? requestProfile() : null;
-    requestQuestions();
+  const requestProfile = useCallback((userID) => {
+    setLoading(true);
+    API.getUser(userID)
+      .then(res => setUserProfile(res))
+      .catch(err => setDialogData({ error: true, title: "Oops! Ocorreu um erro!", body: err.response?.data?.message }))
+      .finally(() => setLoading(false));
   }, []);
+
+  const requestQuestions = useCallback((userID) => {
+    setLoading(true);
+    API.questionsByUser(userID)
+      .then(res => setList(res))
+      .catch(err => setDialogData({ error: true, title: "Oops! Ocorreu um erro!", body: err.response?.data?.message }))
+      .finally(() => setLoading(false));
+  }, []);
+
+  useEffect(() => {
+    !Boolean(user) ? requestProfile(userID) : null;
+    requestQuestions(userID);
+  }, []);
+
+  useEffect(() => {
+    const focusHandler = navigation.addListener('focus', () => {
+      !Boolean(user) ? requestProfile(userID) : null;
+      requestQuestions(userID);
+    });
+    return focusHandler;
+  }, [navigation]);
 
   return (
     <>
@@ -192,7 +200,7 @@ export const Profile = ({ route, navigation }) => {
       </Modal>
 
       <Portal>
-        <Dialog visible={Boolean(dialogData)} onDismiss={() => {Boolean(dialogData?.callback) ? dialogData?.callback() : null; setDialogData(null);}}
+        <Dialog visible={Boolean(dialogData)} onDismiss={() => { Boolean(dialogData?.callback) ? dialogData?.callback() : null; setDialogData(null); }}
           style={{ borderWidth: 4, borderColor: dialogData?.error ? colors.error : colors.success, paddingVertical: 20 }}
         >
           <>

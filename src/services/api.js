@@ -2,10 +2,10 @@ import axios from "axios";
 
 const api = axios.create({
   //  CASA
-  baseURL: "http://192.168.0.113:3333/v1-0/br",
+  // baseURL: "http://192.168.0.113:3333/v1-0/br",
 
   //  CHÁCARA
-  // baseURL: "http://192.168.1.113:3333/v1-0/br",
+  baseURL: "http://192.168.1.113:3333/v1-0/br",
 
   // headers: {}
 });
@@ -104,9 +104,9 @@ export const API = {
 
     //  Listar Tags POPULARES (apenas as 8 primeiras)
     //  GET: /list/popupar
-    // popuparTags: async () => {
-    //   return await api.get("/tags/popular").then(res => res.data);
-    // },
+    firstTags: async () => {
+      return await api.get("/tags").then(res => res.data);
+    },
 
     //  Cadastrar uma TAG
     //  POST: /
