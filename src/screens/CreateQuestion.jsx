@@ -1,8 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { KeyboardAvoidingView, PixelRatio, StyleSheet, View, Modal, FlatList } from "react-native";
-import { Button, Chip, Divider, IconButton, TextInput, Title, useTheme, Searchbar, HelperText, Portal, Dialog, Avatar, Text } from "react-native-paper";
+import { Button, Chip, Divider, IconButton, TextInput, Title, useTheme, Searchbar, HelperText, Portal, Dialog, Avatar, Text, ActivityIndicator } from "react-native-paper";
 import { API } from "../services/api";
 
 const ratio = PixelRatio.getFontScale();
@@ -10,13 +10,17 @@ const ratio = PixelRatio.getFontScale();
 export const CreateQuestion = ({ route, navigation }) => {
   const { colors } = useTheme();
   const { question } = route.params;
+  const [tagList, setTagList] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [pagination, setPagination] = useState(0);
   const [dialogData, setDialogData] = useState(null);
   const [addTagModal, setAddTagModal] = useState(false);
+  const [selectedList, setSelectedList] = useState(Boolean(question) ? question?.tags : []);
 
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: { title: Boolean(question) ? question?.title : "", description: Boolean(question) ? question?.description : "", tags: Boolean(question) ? question?.tags : [] }
   });
+
   const onSubmit = async data => {
     const session = JSON.parse(await AsyncStorage.getItem('QB@user_session_key'));
     !Boolean(question)
@@ -33,33 +37,6 @@ export const CreateQuestion = ({ route, navigation }) => {
       }).finally(() => setLoading(false));
   };
 
-  const tagList = [
-    { title: "Java" },
-    { title: "SQL" },
-    { title: "JavaScript" },
-    { title: "HTML" },
-    { title: "CSS" },
-    { title: "React" },
-    { title: "IFS" },
-    { title: "NodeJS" },
-    { title: "Java" },
-    { title: "SQL" },
-    { title: "JavaScript" },
-    { title: "HTML" },
-    { title: "CSS" },
-    { title: "React" },
-    { title: "IFS" },
-    { title: "NodeJS" },
-    { title: "Java" },
-    { title: "SQL" },
-    { title: "JavaScript" },
-    { title: "HTML" },
-    { title: "CSS" },
-    { title: "React" },
-    { title: "IFS" },
-    { title: "NodeJS" },
-  ];
-
   const QuestiontagList = [
     { title: "HTML" },
     { title: "CSS" },
@@ -68,6 +45,23 @@ export const CreateQuestion = ({ route, navigation }) => {
     { title: "TypeScript" },
     { title: "PHP" },
   ];
+
+  const handleGetTags = () => {
+    if (loading || pagination < 0) return;
+    setLoading(true);
+    API.tags(pagination).then(res => {
+      if (Boolean(res.length) && pagination >= 0) {
+        setTagList([...tagList, ...res]);
+        setPagination(pagination + 1);
+      } else setPagination(-1);
+    }).catch(err => {
+      setDialogData({ error: true, title: "Oops! Ocorreu um erro!", body: err.response?.data?.message });
+    }).finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    handleGetTags();
+  }, []);
 
   return (
     <>
@@ -182,12 +176,12 @@ export const CreateQuestion = ({ route, navigation }) => {
             <Title style={{ fontSize: 16 / ratio }}>TAGs selecionadas:</Title>
             {Boolean(QuestiontagList.length) && (
               <View style={{ marginTop: 10, flexDirection: "row", flexWrap: "wrap" }}>
-                {QuestiontagList.map(tag => (
+                {selectedList.map((tag, i) => (
                   <Chip
-                    key={tag.title}
-                    onClose={() => alert("close")}
+                    key={tag.i}
                     closeIcon="close-circle-outline"
                     style={{ margin: 4, backgroundColor: colors.surface }}
+                    onClose={() => setSelectedList(prev => prev.filter((it, j) => j !== i))}
                   >
                     {tag.title}
                   </Chip>
@@ -198,22 +192,25 @@ export const CreateQuestion = ({ route, navigation }) => {
             <Divider style={{ marginVertical: 20 }} />
 
             <Title style={{ fontSize: 16 / ratio, marginBottom: 10 }}>Selecione as TAGs:</Title>
-            <Searchbar
+            {/* <Searchbar
               // value={searchQuery}
               placeholder="Pesquisar TAG"
             // onChangeText={onChangeSearch}
-            />
+            /> */}
 
             <FlatList
               numColumns={5}
               data={tagList}
-              scrollEventThrottle={1900}
+              // scrollEventThrottle={1900}
+              onEndReached={handleGetTags}
               keyExtractor={(item, index) => index}
               columnWrapperStyle={{ flexWrap: "wrap" }}
               contentContainerStyle={{ paddingBottom: 30, }}
               style={{ height: 200, marginTop: 15, padding: 10, borderRadius: 8, backgroundColor: colors.surface }}
+              ListFooterComponent={
+                loading && <ActivityIndicator style={{ padding: 10 }} size={"large"} color={colors.primary} />}
               renderItem={({ item }) => (
-                <Chip icon="plus" onPress={() => { }} style={{ margin: 4, backgroundColor: colors.background }}>
+                <Chip icon="plus" onPress={() => setSelectedList([...selectedList, item])} style={{ margin: 4, backgroundColor: colors.background }}>
                   {item.title}
                 </Chip>
               )}
