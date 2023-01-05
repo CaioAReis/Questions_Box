@@ -25,9 +25,9 @@ export const API = {
 
     // Buscar uma pergunta específica
     //  GET: /:questionId
-    // getQuestion: async (questionId) => {
-    //   return await api.get(`/questions/${questionId}`).then(res => res.data);
-    // },
+    getQuestion: async (questionId) => {
+      return await api.get(`/questions/buscar/${questionId}`).then(res => res.data);
+    },
 
     questions: async (pagination) => {
       return await api.get(`/questions/${pagination}`).then(res => res.data);

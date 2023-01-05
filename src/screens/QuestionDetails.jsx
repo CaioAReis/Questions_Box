@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { FlatList, KeyboardAvoidingView, Modal, PixelRatio, Pressable, View } from "react-native";
 import { Avatar, Button, Chip, Dialog, Divider, HelperText, IconButton, Menu, Portal, Text, TextInput, Title, useTheme } from "react-native-paper";
@@ -10,8 +10,9 @@ const ratio = PixelRatio.getFontScale();
 
 export const QuestionDetails = ({ route, navigation }) => {
   const { colors } = useTheme();
-  const { question } = route?.params;
+  const q = route?.params.question;
   const [session, setSession] = useState("");
+  const [question, setQuestion] = useState(q);
   const [loading, setLoading] = useState(false);
   const [dialogData, setDialogData] = useState(null);
   const [openAnswer, setOpenAnswer] = useState(false);
@@ -24,7 +25,6 @@ export const QuestionDetails = ({ route, navigation }) => {
 
   const onSubmit = async data => {
     setLoading(true);
-    // const session = JSON.parse(await AsyncStorage.getItem('QB@user_session_key'));
     API.createAnswer(question?._id, data, session?.token).then(res => {
       setDialogData({ title: "Resposta enviada!", body: "Sua resposta foi enviada com sucesso!" });
       question?.responses?.push(res.data);
@@ -44,6 +44,15 @@ export const QuestionDetails = ({ route, navigation }) => {
     }).finally(() => { setLoading(false); });
   };
 
+  const handleGetQuestion = useCallback((id) => {
+    setLoading(true);
+    API.getQuestion(id).then(res => {
+      setQuestion(res);
+    }).catch(err => {
+      setDialogData({ error: true, title: "Oops! Ocorreu um erro!", body: err.response?.data?.message });
+    }).finally(() => { setLoading(false); });
+  }, []);
+
   useEffect(() => {
     const getSession = async () => {
       const res = JSON.parse(await AsyncStorage.getItem('QB@user_session_key'));
@@ -52,12 +61,12 @@ export const QuestionDetails = ({ route, navigation }) => {
     getSession();
   }, []);
 
-  // useEffect(() => {
-  //   const focusHandler = navigation.addListener('focus', () => {
-  //     handleGetProducts();
-  //   });
-  //   return focusHandler;
-  // }, [navigation]);
+  useEffect(() => {
+    const focusHandler = navigation.addListener('focus', () => {
+      handleGetQuestion(question?._id);
+    });
+    return focusHandler;
+  }, [navigation]);
 
   return (
     <>
@@ -73,7 +82,7 @@ export const QuestionDetails = ({ route, navigation }) => {
               </Title>
             </View>
           }
-          renderItem={({ item, index }) => 
+          renderItem={({ item, index }) =>
             <ResponseCard questionId={question?._id} answerIndex={index} owner={session?._id === question?.user?._id} answer={item} ratio={ratio} />}
           ListHeaderComponent={
             <View style={{ backgroundColor: colors.surface, flex: 1, paddingHorizontal: 20, paddingVertical: 30 }}>
