@@ -2,10 +2,10 @@ import axios from "axios";
 
 const api = axios.create({
   //  CASA
-  // baseURL: "http://192.168.0.113:3333/v1-0/br",
+  baseURL: "http://192.168.0.113:3333/v1-0/br",
 
   //  CHÁCARA
-  baseURL: "http://192.168.1.113:3333/v1-0/br",
+  // baseURL: "http://192.168.1.113:3333/v1-0/br",
 
   // headers: {}
 });
@@ -52,6 +52,10 @@ export const API = {
     // EDITAR QUESTION
     editQuestion: async (questionId, body, token) => {
       return await api.put(`/questions/${questionId}`, body, {headers: { "authentication": "Bearer " + token }}).then(res => res.data);
+    },
+
+    deleteQuestion: async (questionId, token) => {
+      return await api.delete(`/questions/${questionId}`, { headers: { "authentication": "Bearer " + token } }).then(res => res.data);
     },
 
     //  EDITAR RESPOSTA

@@ -24,7 +24,7 @@ export const QuestionDetails = ({ route, navigation }) => {
 
   const onSubmit = async data => {
     setLoading(true);
-    const session = JSON.parse(await AsyncStorage.getItem('QB@user_session_key'));
+    // const session = JSON.parse(await AsyncStorage.getItem('QB@user_session_key'));
     API.createAnswer(question?._id, data, session?.token).then(res => {
       setDialogData({ title: "Resposta enviada!", body: "Sua resposta foi enviada com sucesso!" });
       question?.responses?.push(res.data);
@@ -35,8 +35,13 @@ export const QuestionDetails = ({ route, navigation }) => {
   };
 
   const handleDelete = () => {
-    alert("DELETAR");
-    setIsOpenDelete(false);
+    setLoading(true);
+    API.deleteQuestion(question?._id, session?.token).then(res => {
+      setDialogData({ title: "Dúvida apagada!", body: "Sua dúvida foi apagada com sucesso!", callback: () => navigation.goBack() });
+      setIsOpenDelete(false);
+    }).catch(err => {
+      setDialogData({ error: true, title: "Oops! Ocorreu um erro!", body: err.response?.data?.message });
+    }).finally(() => { setLoading(false); });
   };
 
   useEffect(() => {
@@ -52,7 +57,7 @@ export const QuestionDetails = ({ route, navigation }) => {
       <View style={{ backgroundColor: colors.surface, flex: 1 }}>
         <FlatList
           data={question?.responses}
-          keyExtractor={(answer, i) => i}
+          keyExtractor={(answer, i) => answer?._id}
           contentContainerStyle={{ paddingBottom: 34 }}
           ListEmptyComponent={
             <View style={{ padding: 20 }}>
@@ -61,7 +66,8 @@ export const QuestionDetails = ({ route, navigation }) => {
               </Title>
             </View>
           }
-          renderItem={({ item, index }) => <ResponseCard questionId={question?._id} answerIndex={index} owner={session?._id === question?.user?._id} answer={item} ratio={ratio} />}
+          renderItem={({ item, index }) => 
+            <ResponseCard questionId={question?._id} answerIndex={index} owner={session?._id === question?.user?._id} answer={item} ratio={ratio} />}
           ListHeaderComponent={
             <View style={{ backgroundColor: colors.surface, flex: 1, paddingHorizontal: 20, paddingVertical: 30 }}>
               <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
@@ -73,23 +79,25 @@ export const QuestionDetails = ({ route, navigation }) => {
                   onPress={() => navigation.goBack()}
                 />
 
-                <Menu
-                  visible={isOpenMenu}
-                  contentStyle={{ borderWidth: 1, borderColor: colors.placeholder }}
-                  onDismiss={() => setIsOpenMenu(false)}
-                  anchor={
-                    <IconButton
-                      size={35}
-                      color={colors.text}
-                      style={{ margin: 0 }}
-                      icon="circle-edit-outline"
-                      onPress={() => setIsOpenMenu(true)}
-                    />
-                  }>
-                  <Menu.Item icon="circle-edit-outline" onPress={() => { setIsOpenMenu(false); navigation.navigate("CreateQuestion", { question: question }); }} title="Editar dúvida" />
-                  <Divider />
-                  <Menu.Item icon="close" onPress={() => { setIsOpenMenu(false); setIsOpenDelete(true); }} title="Apagar dúvida" />
-                </Menu>
+                {session?._id === question?.user?._id ? (
+                  <Menu
+                    visible={isOpenMenu}
+                    contentStyle={{ borderWidth: 1, borderColor: colors.placeholder }}
+                    onDismiss={() => setIsOpenMenu(false)}
+                    anchor={
+                      <IconButton
+                        size={35}
+                        color={colors.text}
+                        style={{ margin: 0 }}
+                        icon="circle-edit-outline"
+                        onPress={() => setIsOpenMenu(true)}
+                      />
+                    }>
+                    <Menu.Item icon="circle-edit-outline" onPress={() => { setIsOpenMenu(false); navigation.navigate("CreateQuestion", { question: question }); }} title="Editar dúvida" />
+                    <Divider />
+                    <Menu.Item icon="close" onPress={() => { setIsOpenMenu(false); setIsOpenDelete(true); }} title="Apagar dúvida" />
+                  </Menu>
+                ) : null}
               </View>
 
               <View style={{ flexDirection: "row", alignItems: "center" }}>

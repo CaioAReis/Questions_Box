@@ -2,7 +2,7 @@ import { View, StyleSheet, Image, FlatList, PixelRatio, Pressable, RefreshContro
 import { ActivityIndicator, Avatar, Button, Chip, Dialog, Divider, FAB, Portal, Text, Title, useTheme } from "react-native-paper";
 import { QuestionCard } from "../components";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { API } from "../services/api";
 
 const ratio = PixelRatio.getFontScale();
@@ -26,18 +26,18 @@ export const Home = ({ navigation }) => {
     { title: "NodeJS" },
   ];
 
-  const handleGetProducts = async () => {
+  const handleGetProducts = () => {
     if (loadList || pagination < 0) return;
     setLoadList(true);
     API.questions(pagination).then(res => {
       if (Boolean(res.length) && pagination >= 0) {
-        setList([ ...list, ...res ]);
+        setList(list.concat(res));
         setPagination(pagination + 1);
       } else setPagination(-1);
     }).catch(err => {
       setDialogData({ error: true, title: "Oops! Ocorreu um erro!", body: err.response?.data?.message });
     }).finally(() => setLoadList(false));
-  }
+  };
 
   useEffect(() => {
     const x = async () => {
@@ -45,14 +45,15 @@ export const Home = ({ navigation }) => {
       setSession(JSON.parse(value));
     }
     x();
+    handleGetProducts();
   }, []);
 
-  useEffect(() => {
-    const focusHandler = navigation.addListener('focus', () => {
-      handleGetProducts();
-    });
-    return focusHandler;
-  }, [navigation]);
+  // useEffect(() => {
+  //   const focusHandler = navigation.addListener('focus', () => {
+  //     handleGetProducts();
+  //   });
+  //   return focusHandler;
+  // }, [navigation]);
 
   return (
     <>
@@ -61,8 +62,8 @@ export const Home = ({ navigation }) => {
           data={list}
           scrollEventThrottle={2}
           onEndReached={handleGetProducts}
+          keyExtractor={(item, i)=> i}
           showsVerticalScrollIndicator={false}
-          keyExtractor={question => question?._id}
           contentContainerStyle={{ paddingBottom: 80, backgroundColor: colors.surface }}
           renderItem={({ item }) => <QuestionCard nav={navigation} question={item} ratio={ratio} />}
           // refreshControl={<RefreshControl refreshing={loadList} onRefresh={() => {setPagination(0); handleGetProducts()}} tintColor={colors.primary} />}
@@ -120,8 +121,8 @@ export const Home = ({ navigation }) => {
           icon="plus"
           animated={true}
           label="Postar dúvida"
-          onPress={() => navigation.navigate("CreateQuestion")}
           style={{ ...styles.fab, backgroundColor: colors.primary }}
+          onPress={() => navigation.navigate("CreateQuestion", { question: null })}
         />
       </View>
 
