@@ -52,6 +52,13 @@ export const QuestionDetails = ({ route, navigation }) => {
     getSession();
   }, []);
 
+  // useEffect(() => {
+  //   const focusHandler = navigation.addListener('focus', () => {
+  //     handleGetProducts();
+  //   });
+  //   return focusHandler;
+  // }, [navigation]);
+
   return (
     <>
       <View style={{ backgroundColor: colors.surface, flex: 1 }}>
