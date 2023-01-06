@@ -9,22 +9,19 @@ export const QuestionCard = ({ question, ratio, nav }) => {
   return (
     <TouchableOpacity activeOpacity={.5} onPress={() => nav.navigate("QuestionDetails", { question: question })}>
       <Card.Content style={{ position: "relative", marginBottom: 20 }}>
-        <Text style={{ fontSize: 10 / ratio }}>{`${d.getUTCDate() < 10 ? "0"+d.getUTCDate() : d.getUTCDate()}/${d.getUTCMonth()+1 < 10 ? "0"+(d.getUTCMonth()+1) : d.getUTCMonth()+1}/${d.getFullYear()} - ${d.getHours() < 10 ? "0"+d.getHours() : d.getHours()}:${d.getMinutes() < 10 ? "0"+d.getMinutes() : d.getMinutes()}`}</Text>
+        <Text style={{ fontSize: 10 / ratio }}>{`${d.getUTCDate() < 10 ? "0" + d.getUTCDate() : d.getUTCDate()}/${d.getUTCMonth() + 1 < 10 ? "0" + (d.getUTCMonth() + 1) : d.getUTCMonth() + 1}/${d.getFullYear()} - ${d.getHours() < 10 ? "0" + d.getHours() : d.getHours()}:${d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes()}`}</Text>
         <View style={{ backgroundColor: colors.background, ...styles.post }}>
           <View style={{ flex: 1, marginRight: 10, paddingTop: 10 }}>
-            {/* <Title numberOfLines={2} style={{ fontSize: 14 / ratio, lineHeight: 22 }}>{question?._id}</Title> */}
             <Title numberOfLines={2} style={{ fontSize: 14 / ratio, lineHeight: 22 }}>{question?.title}</Title>
             <View style={styles.tagsView}>
-              {question?.tags.map(tag =>
-                <Chip
-                  key={tag.title}
-                  mode="outlined"
-                  textStyle={{ fontSize: 12 / ratio }}
-                  onPress={() => nav.navigate("ListForTag", { TAG: tag?._id })}
-                  style={{ backgroundColor: colors.background, marginRight: 4, marginBottom: 4 }}>
-                  {tag.title}
-                </Chip>
-              )}
+              <Chip
+                mode="outlined"
+                key={question?.tags[0]?.title}
+                textStyle={{ fontSize: 12 / ratio }}
+                onPress={() => nav.navigate("ListForTag", { TAG: question?.tags[0]?._id })}
+                style={{ backgroundColor: colors.background, marginRight: 4, marginBottom: 4 }}>
+                {question?.tags[0]?.title}
+              </Chip>
             </View>
           </View>
           <View style={{ width: 2, height: "100%", backgroundColor: colors.surface }} />

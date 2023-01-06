@@ -131,10 +131,10 @@ export const QuestionDetails = ({ route, navigation }) => {
 
               <View style={{ flexWrap: "wrap", marginVertical: 35, flexDirection: "row" }}>
                 {question?.tags?.map(tag => (
-                  <Chip
+                  <Chip key={tag._id}
                     textStyle={{ fontSize: 16 / ratio }}
                     onPress={() => navigation.navigate("ListForTag", { TAG: { title: "IFS" } })}
-                    style={{ backgroundColor: colors.background, paddingHorizontal: 6, paddingVertical: 2, marginHorizontal: 5 }}
+                    style={{ backgroundColor: colors.background, marginVertical: 5, paddingHorizontal: 6, paddingVertical: 2, marginHorizontal: 5 }}
                   >
                     {tag.title}
                   </Chip>

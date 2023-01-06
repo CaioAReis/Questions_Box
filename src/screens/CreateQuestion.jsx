@@ -1,13 +1,14 @@
+import React, { useEffect, useRef, useState } from "react";
+import { PixelRatio, StyleSheet, View, FlatList, ScrollView, Pressable } from "react-native";
+import { Button, Modal, Chip, Divider, IconButton, TextInput, Title, useTheme, Searchbar, HelperText, Portal, Dialog, Avatar, Text, ActivityIndicator } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { KeyboardAvoidingView, PixelRatio, StyleSheet, View, Modal, FlatList } from "react-native";
-import { Button, Chip, Divider, IconButton, TextInput, Title, useTheme, Searchbar, HelperText, Portal, Dialog, Avatar, Text, ActivityIndicator } from "react-native-paper";
 import { API } from "../services/api";
 
 const ratio = PixelRatio.getFontScale();
 
 export const CreateQuestion = ({ route, navigation }) => {
+  const __tagSize = useRef();
   const { colors } = useTheme();
   const { question } = route.params;
   const [tagList, setTagList] = useState([]);
@@ -15,7 +16,6 @@ export const CreateQuestion = ({ route, navigation }) => {
   const [pagination, setPagination] = useState(0);
   const [dialogData, setDialogData] = useState(null);
   const [addTagModal, setAddTagModal] = useState(false);
-  const [selectedList, setSelectedList] = useState(Boolean(question) ? question?.tags : []);
 
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: { title: Boolean(question) ? question?.title : "", description: Boolean(question) ? question?.description : "", tags: Boolean(question) ? question?.tags : [] }
@@ -37,15 +37,6 @@ export const CreateQuestion = ({ route, navigation }) => {
       }).finally(() => setLoading(false));
   };
 
-  const QuestiontagList = [
-    { title: "HTML" },
-    { title: "CSS" },
-    { title: "DOM" },
-    { title: "JavaScript" },
-    { title: "TypeScript" },
-    { title: "PHP" },
-  ];
-
   const handleGetTags = () => {
     if (loading || pagination < 0) return;
     setLoading(true);
@@ -59,13 +50,21 @@ export const CreateQuestion = ({ route, navigation }) => {
     }).finally(() => setLoading(false));
   };
 
-  useEffect(() => {
-    handleGetTags();
-  }, []);
+  const handleSelectTag = ({ origin, destiny, item, value = null, out = false }) => {
+    if (out) {
+      origin(value.filter(it => it?._id !== item?._id));
+      destiny(prev => [...prev, item]);
+    } else {
+      origin(prev => prev.filter(it => it?._id !== item?._id));
+      destiny([...value, item]);
+    }
+  };
+
+  useEffect(() => handleGetTags(), []);
 
   return (
     <>
-      <View>
+      <ScrollView>
         <View style={{ ...styles.header, backgroundColor: colors.background }}>
           <IconButton
             size={35}
@@ -95,53 +94,138 @@ export const CreateQuestion = ({ route, navigation }) => {
               />
             )}
           />
-          <HelperText style={{ marginBottom: 5 }} type="error" visible={Boolean(errors.title)} >
-            Campo obrigatório
-          </HelperText>
+          {Boolean(errors.title) ? (
+            <HelperText type="error" visible={Boolean(errors.title)}>{errors.title.message}</HelperText>
+          ) : null}
 
           <Controller name="description" control={control}
-            rules={{ required: true }}
+            rules={{ required: "Campo obrigatório" }}
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
+                multiline
                 value={value}
                 mode="outlined"
                 onBlur={onBlur}
                 onChangeText={onChange}
-                style={{ height: 150 }}
                 label="Descrição dúvida"
                 error={Boolean(errors.description)}
+                style={{ height: 150, marginTop: 20 }}
                 theme={{ colors: { background: colors.surface, primary: colors.text } }}
               />
             )}
           />
-          <HelperText style={{ marginBottom: 5 }} type="error" visible={Boolean(errors.description)} >
-            Campo obrigatório
-          </HelperText>
+          {Boolean(errors.description) ? (
+            <HelperText type="error" visible={Boolean(errors.description)}>{errors.description.message}</HelperText>
+          ) : null}
 
           <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 20 }}>
             <Title style={{ fontSize: 20 / ratio }}>Tags</Title>
             <Button contentStyle={{ height: 45 }} color={colors.success} icon="plus-circle" onPress={() => setAddTagModal(true)}>Adicionar tag</Button>
           </View>
 
-          {Boolean(QuestiontagList.length) && (
-            <>
-              <View style={{ borderWidth: 1, borderColor: Boolean(errors.tags) ? colors.error : colors.surface, marginTop: 15, flexDirection: "row", padding: 10, borderRadius: 8, backgroundColor: colors.surface, flexWrap: "wrap" }} >
-                {QuestiontagList.map(tag => (
-                  <Chip
-                    key={tag.title}
-                    onClose={() => alert("close")}
-                    closeIcon="close-circle-outline"
-                    style={{ margin: 4, backgroundColor: colors.background }}
-                  >
-                    {tag.title}
-                  </Chip>
-                ))}
-              </View>
-              <HelperText type="error" visible={Boolean(errors.tags)} >
-                Selecione pelo menos uma tag.
-              </HelperText>
-            </>
-          )}
+          <Controller name="tags" control={control}
+            rules={{ required: "Campo obrigatório" }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <>
+                {Boolean(value.length) ? (
+                  <>
+                    <View style={{ borderWidth: 1, borderColor: Boolean(errors.tags) ? colors.error : colors.surface, marginTop: 15, flexDirection: "row", padding: 10, borderRadius: 8, backgroundColor: colors.surface, flexWrap: "wrap" }} >
+                      {value.map((tag) => (
+                        <Chip
+                          key={tag._id}
+                          closeIcon="close-circle-outline"
+                          style={{ margin: 4, backgroundColor: colors.background }}
+                          onClose={() => handleSelectTag({ origin: onChange, destiny: setTagList, item: tag, value: value, out: true })}
+                        >
+                          {tag.title}
+                        </Chip>
+                      ))}
+                    </View>
+                  </>
+                ) :
+                  <Pressable onPress={() => setAddTagModal(true)} style={{ marginTop: 20, backgroundColor: colors.surface, padding: 20, borderRadius: 8, borderWidth: 1, borderColor: Boolean(errors.tags) ? colors.error : colors.placeholder }}>
+                    <Text style={{ color: Boolean(errors.tags) ? colors.error : colors.placeholder }}>Selecione as Tags</Text>
+                  </Pressable>
+                }
+
+                <Portal>
+                  <Modal visible={addTagModal} contentContainerStyle={{ alignItems: "center" }}>
+                    <View style={{ padding: 20, width: "90%", borderRadius: 10, backgroundColor: colors.background }}>
+                      <View style={{ position: "relative", marginBottom: 30 }}>
+                        <Title style={{ textAlign: "center", }}>Adicionar TAGs</Title>
+                        <IconButton
+                          size={30}
+                          color={colors.error}
+                          icon="close-circle-outline"
+                          onPress={() => setAddTagModal(false)}
+                          style={{ position: "absolute", margin: 0, top: -10, right: 0 }}
+                        />
+                      </View>
+
+                      <Title style={{ fontSize: 16 / ratio }}>TAGs selecionadas:</Title>
+                      <ScrollView onContentSizeChange={() => __tagSize.current.scrollToEnd()} ref={__tagSize} style={{ maxHeight: "20%" }}>
+                        {Boolean(value.length) && (
+                          <View style={{ marginTop: 10, flexDirection: "row", flexWrap: "wrap" }}>
+                            {value.map((tag, i) => (
+                              <Chip
+                                key={tag.i}
+                                closeIcon="close-circle-outline"
+                                style={{ margin: 4, backgroundColor: colors.surface }}
+                                onClose={() => handleSelectTag({ origin: onChange, destiny: setTagList, item: tag, value: value, out: true })}
+                              >
+                                {tag.title}
+                              </Chip>
+                            ))}
+                          </View>
+                        )}
+                      </ScrollView>
+
+                      <Divider style={{ marginVertical: 20 }} />
+
+                      <Title style={{ fontSize: 16 / ratio, marginBottom: 10 }}>Selecione as TAGs:</Title>
+                      {/* <Searchbar
+                        // value={searchQuery}
+                        placeholder="Pesquisar TAG"
+                      // onChangeText={onChangeSearch}
+                      /> */}
+
+                      <FlatList
+                        numColumns={5}
+                        data={tagList}
+                        onEndReached={handleGetTags}
+                        keyExtractor={(item) => item._id}
+                        columnWrapperStyle={{ flexWrap: "wrap" }}
+                        contentContainerStyle={{ paddingBottom: 30, }}
+                        style={{ height: 200, marginTop: 15, padding: 10, borderRadius: 8, backgroundColor: colors.surface }}
+                        ListFooterComponent={
+                          loading && <ActivityIndicator style={{ padding: 10 }} size={"large"} color={colors.primary} />}
+                        renderItem={({ item }) => (
+                          <Chip icon="plus" onPress={() => handleSelectTag({ origin: setTagList, destiny: onChange, value: value, item: item })} style={{ margin: 4, backgroundColor: colors.background }}>
+                            {item.title}
+                          </Chip>
+                        )}
+                      />
+
+                      <Button
+                        title="Submit"
+                        mode="contained"
+                        icon="checkbox-marked-circle"
+                        contentStyle={{ height: 45 }}
+                        style={{ marginTop: 20 }}
+                        onPress={() => setAddTagModal(false)}
+                        labelStyle={{ fontSize: 14 / ratio }}>
+                        OK
+                      </Button>
+                    </View>
+                  </Modal>
+                </Portal>
+              </>
+            )}
+          />
+
+          {Boolean(errors.tags) ? (
+            <HelperText type="error" visible={Boolean(errors.tags)}>{errors.tags.message}</HelperText>
+          ) : null}
 
           <Divider style={{ marginVertical: 30 }} />
 
@@ -157,80 +241,7 @@ export const CreateQuestion = ({ route, navigation }) => {
             {Boolean(question) ? "Salvar Alterações" : "Postar Dúvida"}
           </Button>
         </View>
-      </View>
-
-      <Modal visible={addTagModal} transparent>
-        <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : ""} style={{ flex: 1, maxHeight: "90%", borderWidth: 1, alignItems: "center", justifyContent: "center", backgroundColor: colors.backModal }}>
-          <View style={{ padding: 20, width: "90%", borderRadius: 10, backgroundColor: colors.background }}>
-            <View style={{ position: "relative", marginBottom: 30 }}>
-              <Title style={{ textAlign: "center", }}>Adicionar TAGs</Title>
-              <IconButton
-                size={30}
-                color={colors.error}
-                icon="close-circle-outline"
-                onPress={() => setAddTagModal(false)}
-                style={{ position: "absolute", margin: 0, top: -10, right: 0 }}
-              />
-            </View>
-
-            <Title style={{ fontSize: 16 / ratio }}>TAGs selecionadas:</Title>
-            {Boolean(QuestiontagList.length) && (
-              <View style={{ marginTop: 10, flexDirection: "row", flexWrap: "wrap" }}>
-                {selectedList.map((tag, i) => (
-                  <Chip
-                    key={tag.i}
-                    closeIcon="close-circle-outline"
-                    style={{ margin: 4, backgroundColor: colors.surface }}
-                    onClose={() => setSelectedList(prev => prev.filter((it, j) => j !== i))}
-                  >
-                    {tag.title}
-                  </Chip>
-                ))}
-              </View>
-            )}
-
-            <Divider style={{ marginVertical: 20 }} />
-
-            <Title style={{ fontSize: 16 / ratio, marginBottom: 10 }}>Selecione as TAGs:</Title>
-            {/* <Searchbar
-              // value={searchQuery}
-              placeholder="Pesquisar TAG"
-            // onChangeText={onChangeSearch}
-            /> */}
-
-            <FlatList
-              numColumns={5}
-              data={tagList}
-              // scrollEventThrottle={1900}
-              onEndReached={handleGetTags}
-              keyExtractor={(item, index) => index}
-              columnWrapperStyle={{ flexWrap: "wrap" }}
-              contentContainerStyle={{ paddingBottom: 30, }}
-              style={{ height: 200, marginTop: 15, padding: 10, borderRadius: 8, backgroundColor: colors.surface }}
-              ListFooterComponent={
-                loading && <ActivityIndicator style={{ padding: 10 }} size={"large"} color={colors.primary} />}
-              renderItem={({ item }) => (
-                <Chip icon="plus" onPress={() => setSelectedList([...selectedList, item])} style={{ margin: 4, backgroundColor: colors.background }}>
-                  {item.title}
-                </Chip>
-              )}
-            />
-
-            {/* <View style={{ height: 200, marginTop: 15, padding: 10, borderRadius: 8, backgroundColor: colors.surface }}>
-              <ScrollView style={{}}>
-                {tagList.map((item, i) => (
-                  <>
-                    <Chip icon="plus" key={i} style={{ margin: 4, backgroundColor: colors.background }}>
-                      {item.title}
-                    </Chip>
-                  </>
-                ))}
-              </ScrollView>
-            </View> */}
-
-          </View>
-        </KeyboardAvoidingView>
-      </Modal>
+      </ScrollView>
 
       <Portal>
         <Dialog visible={Boolean(dialogData)} onDismiss={() => { Boolean(dialogData?.callback) ? dialogData?.callback() : null; setDialogData(null); }}
