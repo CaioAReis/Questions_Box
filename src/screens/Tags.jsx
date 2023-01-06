@@ -62,7 +62,7 @@ export const Tags = ({ navigation }) => {
         scrollEventThrottle={2}
         keyExtractor={item => item._id}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ backgroundColor: colors.surface }}
+        contentContainerStyle={{ backgroundColor: colors.surface, paddingBottom: 50 }}
         renderItem={({ item }) => <TagCard name={item.title} description={item.description} style={{ marginHorizontal: 20 }} />}
         ListFooterComponent={
           loading && <ActivityIndicator style={{ padding: 10 }} size={"large"} color={colors.primary} />}

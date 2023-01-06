@@ -2,10 +2,10 @@ import axios from "axios";
 
 const api = axios.create({
   //  CASA
-  // baseURL: "http://192.168.0.113:3333/v1-0/br",
+  baseURL: "http://192.168.0.113:3333/v1-0/br",
 
   //  CHÁCARA
-  baseURL: "http://192.168.1.113:3333/v1-0/br",
+  // baseURL: "http://192.168.1.113:3333/v1-0/br",
 
   // headers: {}
 });
@@ -14,9 +14,9 @@ export const API = {
   //  QUESTIONS: /questions
     // Listar perguntas por tag
     //  GET: /questionbytag/:tagId
-    // questionsByTag: async (tagId) => {
-    //   return await api.get(`/questions/questionbytag/${tagId}`).then(res => res.data);
-    // },
+    questionsByTag: async (tagId, pagination) => {
+      return await api.get(`/questions/questionbytag/${tagId}/${pagination}`).then(res => res.data);
+    },
 
     // OK
     questionsByUser: async (userId) => {

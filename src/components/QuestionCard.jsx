@@ -18,7 +18,7 @@ export const QuestionCard = ({ question, ratio, nav }) => {
                 mode="outlined"
                 key={question?.tags[0]?.title}
                 textStyle={{ fontSize: 12 / ratio }}
-                onPress={() => nav.navigate("ListForTag", { TAG: question?.tags[0]?._id })}
+                onPress={() => nav.navigate("ListForTag", { TAG: question?.tags[0] })}
                 style={{ backgroundColor: colors.background, marginRight: 4, marginBottom: 4 }}>
                 {question?.tags[0]?.title}
               </Chip>

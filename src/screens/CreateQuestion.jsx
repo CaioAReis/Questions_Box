@@ -151,7 +151,7 @@ export const CreateQuestion = ({ route, navigation }) => {
                 <Portal>
                   <Modal visible={addTagModal} contentContainerStyle={{ alignItems: "center" }}>
                     <View style={{ padding: 20, width: "90%", borderRadius: 10, backgroundColor: colors.background }}>
-                      <View style={{ position: "relative", marginBottom: 30 }}>
+                      <View style={{ position: "relative", marginBottom: 10 }}>
                         <Title style={{ textAlign: "center", }}>Adicionar TAGs</Title>
                         <IconButton
                           size={30}
@@ -161,6 +161,8 @@ export const CreateQuestion = ({ route, navigation }) => {
                           style={{ position: "absolute", margin: 0, top: -10, right: 0 }}
                         />
                       </View>
+
+                      <Text style={{ textAlign: "center", opacity: .5, marginBottom: 20 }}>Considera a 1ª TAG a mais importante!</Text>
 
                       <Title style={{ fontSize: 16 / ratio }}>TAGs selecionadas:</Title>
                       <ScrollView onContentSizeChange={() => __tagSize.current.scrollToEnd()} ref={__tagSize} style={{ maxHeight: "20%" }}>
@@ -209,9 +211,9 @@ export const CreateQuestion = ({ route, navigation }) => {
                       <Button
                         title="Submit"
                         mode="contained"
+                        style={{ marginTop: 20 }}
                         icon="checkbox-marked-circle"
                         contentStyle={{ height: 45 }}
-                        style={{ marginTop: 20 }}
                         onPress={() => setAddTagModal(false)}
                         labelStyle={{ fontSize: 14 / ratio }}>
                         OK
