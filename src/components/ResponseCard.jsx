@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { KeyboardAvoidingView, Platform, Pressable, View } from "react-native";
+import { KeyboardAvoidingView, Platform, View } from "react-native";
 import { Avatar, Button, Dialog, Divider, HelperText, IconButton, Menu, Modal, Portal, Text, TextInput, Title, useTheme } from "react-native-paper";
 import { API } from "../services/api";
 

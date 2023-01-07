@@ -73,7 +73,7 @@ export const QuestionDetails = ({ route, navigation }) => {
       <View style={{ backgroundColor: colors.surface, flex: 1 }}>
         <FlatList
           data={question?.responses}
-          keyExtractor={(answer, i) => answer?._id}
+          keyExtractor={(item, i) => i}
           contentContainerStyle={{ paddingBottom: 34 }}
           ListEmptyComponent={
             <View style={{ padding: 20 }}>
