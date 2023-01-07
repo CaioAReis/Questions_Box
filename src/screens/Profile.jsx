@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { FlatList, KeyboardAvoidingView, PixelRatio, Platform, View } from "react-native";
 import { Avatar, Button, Dialog, HelperText, IconButton, Modal, Portal, Text, TextInput, Title, useTheme } from "react-native-paper";
-import { QuestionCard } from "../components";
+import { EditUser, QuestionCard } from "../components";
 import { API } from "../services/api";
 
 const ratio = PixelRatio.getFontScale();
@@ -89,16 +89,7 @@ export const Profile = ({ route, navigation }) => {
                     icon="arrow-left-circle-outline"
                     onPress={() => navigation.goBack()}
                   />
-
-                  {Boolean(user) ? (
-                    <IconButton
-                      size={35}
-                      color={colors.text}
-                      style={{ margin: 0 }}
-                      icon="circle-edit-outline"
-                      onPress={() => setOpenEdit(true)}
-                    />
-                  ) : null}
+                  {Boolean(user) ? <EditUser setOpenEdit={setOpenEdit} /> : null}
                 </View>
 
                 <View style={{ flexDirection: "row", }}>

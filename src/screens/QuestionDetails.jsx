@@ -133,7 +133,7 @@ export const QuestionDetails = ({ route, navigation }) => {
                 {question?.tags?.map(tag => (
                   <Chip key={tag._id}
                     textStyle={{ fontSize: 16 / ratio }}
-                    onPress={() => navigation.navigate("ListForTag", { TAG: { title: "IFS" } })}
+                    onPress={() => navigation.navigate("ListForTag", { TAG: tag })}
                     style={{ backgroundColor: colors.background, marginVertical: 5, paddingHorizontal: 6, paddingVertical: 2, marginHorizontal: 5 }}
                   >
                     {tag.title}

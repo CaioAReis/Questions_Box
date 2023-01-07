@@ -63,7 +63,7 @@ export const Tags = ({ navigation }) => {
         keyExtractor={item => item._id}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ backgroundColor: colors.surface, paddingBottom: 50 }}
-        renderItem={({ item }) => <TagCard name={item.title} description={item.description} style={{ marginHorizontal: 20 }} />}
+        renderItem={({ item }) => <TagCard onPress={() => navigation.navigate("ListForTag", { TAG: item })} name={item.title} description={item.description} style={{ marginHorizontal: 20 }} />}
         ListFooterComponent={
           loading && <ActivityIndicator style={{ padding: 10 }} size={"large"} color={colors.primary} />}
         ListHeaderComponent={
