@@ -12,6 +12,7 @@ export const UserMenu = ({ user }) => {
   const [openEdit, setOpenEdit] = useState(false);
   const [dialogData, setDialogData] = useState(null);
   const [isOpenMenu, setIsOpenMenu] = useState(false);
+  const [isOpenLogout, setIsOpenLogout] = useState(false);
 
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: { name: user?.name, cpf: user?.cpf, email: user?.email }
@@ -29,6 +30,13 @@ export const UserMenu = ({ user }) => {
     }).finally(() => setLoading(false));
   };
 
+  const handleLogout = () => {
+    AsyncStorage.clear().then(() => {
+      setIsOpenMenu(false);
+      navigation.navigate("SignIn");
+    });
+  }
+
   return (
     <>
       <Menu
@@ -45,9 +53,9 @@ export const UserMenu = ({ user }) => {
           />
         }>
         <Menu.Item icon="account-edit-outline" onPress={() => { setIsOpenMenu(false); setOpenEdit(true); }} title="Editar perfil" />
-        <Menu.Item icon="lock-open-outline" onPress={() => alert("Aterar senha")} title="Alterar senha" />
+        {/* <Menu.Item icon="lock-open-outline" onPress={() => alert("Aterar senha")} title="Alterar senha" /> */}
         <Divider />
-        <Menu.Item titleStyle={{ color: colors.error }} icon="logout" onPress={async () => { await AsyncStorage.clear(); setIsOpenMenu(false); navigation.navigate("SignIn"); }} title="Sair" />
+        <Menu.Item titleStyle={{ color: colors.error }} icon="logout" onPress={async () => { setIsOpenMenu(false); setIsOpenLogout(true); }} title="Sair" />
       </Menu>
 
       <Portal>
@@ -125,6 +133,16 @@ export const UserMenu = ({ user }) => {
             </View>
           </KeyboardAvoidingView>
         </Modal>
+      </Portal>
+
+      <Portal>
+        <Dialog visible={isOpenLogout} onDismiss={() => setIsOpenLogout(false)}>
+          <Dialog.Title>Você realmente deseja sair da conta?</Dialog.Title>
+          <Dialog.Actions style={{ justifyContent: "space-evenly" }}>
+            <Button labelStyle={{ color: colors.error }} onPress={handleLogout}>SIM</Button>
+            <Button labelStyle={{ color: colors.text }} onPress={() => setIsOpenLogout(false)}>NÃO</Button>
+          </Dialog.Actions>
+        </Dialog>
       </Portal>
 
       <Portal>
