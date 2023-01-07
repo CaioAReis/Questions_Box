@@ -51,7 +51,7 @@ export const UserMenu = ({ user }) => {
       </Menu>
 
       <Portal>
-        <Modal visible={openEdit} style={{ justifyContent: "flex-start", alignItems: "center" }} onDismiss={() => setOpenEdit(false)}
+        <Modal visible={openEdit} style={{ justifyContent: "center", alignItems: "center" }} onDismiss={() => setOpenEdit(false)}
           contentContainerStyle={{
             padding: 20,
             width: "90%",
@@ -59,7 +59,7 @@ export const UserMenu = ({ user }) => {
             backgroundColor: colors.background,
           }}
         >
-          <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "position" : ""}>
+          <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : ""}>
             <View style={{ position: "relative", marginBottom: 30 }}>
               <Title style={{ textAlign: "center", }}>Editar dados</Title>
               <IconButton
