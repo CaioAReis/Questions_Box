@@ -34,15 +34,24 @@ export const ResponseCard = ({ answer, session, ratio, owner, answerIndex, quest
 
   const handleDeleteAnswer = () => {
     setLoading(true);
-    alert("Remover dúvida");
-    setLoading(false);
+    API.deleteAnswer(questionId, answer?._id, session?.token).then(res => {
+      setDialogData({ title: "Resposta removida!", body: "Resposta removida com sucesso!" });
+    }).catch(err => {
+      setDialogData({ error: true, title: "Oops! Ocorreu um erro!", body: err.response?.data?.message });
+    }).finally(() => { setLoading(false); });
   };
 
   const onSubmit = data => {
     setLoading(true);
-    console.warn(data);
+    API.editAnswer(questionId, answer._id, data, session?.token).then(res => {
+      answer.answer = data?.answer;
+      setOpenAnswer(false);
+      setDialogData({ title: "Resposta editada!", body: "Resposta editada com sucesso!" });
+    }).catch(err => {
+      setOpenAnswer(false);
+      setDialogData({ error: true, title: "Oops! Ocorreu um erro!", body: err.response?.data?.message });
+    }).finally(() => { setLoading(false); });
 
-    setLoading(false);
   };
 
   return (
@@ -61,7 +70,7 @@ export const ResponseCard = ({ answer, session, ratio, owner, answerIndex, quest
                   <IconButton
                     size={25}
                     icon="dots-vertical"
-                    color={colors.backdrop}
+                    color={colors.text}
                     style={{ margin: 0 }}
                     onPress={() => setIsOpenMenu(true)}
                   />

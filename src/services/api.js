@@ -59,10 +59,16 @@ export const API = {
     },
 
     //  EDITAR RESPOSTA
-    //  PUT: /response/edit/:questionId/:indexAnswer
-    // editAnswer: async (questionId, body, token) => {
-    //   return await api.put(`/questions/answer/${questionId}/${indexAnswer}`, body, {headers: { "authentication": "Bearer " + token }}).then(res => res.data);
-    // },
+    //  PUT: /answer/:questionId/:answerId'
+    editAnswer: async (questionId, answerId, body, token) => {
+      return await api.put(`/questions/answer/${questionId}/${answerId}`, body, {headers: { "authentication": "Bearer " + token }}).then(res => res.data);
+    },
+
+    //  APAGAR RESPOSTA
+    //  PUT: /delete/:id/:idResponse
+    deleteAnswer: async (questionId, answerId, token) => {
+      return await api.delete(`/questions/delete/${questionId}/${answerId}`, { headers: { "authentication": "Bearer " + token } }).then(res => res.data);
+    },
 
   //  USERS: /users
     //  Login
