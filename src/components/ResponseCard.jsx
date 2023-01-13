@@ -35,6 +35,7 @@ export const ResponseCard = ({ answer, session, ratio, owner, answerIndex, quest
   const handleDeleteAnswer = () => {
     setLoading(true);
     API.deleteAnswer(questionId, answer?._id, session?.token).then(res => {
+      // setIsOpenDeleteAnswer(false);
       setDialogData({ title: "Resposta removida!", body: "Resposta removida com sucesso!" });
     }).catch(err => {
       setDialogData({ error: true, title: "Oops! Ocorreu um erro!", body: err.response?.data?.message });
@@ -51,7 +52,6 @@ export const ResponseCard = ({ answer, session, ratio, owner, answerIndex, quest
       setOpenAnswer(false);
       setDialogData({ error: true, title: "Oops! Ocorreu um erro!", body: err.response?.data?.message });
     }).finally(() => { setLoading(false); });
-
   };
 
   return (
