@@ -9,12 +9,12 @@ const ratio = PixelRatio.getFontScale();
 
 export const Home = ({ navigation }) => {
   const { colors, logos } = useTheme();
-  const [list, setList] = useState([]);
-  const [tags, setTags] = useState([]);
-  const [session, setSession] = useState(null);
-  const [loadList, setLoadList] = useState(false);
-  const [pagination, setPagination] = useState(0);
-  const [dialogData, setDialogData] = useState(null);
+  const [ list, setList ] = useState([]);
+  const [ tags, setTags ] = useState([]);
+  const [ session, setSession ] = useState(null);
+  const [ loadList, setLoadList ] = useState(false);
+  const [ pagination, setPagination ] = useState(0);
+  const [ dialogData, setDialogData ] = useState(null);
 
   const handleGetProducts = () => {
     if (loadList || pagination < 0) return;
@@ -35,24 +35,26 @@ export const Home = ({ navigation }) => {
     });
   }, []);
 
+  const fetchSession = async () => {
+    const value = await AsyncStorage.getItem('QB@user_session_key');
+    setSession(JSON.parse(value));
+  }
+
   useEffect(() => {
-    const x = async () => {
-      const value = await AsyncStorage.getItem('QB@user_session_key');
-      setSession(JSON.parse(value));
-    }
-    x();
+    fetchSession();
     handleGetFirstTags();
     handleGetProducts();
   }, []);
 
   useEffect(() => {
     const focusHandler = navigation.addListener('focus', () => {
+      setList([]);
+      setPagination(0);
       handleGetProducts();
+      fetchSession();
     });
-    setList([]);
-    setPagination(0);
     return focusHandler;
-  }, [navigation]);
+  }, [ navigation ]);
 
 
   return (
@@ -66,7 +68,7 @@ export const Home = ({ navigation }) => {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 80, backgroundColor: colors.surface }}
           renderItem={({ item }) => <QuestionCard nav={navigation} question={item} ratio={ratio} />}
-          // refreshControl={<RefreshControl refreshing={loadList} onRefresh={() => {setPagination(0); handleGetProducts()}} tintColor={colors.primary} />}
+          // refreshControl={<RefreshControl  onRefresh={() => {setPagination(0); setList(c => []); handleGetProducts()}} tintColor={colors.primary} />}
           ListFooterComponent={
             loadList && <ActivityIndicator style={{ padding: 10 }} size={"large"} color={colors.primary} />}
           ListEmptyComponent={
@@ -80,10 +82,10 @@ export const Home = ({ navigation }) => {
             <View>
               <View style={{ ...styles.header, backgroundColor: colors.background }}>
                 <View style={{ alignItems: "center" }}>
-                  <Image source={logos[3]} resizeMode="contain" style={{ width: 140, height: 50 }} />
+                  <Image source={logos[ 3 ]} resizeMode="contain" style={{ width: 140, height: 50 }} />
                 </View>
                 <Pressable onPress={() => navigation.navigate("Profile", { userID: session?._id, user: session })}>
-                  <Avatar.Text size={40} label={Boolean(session) ? session?.name[0]?.toUpperCase() : "QB"} labelStyle={{ fontSize: 16 / ratio }} />
+                  <Avatar.Text size={40} label={Boolean(session) ? session?.name[ 0 ]?.toUpperCase() : "QB"} labelStyle={{ fontSize: 16 / ratio }} />
                 </Pressable>
               </View>
 
@@ -122,7 +124,7 @@ export const Home = ({ navigation }) => {
           animated={true}
           label="Postar dúvida"
           style={{ ...styles.fab, backgroundColor: colors.primary }}
-          onPress={() => navigation.navigate("CreateQuestion", { question: null })}
+          onPress={() => navigation.navigate("CreateQuestion", { question: null, session: session })}
         />
       </View>
 

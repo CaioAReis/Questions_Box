@@ -51,6 +51,7 @@ export const API = {
 
     // EDITAR QUESTION
     editQuestion: async (questionId, body, token) => {
+      console.warn({ token: token });
       return await api.put(`/questions/${questionId}`, body, {headers: { "authentication": "Bearer " + token }}).then(res => res.data);
     },
 

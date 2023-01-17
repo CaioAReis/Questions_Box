@@ -26,6 +26,7 @@ export const Tags = ({ navigation }) => {
     setLoading(true);
     API.createTag(data, session?.token).then(res => {
       setOpenCreateTag(false);
+      setList(current => {current.push(data); return current});
       setDialogData({ title: "Tag criada!", body: "Sua TAG foi criada!" });
     }).catch(err => {
       setDialogData({ error: true, title: "Oops! Ocorreu um erro!", body: err.response?.data?.message });

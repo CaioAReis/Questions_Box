@@ -10,7 +10,7 @@ const ratio = PixelRatio.getFontScale();
 export const CreateQuestion = ({ route, navigation }) => {
   const __tagSize = useRef();
   const { colors } = useTheme();
-  const { question } = route.params;
+  const { question, session } = route.params;
   const [tagList, setTagList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [pagination, setPagination] = useState(0);
@@ -22,7 +22,6 @@ export const CreateQuestion = ({ route, navigation }) => {
   });
 
   const onSubmit = async data => {
-    const session = JSON.parse(await AsyncStorage.getItem('QB@user_session_key'));
     !Boolean(question)
       ? API.createQuestion(data, session?.token).then(res => {
         setDialogData({ title: "Dúvida publicada!", body: "Sua dúvida publicada com sucesso!", callback: () => navigation.goBack() });
@@ -31,6 +30,7 @@ export const CreateQuestion = ({ route, navigation }) => {
       }).finally(() => setLoading(false))
 
       : API.editQuestion(question?._id, data, session?.token).then(res => {
+        console.warn(res);
         setDialogData({ title: "Dúvida Editada!", body: "Sua dúvida foi editada com sucesso!", callback: () => navigation.goBack() });
       }).catch(err => {
         setDialogData({ error: true, title: "Oops! Ocorreu um erro!", body: err.response?.data?.message });
@@ -170,7 +170,7 @@ export const CreateQuestion = ({ route, navigation }) => {
                           <View style={{ marginTop: 10, flexDirection: "row", flexWrap: "wrap" }}>
                             {value.map((tag, i) => (
                               <Chip
-                                key={tag.i}
+                                key={tag._id}
                                 closeIcon="close-circle-outline"
                                 style={{ margin: 4, backgroundColor: colors.surface }}
                                 onClose={() => handleSelectTag({ origin: onChange, destiny: setTagList, item: tag, value: value, out: true })}

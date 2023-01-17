@@ -4,8 +4,9 @@ import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { KeyboardAvoidingView, Platform, View } from "react-native";
 import { Divider, Menu, Avatar, Button, Dialog, HelperText, IconButton, Modal, Portal, Text, TextInput, Title, useTheme } from "react-native-paper";
+import { API } from "../services/api";
 
-export const UserMenu = ({ user }) => {
+export const UserMenu = ({ user, setUser }) => {
   const { colors } = useTheme();
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
@@ -22,10 +23,11 @@ export const UserMenu = ({ user }) => {
     setLoading(true);
     API.editUser(user?._id, data, user?.token).then(async res => {
       setDialogData({ title: "Salvo!", body: "Seus dados foram editados com sucesso!" });
-      await AsyncStorage.setItem('QB@user_session_key', JSON.stringify({ ...userProfile, ...data }));
-      setUserProfile(current => { return { ...current, ...data } });
+      await AsyncStorage.setItem('QB@user_session_key', JSON.stringify({ ...user, ...data, token: res?.token }));
+      setUser(current => { return { ...current, ...data, token: res?.token } });
       setOpenEdit(false);
     }).catch(err => {
+      console.error(err);
       setDialogData({ error: true, title: "Oops! Ocorreu um erro!", body: err.response?.data?.message });
     }).finally(() => setLoading(false));
   };

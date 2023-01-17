@@ -70,7 +70,7 @@ export const Profile = ({ route, navigation }) => {
                     icon="arrow-left-circle-outline"
                     onPress={() => navigation.goBack()}
                   />
-                  {Boolean(user) ? <UserMenu user={user} /> : null}
+                  {Boolean(user) ? <UserMenu user={userProfile} setUser={setUserProfile}  /> : null}
                 </View>
 
                 <View style={{ flexDirection: "row", }}>

@@ -4,7 +4,7 @@ import { KeyboardAvoidingView, Platform, View } from "react-native";
 import { Avatar, Button, Dialog, Divider, HelperText, IconButton, Menu, Modal, Portal, Text, TextInput, Title, useTheme } from "react-native-paper";
 import { API } from "../services/api";
 
-export const ResponseCard = ({ answer, session, ratio, owner, answerIndex, questionId }) => {
+export const ResponseCard = ({ answer, reload, session, ratio, owner, answerIndex, questionId }) => {
   const { colors } = useTheme();
   const d = new Date(answer?.createdAt);
   const [ loading, setLoading ] = useState(false);
@@ -33,10 +33,10 @@ export const ResponseCard = ({ answer, session, ratio, owner, answerIndex, quest
   };
 
   const handleDeleteAnswer = () => {
+    setIsOpenDeleteAnswer(false);
     setLoading(true);
     API.deleteAnswer(questionId, answer?._id, session?.token).then(res => {
-      // setIsOpenDeleteAnswer(false);
-      setDialogData({ title: "Resposta removida!", body: "Resposta removida com sucesso!" });
+      setDialogData({ title: "Resposta removida!", body: "Resposta removida com sucesso!", callback: () => reload(questionId) });
     }).catch(err => {
       setDialogData({ error: true, title: "Oops! Ocorreu um erro!", body: err.response?.data?.message });
     }).finally(() => { setLoading(false); });
