@@ -70,14 +70,14 @@ Basta lê o QrCode gerado atraves do aplicativo do Expo Go instalado em seu smar
 
 <p align="center">
   <img src = "./assets/Readme/show1.gif" width=350>
-</p>
-
-<p align="center">
   <img src = "./assets/Readme/show2.gif" width=350>
+  <img src = "./assets/Readme/show3.gif" width=350>
 </p>
 
 <p align="center">
-  <img src = "./assets/Readme/show3.gif" width=350>
+</p>
+
+<p align="center">
 </p>
 
 ## Valeu pela visita! 😉
