@@ -68,9 +68,9 @@ Basta lê o QrCode gerado atraves do aplicativo do Expo Go instalado em seu smar
 
 **O app foi executado apenas em android!**
 
-![MongoDB](./assets/Readme/show1.gif)&nbsp;
-![MongoDB](./assets/Readme/show2.gif)&nbsp;
-![MongoDB](./assets/Readme/show3.gif)&nbsp;
+<p align="center">
+  <img src = "./assets/Readme/show1.gif" width=350>
+</p>
 
 <p align="center">
   <img src = "./assets/Readme/show2.gif" width=350>
