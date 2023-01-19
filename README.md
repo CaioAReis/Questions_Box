@@ -33,9 +33,9 @@ alunos que tenham conhecimento sobre o assunto, seja ele veterano ou não.
 
 ## Protótipo FIGMA
 
-- O protótipo da aplicação pode ser visto nesse link: [Questions Box - FIGMA](https://www.figma.com/file/uWypl4okI5vZFMWqmrYNFB/Projeto-Programa%C3%A7%C3%A3o-Mobile?node-id=0%3A1&t=eFoHfnPNZGoVzp5s-1)
+- O protótipo da aplicação pode ser visto nesse link: [Questions Box - FIGMA](https://www.figma.com/file/uWypl4okI5vZFMWqmrYNFB/Projeto-Programa%C3%A7%C3%A3o-Mobile?node-id=0%3A1&t=G0Ti5sf4k8gASjY0-1)
 
-<a href="https://www.figma.com/file/a6x2j4iTq1BuPhTx0pP2ll/PokemonTest?node-id=0%3A1" target="_blank">
+<a href="https://www.figma.com/file/uWypl4okI5vZFMWqmrYNFB/Projeto-Programa%C3%A7%C3%A3o-Mobile?node-id=0%3A1&t=G0Ti5sf4k8gASjY0-1" target="_blank">
 <p align="center">
     <img alt="Figma - Questions Box" title="GitPoint" src="./assets/Readme/Figma.png" width="450">
 </p>
