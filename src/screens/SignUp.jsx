@@ -19,8 +19,7 @@ export const SignUp = ({ navigation }) => {
   const onSubmit = data => {
     setLoading(true);
     API.signUP(data).then(async res => {
-      setDialogData({ error: false, title: "Parabéns! 👏👏", body: "Sua conta foi criada com sucesso!" });
-      navigation.navigate("SignIn");
+      setDialogData({ title: "Parabéns! 👏👏", body: "Sua conta foi criada com sucesso!", callback: () => navigation.navigate("SignIn") });
     }).catch(err => {
       setDialogData({ error: true, title: "Oops! Ocorreu um erro!", body: err.response?.data?.message });
     }).finally(() => {
@@ -141,7 +140,10 @@ export const SignUp = ({ navigation }) => {
       </ScrollView>
 
       <Portal>
-        <Dialog visible={Boolean(dialogData)} onDismiss={() => setDialogData(null)}
+        <Dialog visible={Boolean(dialogData)} onDismiss={() => {
+          Boolean(dialogData?.callback) ? dialogData?.callback() : null; 
+          setDialogData(null); 
+        }}
           style={{ borderWidth: 4, borderColor: dialogData?.error ? colors.error : colors.success, paddingVertical: 20 }}
         >
           <>

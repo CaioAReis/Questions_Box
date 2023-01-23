@@ -2,10 +2,12 @@ import axios from "axios";
 
 const api = axios.create({
   //  CASA
-  baseURL: "http://192.168.0.113:3333/v1-0/br",
+  // baseURL: "http://192.168.0.113:3333/v1-0/br",
+
+  // baseURL: "http://192.168.1.102:3333/v1-0/br",
 
   //  CHÁCARA
-  // baseURL: "http://192.168.1.113:3333/v1-0/br",
+  baseURL: "http://192.168.1.113:3333/v1-0/br",
 
   // headers: {}
 });
