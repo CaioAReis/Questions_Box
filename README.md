@@ -1,7 +1,7 @@
 <h1 align="center"> Questions Box </h1> <br>
 
 <p align="center">
-  <img alt="Questions Box" title="GitPoint" src="./assets/Readme/splash.png" width="450">
+  <img alt="Questions Box" title="Questions Box" src="./assets/Readme/splash.png" width="450">
 </p>
 
 <p align="center">
